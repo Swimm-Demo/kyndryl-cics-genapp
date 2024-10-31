@@ -40,11 +40,39 @@ graph TD;
  evhgw("Deleting Policy Records (LGDPDB01)") --> 5druc("Deleting Policy Records (LGDPVS01)")
 ```
 
+## Top Level Flows
+
 ### Customer Transactions Menu (<SwmToken path="/base/src/lgtestc1.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTC1.">`LGTESTC1`</SwmToken>)
 
 Customer Transactions Menu (<SwmToken path="/base/src/lgtestc1.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTC1.">`LGTESTC1`</SwmToken>) is a COBOL program that provides the presentation logic for customer-related transactions, handling operations like querying, inserting, updating, and deleting customer information within the general insurance application.
 
-- <SwmLink doc-title="Handling Customer Operations (LGTESTC1)">[Handling Customer Operations (LGTESTC1)](/.swm/handling-customer-operations-lgtestc1.jjzhyi1x.sw.md)</SwmLink>
+- <SwmLink doc-title="Customer Transactions Menu (LGTESTC1)">[Customer Transactions Menu (LGTESTC1)](/.swm/customer-transactions-menu-lgtestc1.jjzhyi1x.sw.md)</SwmLink>
+
+### Motor Policy Menu (<SwmToken path="/base/src/lgtestp1.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP1.">`LGTESTP1`</SwmToken>)
+
+Motor Policy Menu (<SwmToken path="/base/src/lgtestp1.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP1.">`LGTESTP1`</SwmToken>) is the presentation logic for managing motor policy transactions, allowing users to add, update, delete, and inquire about motor policies.
+
+- <SwmLink doc-title="Motor Policy Menu (LGTESTP1)">[Motor Policy Menu (LGTESTP1)](/.swm/motor-policy-menu-lgtestp1.v16ier5t.sw.md)</SwmLink>
+
+### House Policy Menu (<SwmToken path="/base/src/lgtestp3.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP3.">`LGTESTP3`</SwmToken>)
+
+House Policy Menu (<SwmToken path="/base/src/lgtestp3.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP3.">`LGTESTP3`</SwmToken>) is a component that manages house policy transactions, allowing users to add, update, query, and delete house policy information.
+
+- <SwmLink doc-title="House Policy Menu (LGTESTP3)">[House Policy Menu (LGTESTP3)](/.swm/house-policy-menu-lgtestp3.uc39vnee.sw.md)</SwmLink>
+
+### Endowment Policy Menu (<SwmToken path="/base/src/lgtestp2.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP2.">`LGTESTP2`</SwmToken>)
+
+Endowment Policy Menu (<SwmToken path="/base/src/lgtestp2.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP2.">`LGTESTP2`</SwmToken>) refers to the presentation logic for handling endowment policy transactions, providing a user interface for managing policy data.
+
+- <SwmLink doc-title="Endowment Policy Menu (LGTESTP2)">[Endowment Policy Menu (LGTESTP2)](/.swm/endowment-policy-menu-lgtestp2.7v3gklr7.sw.md)</SwmLink>
+
+### Commercial Policy Menu (<SwmToken path="/base/src/lgtestp4.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP4.">`LGTESTP4`</SwmToken>)
+
+Commercial Policy Menu (<SwmToken path="/base/src/lgtestp4.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP4.">`LGTESTP4`</SwmToken>) refers to the presentation logic for managing commercial property policies, allowing users to perform transactions like insert, query, and delete within the insurance application.
+
+- <SwmLink doc-title="Commercial Policy Menu (LGTESTP4)">[Commercial Policy Menu (LGTESTP4)](/.swm/commercial-policy-menu-lgtestp4.vx4n1efq.sw.md)</SwmLink>
+
+## Programs
 
 ### **Adding Customer (**<SwmToken path="/base/src/lgacus01.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGACUS01.">`LGACUS01`</SwmToken>**)**
 
@@ -76,6 +104,12 @@ Updating Customer Details (<SwmToken path="/base/src/lgucus01.cbl" pos="11:6:6" 
 
 - <SwmLink doc-title="Updating Customer Information (LGUCUS01)">[Updating Customer Information (LGUCUS01)](/.swm/updating-customer-information-lgucus01.5ep8jkr6.sw.md)</SwmLink>
 
+### Deleting Policy Information (<SwmToken path="/base/src/lgdpol01.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGDPOL01.">`LGDPOL01`</SwmToken>)
+
+Deleting Policy Information (<SwmToken path="/base/src/lgdpol01.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGDPOL01.">`LGDPOL01`</SwmToken>) involves executing the business logic required to remove a policy record from the system. This process includes validating the input data, ensuring the communication area is correctly set up, and then calling the appropriate routine to delete the policy from the Db2 database.
+
+- <SwmLink doc-title="Deleting Policy Information (LGDPOL01)">[Deleting Policy Information (LGDPOL01)](/.swm/deleting-policy-information-lgdpol01.sf6u0vqb.sw.md)</SwmLink>
+
 ### Inquiring Policy Data (<SwmToken path="/base/src/lgipdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGIPDB01.">`LGIPDB01`</SwmToken>)
 
 Inquiring Policy Data (<SwmToken path="/base/src/lgipdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGIPDB01.">`LGIPDB01`</SwmToken>) refers to the process of retrieving detailed information about individual insurance policies from the Db2 database. The program <SwmToken path="/base/src/lgipdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGIPDB01.">`LGIPDB01`</SwmToken> is designed to handle inquiries for various types of policies, including endowment, house, motor, and commercial policies. It performs SQL queries to fetch the relevant policy data based on customer and policy numbers, processes the data, and returns it to the caller. The program ensures that the data is correctly formatted and handles any errors that may occur during the data retrieval process.
@@ -93,36 +127,6 @@ Updating Policy Records (<SwmToken path="/base/src/lgupvs01.cbl" pos="11:6:6" li
 Deleting Policy Records (<SwmToken path="/base/src/lgdpdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGDPDB01.">`LGDPDB01`</SwmToken>) involves removing a specific policy record from the Db2 database. The program <SwmToken path="/base/src/lgdpdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGDPDB01.">`LGDPDB01`</SwmToken> handles this operation by executing an SQL DELETE statement that targets the policy record based on the customer number and policy number. If the deletion is successful or if the record is not found, the operation is considered successful. Any errors encountered during the process are logged and appropriate error messages are generated.
 
 - <SwmLink doc-title="Deleting Policy Information (LGDPDB01)">[Deleting Policy Information (LGDPDB01)](/.swm/deleting-policy-information-lgdpdb01.4iufc8fu.sw.md)</SwmLink>
-
-### Commercial Policy Menu (<SwmToken path="/base/src/lgtestp4.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP4.">`LGTESTP4`</SwmToken>)
-
-Commercial Policy Menu (<SwmToken path="/base/src/lgtestp4.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP4.">`LGTESTP4`</SwmToken>) refers to the presentation logic for managing commercial property policies, allowing users to perform transactions like insert, query, and delete within the insurance application.
-
-- <SwmLink doc-title="Policy Management Flow (LGTESTP4)">[Policy Management Flow (LGTESTP4)](/.swm/policy-management-flow-lgtestp4.vx4n1efq.sw.md)</SwmLink>
-
-### Motor Policy Menu (<SwmToken path="/base/src/lgtestp1.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP1.">`LGTESTP1`</SwmToken>)
-
-Motor Policy Menu (<SwmToken path="/base/src/lgtestp1.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP1.">`LGTESTP1`</SwmToken>) is the presentation logic for managing motor policy transactions, allowing users to add, update, delete, and inquire about motor policies.
-
-- <SwmLink doc-title="Handling User Input and Operations (LGTESTP1)">[Handling User Input and Operations (LGTESTP1)](/.swm/handling-user-input-and-operations-lgtestp1.v16ier5t.sw.md)</SwmLink>
-
-### Deleting Policy Information (<SwmToken path="/base/src/lgdpol01.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGDPOL01.">`LGDPOL01`</SwmToken>)
-
-Deleting Policy Information (<SwmToken path="/base/src/lgdpol01.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGDPOL01.">`LGDPOL01`</SwmToken>) involves executing the business logic required to remove a policy record from the system. This process includes validating the input data, ensuring the communication area is correctly set up, and then calling the appropriate routine to delete the policy from the Db2 database.
-
-- <SwmLink doc-title="Deleting Policy Information (LGDPOL01)">[Deleting Policy Information (LGDPOL01)](/.swm/deleting-policy-information-lgdpol01.sf6u0vqb.sw.md)</SwmLink>
-
-### House Policy Menu (<SwmToken path="/base/src/lgtestp3.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP3.">`LGTESTP3`</SwmToken>)
-
-House Policy Menu (<SwmToken path="/base/src/lgtestp3.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP3.">`LGTESTP3`</SwmToken>) is a component that manages house policy transactions, allowing users to add, update, query, and delete house policy information.
-
-- <SwmLink doc-title="House Policy Menu (LGTESTP3)">[House Policy Menu (LGTESTP3)](/.swm/house-policy-menu-lgtestp3.uc39vnee.sw.md)</SwmLink>
-
-### Endowment Policy Menu (<SwmToken path="/base/src/lgtestp2.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP2.">`LGTESTP2`</SwmToken>)
-
-Endowment Policy Menu (<SwmToken path="/base/src/lgtestp2.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP2.">`LGTESTP2`</SwmToken>) refers to the presentation logic for handling endowment policy transactions, providing a user interface for managing policy data.
-
-- <SwmLink doc-title="Handling Life Policy Deletion (LGTESTP2)">[Handling Life Policy Deletion (LGTESTP2)](/.swm/handling-life-policy-deletion-lgtestp2.7v3gklr7.sw.md)</SwmLink>
 
 ### Updating Policy Details (<SwmToken path="/base/src/lgupol01.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGUPOL01.">`LGUPOL01`</SwmToken>)
 

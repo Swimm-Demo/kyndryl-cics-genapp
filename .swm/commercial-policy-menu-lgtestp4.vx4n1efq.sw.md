@@ -1,5 +1,5 @@
 ---
-title: Policy Management Flow (LGTESTP4)
+title: Commercial Policy Menu (LGTESTP4)
 ---
 The <SwmToken path="base/src/lgtestp4.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP4.">`LGTESTP4`</SwmToken> program handles various user options related to policy management, including insertion, deletion, and querying of policy information. The program achieves this by initializing fields, mapping user inputs to internal structures, and calling subprograms to perform the necessary operations.
 
@@ -559,4 +559,4 @@ Finally, we initialize <SwmToken path="base/src/lgtestp4.cbl" pos="35:3:3" line-
 
 *This is an auto-generated document by Swimm 🌊 and has not yet been verified by a human*
 
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](/)</sup></SwmMeta>
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>

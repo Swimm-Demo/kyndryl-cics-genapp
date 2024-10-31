@@ -1,5 +1,5 @@
 ---
-title: Handling Life Policy Deletion (LGTESTP2)
+title: Endowment Policy Menu (LGTESTP2)
 ---
 The <SwmToken path="base/src/lgtestp2.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP2.">`LGTESTP2`</SwmToken> program handles the deletion of life policies in the system. It ensures that policies are properly deleted by checking return codes, clearing policy fields, setting deletion messages, and updating the user interface. This process is achieved through a series of steps that involve interacting with the user interface and the database.
 
@@ -451,4 +451,4 @@ Then, regardless of the error check, the program proceeds to call the <SwmToken 
 
 *This is an auto-generated document by Swimm 🌊 and has not yet been verified by a human*
 
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](/)</sup></SwmMeta>
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
