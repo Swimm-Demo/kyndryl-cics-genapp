@@ -7,7 +7,7 @@ The flow starts by checking if the request ID is <SwmToken path="base/src/lgucus
 
 # Where is this program used?
 
-This program is used once, in a flow starting from `LGTESTC1` as represented in the following diagram:
+This program is used once, in a flow starting from <SwmToken path="/base/src/lgtestc1.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTC1.">`LGTESTC1`</SwmToken> as represented in the following diagram:
 
 ```mermaid
 graph TD
@@ -37,7 +37,7 @@ graph TD
 %%   C --> D
 ```
 
-<SwmSnippet path="/base/src/lgucus01.cbl" line="185">
+<SwmSnippet path="base/src/lgucus01.cbl" line="110">
 
 ---
 
@@ -45,15 +45,18 @@ graph TD
 
 First, the program checks if the <SwmToken path="base/src/lgucus01.cbl" pos="110:3:7" line-data="           If CA-REQUEST-ID NOT = &#39;01UCUS&#39;">`CA-REQUEST-ID`</SwmToken> is not equal to <SwmToken path="base/src/lgucus01.cbl" pos="110:14:14" line-data="           If CA-REQUEST-ID NOT = &#39;01UCUS&#39;">`01UCUS`</SwmToken>. If it is not, the program sets the return code to '99' and goes to the <SwmToken path="base/src/lgucus01.cbl" pos="112:5:7" line-data="               GO TO END-PROGRAM">`END-PROGRAM`</SwmToken> paragraph, effectively ending the process.
 
-```cobol
-
+```
+           If CA-REQUEST-ID NOT = '01UCUS'
+               MOVE '99' TO CA-RETURN-CODE
+               GO TO END-PROGRAM
+           END-IF.
 ```
 
 ---
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgucus01.cbl" line="191">
+<SwmSnippet path="base/src/lgucus01.cbl" line="126">
 
 ---
 
@@ -63,15 +66,22 @@ Next, if the <SwmToken path="base/src/lgucus01.cbl" pos="110:3:7" line-data="   
 
 More about <SwmToken path="base/src/lgucus01.cbl" pos="66:3:3" line-data="       01 LGUCDB01                     PIC X(8) VALUE &#39;LGUCDB01&#39;.">`LGUCDB01`</SwmToken>: <SwmLink doc-title="Updating Customer Information (LGUCDB01)">[Updating Customer Information (LGUCDB01)](/.swm/updating-customer-information-lgucdb01.qw5fu84a.sw.md)</SwmLink>
 
-```cobol
+```
+       UPDATE-CUSTOMER-INFO.
 
+           EXEC CICS LINK Program(LGUCDB01)
+                Commarea(DFHCOMMAREA)
+                LENGTH(32500)
+           END-EXEC.
+
+           EXIT.
 ```
 
 ---
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgucus01.cbl" line="196">
+<SwmSnippet path="base/src/lgucus01.cbl" line="157">
 
 ---
 
@@ -79,8 +89,23 @@ More about <SwmToken path="base/src/lgucus01.cbl" pos="66:3:3" line-data="      
 
 Finally, after updating the customer information, the program goes to the <SwmToken path="base/src/lgucus01.cbl" pos="112:5:7" line-data="               GO TO END-PROGRAM">`END-PROGRAM`</SwmToken> paragraph, which returns control to the caller and ends the execution.
 
-```cobol
-
+```
+           IF EIBCALEN > 0 THEN
+             IF EIBCALEN < 91 THEN
+               MOVE DFHCOMMAREA(1:EIBCALEN) TO CA-DATA
+               EXEC CICS LINK PROGRAM('LGSTSQ')
+                         COMMAREA(CA-ERROR-MSG)
+                         LENGTH(LENGTH OF CA-ERROR-MSG)
+               END-EXEC
+             ELSE
+               MOVE DFHCOMMAREA(1:90) TO CA-DATA
+               EXEC CICS LINK PROGRAM('LGSTSQ')
+                         COMMAREA(CA-ERROR-MSG)
+                         LENGTH(LENGTH OF CA-ERROR-MSG)
+               END-EXEC
+             END-IF
+           END-IF.
+           EXIT.
 ```
 
 ---
@@ -91,4 +116,4 @@ Finally, after updating the customer information, the program goes to the <SwmTo
 
 *This is an auto-generated document by Swimm 🌊 and has not yet been verified by a human*
 
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](/)</sup></SwmMeta>
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
