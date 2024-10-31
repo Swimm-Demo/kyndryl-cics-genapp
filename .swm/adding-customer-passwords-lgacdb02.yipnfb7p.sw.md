@@ -7,7 +7,7 @@ The <SwmToken path="base/src/lgacdb02.cbl" pos="13:6:6" line-data="       PROGRA
 
 # Where is this program used?
 
-This program is used once, in a flow starting from `LGACDB01` as represented in the following diagram:
+This program is used once, in a flow starting from <SwmToken path="/base/src/lgacdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGACDB01.">`LGACDB01`</SwmToken> as represented in the following diagram:
 
 ```mermaid
 graph TD
@@ -39,7 +39,7 @@ First, the program evaluates the <SwmToken path="base/src/lgacdb02.cbl" pos="96:
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgacdb02.cbl" line="232">
+<SwmSnippet path="/base/src/lgacdb02.cbl" line="18">
 
 ---
 
@@ -55,7 +55,7 @@ Next, if the <SwmToken path="base/src/lgacdb02.cbl" pos="96:3:7" line-data="    
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgacdb02.cbl" line="242">
+<SwmSnippet path="/base/src/lgacdb02.cbl" line="18">
 
 ---
 

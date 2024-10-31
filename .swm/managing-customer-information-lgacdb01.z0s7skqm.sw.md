@@ -7,7 +7,7 @@ The <SwmToken path="base/src/lgacdb01.cbl" pos="13:6:6" line-data="       PROGRA
 
 # Where is this program used?
 
-This program is used once, in a flow starting from `LGACUS01` as represented in the following diagram:
+This program is used once, in a flow starting from <SwmToken path="/base/src/lgacus01.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGACUS01.">`LGACUS01`</SwmToken> as represented in the following diagram:
 
 ```mermaid
 graph TD

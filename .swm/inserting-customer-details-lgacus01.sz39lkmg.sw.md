@@ -18,7 +18,7 @@ LGTESTC1-base/src/lgtestc1.cbl("LGTESTC1") --> LGACUS01("LGACUS01 program"):::cu
 
 Lets' zoom into the flow:
 
-<SwmSnippet path="/base/src/lgacus01.cbl" line="287">
+<SwmSnippet path="base/src/lgacus01.cbl" line="78">
 
 ---
 
@@ -26,15 +26,56 @@ Lets' zoom into the flow:
 
 First, the <SwmToken path="base/src/lgacus01.cbl" pos="78:1:1" line-data="       MAINLINE SECTION.">`MAINLINE`</SwmToken> function initializes the environment and handles the main menu display. It then evaluates the user input to determine the next action. If the user opts to insert a new customer, the flow moves to the <SwmToken path="base/src/lgacus01.cbl" pos="119:3:5" line-data="           PERFORM INSERT-CUSTOMER.">`INSERT-CUSTOMER`</SwmToken> paragraph.
 
-```cobol
+```
+       MAINLINE SECTION.
 
+      *----------------------------------------------------------------*
+      * Common code                                                    *
+      *----------------------------------------------------------------*
+      * initialize working storage variables
+           INITIALIZE WS-HEADER.
+      * set up general variable
+           MOVE EIBTRNID TO WS-TRANSID.
+           MOVE EIBTRMID TO WS-TERMID.
+           MOVE EIBTASKN TO WS-TASKNUM.
+      *----------------------------------------------------------------*
+
+      *----------------------------------------------------------------*
+      * Process incoming commarea                                      *
+      *----------------------------------------------------------------*
+      * If NO commarea received issue an ABEND
+           IF EIBCALEN IS EQUAL TO ZERO
+               MOVE ' NO COMMAREA RECEIVED' TO EM-VARIABLE
+               PERFORM WRITE-ERROR-MESSAGE
+               EXEC CICS ABEND ABCODE('LGCA') NODUMP END-EXEC
+           END-IF
+
+      * initialize commarea return code to zero
+           MOVE '00' TO CA-RETURN-CODE
+           MOVE '00' TO CA-NUM-POLICIES
+           MOVE EIBCALEN TO WS-CALEN.
+           SET WS-ADDR-DFHCOMMAREA TO ADDRESS OF DFHCOMMAREA.
+
+      * check commarea length
+           ADD WS-CA-HEADER-LEN TO WS-REQUIRED-CA-LEN
+           ADD WS-CUSTOMER-LEN  TO WS-REQUIRED-CA-LEN
+
+      * if less set error return code and return to caller
+           IF EIBCALEN IS LESS THAN WS-REQUIRED-CA-LEN
+             MOVE '98' TO CA-RETURN-CODE
+             EXEC CICS RETURN END-EXEC
+           END-IF
+
+      *----------------------------------------------------------------*
+      * Call routine to Insert row in DB2 Customer table               *
+           PERFORM INSERT-CUSTOMER.
 ```
 
 ---
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgacus01.cbl" line="287">
+<SwmSnippet path="base/src/lgacus01.cbl" line="132">
 
 ---
 
@@ -44,8 +85,13 @@ Next, within the <SwmToken path="base/src/lgacus01.cbl" pos="119:3:5" line-data=
 
 More about <SwmToken path="base/src/lgacus01.cbl" pos="58:3:3" line-data="       77  LGACDB01                    PIC X(8)       VALUE &#39;LGACDB01&#39;.">`LGACDB01`</SwmToken>: <SwmLink doc-title="Managing Customer Information (LGACDB01)">[Managing Customer Information (LGACDB01)](/.swm/managing-customer-information-lgacdb01.z0s7skqm.sw.md)</SwmLink>
 
-```cobol
+```
+       INSERT-CUSTOMER.
 
+           EXEC CICS LINK Program(LGACDB01)
+                Commarea(DFHCOMMAREA)
+                LENGTH(32500)
+           END-EXEC.
 ```
 
 ---
@@ -56,4 +102,4 @@ More about <SwmToken path="base/src/lgacus01.cbl" pos="58:3:3" line-data="      
 
 *This is an auto-generated document by Swimm 🌊 and has not yet been verified by a human*
 
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](/)</sup></SwmMeta>
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>

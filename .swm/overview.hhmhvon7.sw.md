@@ -40,31 +40,35 @@ graph TD;
  evhgw("Deleting Policy Records (LGDPDB01)") --> 5druc("Deleting Policy Records (LGDPVS01)")
 ```
 
-&nbsp;
+### Customer Transactions Menu (<SwmToken path="/base/src/lgtestc1.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTC1.">`LGTESTC1`</SwmToken>)
+
+Customer Transactions Menu (<SwmToken path="/base/src/lgtestc1.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTC1.">`LGTESTC1`</SwmToken>) is a COBOL program that provides the presentation logic for customer-related transactions, handling operations like querying, inserting, updating, and deleting customer information within the general insurance application.
+
+- <SwmLink doc-title="Handling Customer Operations (LGTESTC1)">[Handling Customer Operations (LGTESTC1)](/.swm/handling-customer-operations-lgtestc1.jjzhyi1x.sw.md)</SwmLink>
+
+### **Adding Customer (**<SwmToken path="/base/src/lgacus01.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGACUS01.">`LGACUS01`</SwmToken>**)**
+
+Adding Customer (<SwmToken path="/base/src/lgacus01.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGACUS01.">`LGACUS01`</SwmToken>) involves the business logic for inserting a new customer into the system, including processing input data, validating it, and storing the customer details in the database.
+
+- <SwmLink doc-title="Inserting Customer Details (LGACUS01)">[Inserting Customer Details (LGACUS01)](/.swm/inserting-customer-details-lgacus01.sz39lkmg.sw.md)</SwmLink>
 
 ### Adding Customer Details (<SwmToken path="/base/src/lgacus01.cbl" pos="58:3:3" line-data="       77  LGACDB01                    PIC X(8)       VALUE &#39;LGACDB01&#39;.">`LGACDB01`</SwmToken>)
 
 <SwmToken path="/base/src/lgacus01.cbl" pos="58:3:3" line-data="       77  LGACDB01                    PIC X(8)       VALUE &#39;LGACDB01&#39;.">`LGACDB01`</SwmToken> is a program that adds customer details to a Db2 database. It handles the insertion of a customer's name, address, and date of birth into the DB2 customer table, creating a new customer entry. The program initializes necessary variables, processes the incoming communication area, checks its length, and then performs the insertion of the customer details into the database. If successful, it returns control to the caller; otherwise, it handles errors appropriately.
 
-- <SwmLink doc-title="Adding Customer Passwords (LGACDB02)">[Adding Customer Passwords (LGACDB02)](/.swm/adding-customer-passwords-lgacdb02.yipnfb7p.sw.md)</SwmLink>
+- <SwmLink doc-title="Managing Customer Information (LGACDB01)">[Managing Customer Information (LGACDB01)](/.swm/managing-customer-information-lgacdb01.z0s7skqm.sw.md)</SwmLink>
 
 ### Adding Customer Passwords (<SwmToken path="/base/src/lgacdb02.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGACDB02.">`LGACDB02`</SwmToken>)
 
 Adding Customer Passwords (<SwmToken path="/base/src/lgacdb02.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGACDB02.">`LGACDB02`</SwmToken>) involves inserting a customer's password into the security table with details such as customer number, password, state indicator, and password change count. The process includes initializing variables, handling communication areas, and executing SQL operations to update the database.
 
-- <SwmLink doc-title="Managing Customer Information (LGACDB01)">[Managing Customer Information (LGACDB01)](/.swm/managing-customer-information-lgacdb01.z0s7skqm.sw.md)</SwmLink>
+- <SwmLink doc-title="Adding Customer Passwords (LGACDB02)">[Adding Customer Passwords (LGACDB02)](/.swm/adding-customer-passwords-lgacdb02.yipnfb7p.sw.md)</SwmLink>
 
 ### Updating Customer Details (<SwmToken path="/base/src/lgucdb01.cbl" pos="10:6:6" line-data="       PROGRAM-ID. LGUCDB01.">`LGUCDB01`</SwmToken>)
 
 Updating Customer Details (<SwmToken path="/base/src/lgucdb01.cbl" pos="10:6:6" line-data="       PROGRAM-ID. LGUCDB01.">`LGUCDB01`</SwmToken>) refers to the process of modifying customer information in the database using the <SwmToken path="/base/src/lgucdb01.cbl" pos="10:6:6" line-data="       PROGRAM-ID. LGUCDB01.">`LGUCDB01`</SwmToken> program, which handles the update operation and error management.
 
 - <SwmLink doc-title="Updating Customer Information (LGUCDB01)">[Updating Customer Information (LGUCDB01)](/.swm/updating-customer-information-lgucdb01.qw5fu84a.sw.md)</SwmLink>
-
-### Customer Transactions Menu (<SwmToken path="/base/src/lgtestc1.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTC1.">`LGTESTC1`</SwmToken>)
-
-Customer Transactions Menu (<SwmToken path="/base/src/lgtestc1.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTC1.">`LGTESTC1`</SwmToken>) is a COBOL program that provides the presentation logic for customer-related transactions, handling operations like querying, inserting, updating, and deleting customer information within the general insurance application.
-
-- <SwmLink doc-title="Handling Customer Operations (LGTESTC1)">[Handling Customer Operations (LGTESTC1)](/.swm/handling-customer-operations-lgtestc1.jjzhyi1x.sw.md)</SwmLink>
 
 ### Updating Customer Details (<SwmToken path="/base/src/lgucus01.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGUCUS01.">`LGUCUS01`</SwmToken>)
 
