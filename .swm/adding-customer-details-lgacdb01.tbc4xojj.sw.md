@@ -168,6 +168,8 @@ Then, in the <SwmToken path="base/src/lgacdb01.cbl" pos="215:1:3" line-data="   
 
 Next, the program calls <SwmToken path="base/src/lgacdb01.cbl" pos="174:9:9" line-data="           EXEC CICS LINK Program(LGACVS01)">`LGACVS01`</SwmToken> to perform additional processing related to the customer data.
 
+More about LGACVS01: <SwmLink doc-title="Adding Customer Details (LGACVS01)">[Adding Customer Details (LGACVS01)](/.swm/adding-customer-details-lgacvs01.hw3htysm.sw.md)</SwmLink>
+
 ```cobol
            EXEC CICS LINK Program(LGACVS01)
                 Commarea(DFHCOMMAREA)
@@ -204,4 +206,4 @@ More about <SwmToken path="base/src/lgacdb01.cbl" pos="186:9:9" line-data="     
 
 *This is an auto-generated document by Swimm 🌊 and has not yet been verified by a human*
 
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](/)</sup></SwmMeta>
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>

@@ -33,7 +33,7 @@ graph TD
   E -->|No| I[Move '00' to CA-RETURN-CODE]
   I --> J[Move EIBCALEN to WS-CALEN]
   J --> K[Set WS-ADDR-DFHCOMMAREA to ADDRESS OF DFHCOMMAREA]
-  K --> L[EXEC CICS LINK Program(LGIPDB01)]
+  K --> L["EXEC CICS LINK Program(LGIPDB01)"]
   L --> M[EXEC CICS RETURN]
 
 %% Swimm:
@@ -48,7 +48,7 @@ graph TD
 %%   E -->|No| I[Move '00' to CA-RETURN-CODE]
 %%   I --> J[Move EIBCALEN to WS-CALEN]
 %%   J --> K[Set <SwmToken path="base/src/lgipol01.cbl" pos="88:3:7" line-data="           SET WS-ADDR-DFHCOMMAREA TO ADDRESS OF DFHCOMMAREA.">`WS-ADDR-DFHCOMMAREA`</SwmToken> to ADDRESS OF DFHCOMMAREA]
-%%   K --> L[EXEC CICS LINK Program(LGIPDB01)]
+%%   K --> L["EXEC CICS LINK Program(LGIPDB01)"]
 %%   L --> M[EXEC CICS RETURN]
 ```
 
@@ -122,6 +122,8 @@ Then, the program initializes the communication area return code to '00', moves 
 
 Moving to the next step, the program links to another CICS program <SwmToken path="base/src/lgipol01.cbl" pos="91:9:9" line-data="           EXEC CICS LINK Program(LGIPDB01)">`LGIPDB01`</SwmToken> using the <SwmToken path="base/src/lgipol01.cbl" pos="91:1:5" line-data="           EXEC CICS LINK Program(LGIPDB01)">`EXEC CICS LINK`</SwmToken> command, passing the communication area <SwmToken path="base/src/lgipol01.cbl" pos="92:3:3" line-data="               Commarea(DFHCOMMAREA)">`DFHCOMMAREA`</SwmToken> with a length of 32500. This step is crucial as it calls the database program to perform operations related to the insurance policy information.
 
+More about LGIPDB01: <SwmLink doc-title="Retrieving Policy Information (LGIPDB01)">[Retrieving Policy Information (LGIPDB01)](/.swm/retrieving-policy-information-lgipdb01.q633bzop.sw.md)</SwmLink>
+
 ```cobol
            EXEC CICS LINK Program(LGIPDB01)
                Commarea(DFHCOMMAREA)
@@ -153,4 +155,4 @@ Finally, the program executes <SwmToken path="base/src/lgipol01.cbl" pos="96:1:5
 
 *This is an auto-generated document by Swimm 🌊 and has not yet been verified by a human*
 
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](/)</sup></SwmMeta>
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>

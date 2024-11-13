@@ -22,7 +22,6 @@ classDef ad0614b98 color:#000000,fill:#00FFF4
 ```mermaid
 graph TD
   mainline("MAINLINE<br>Program Start"):::ab9b3e5e1 --> a-gain("A-GAIN<br>Paragraph A-GAIN")
-  a-gain --> a-gain("A-GAIN<br>Paragraph A-GAIN")
   classDef ab9b3e5e1 color:#000000,fill:#7CB9F4
 ```
 
@@ -469,7 +468,7 @@ Moving to the <SwmToken path="base/src/lgtestp2.cbl" pos="255:1:1" line-data="  
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgtestp2.cbl" line="257">
+<SwmSnippet path="/base/src/lgtestp2.cbl" line="35">
 
 ---
 
@@ -504,7 +503,7 @@ Then, the map <SwmToken path="base/src/lgtestp2.cbl" pos="258:11:11" line-data="
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgtestp2.cbl" line="263">
+<SwmSnippet path="/base/src/lgtestp2.cbl" line="240">
 
 ---
 
@@ -527,4 +526,4 @@ Finally, the transaction returns to the main menu with a <SwmToken path="base/sr
 
 *This is an auto-generated document by Swimm 🌊 and has not yet been verified by a human*
 
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](/)</sup></SwmMeta>
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>

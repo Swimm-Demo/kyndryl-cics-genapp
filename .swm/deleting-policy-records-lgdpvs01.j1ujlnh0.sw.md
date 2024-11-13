@@ -25,7 +25,7 @@ graph TD
   C --> D[Move CA-Policy-Num to WF-Policy-Num]
   D --> E[Move CA-Customer-Num to WF-Customer-Num]
   E --> F[Delete File 'KSDSPOLY']
-  F --> G{WS-RESP = DFHRESP(NORMAL)?}
+  F --> G{"WS-RESP = DFHRESP(NORMAL)?"}
   G -->|No| H[Move EIBRESP2 to WS-RESP2]
   H --> I[Move '81' to CA-RETURN-CODE]
   I --> J[Perform WRITE-ERROR-MESSAGE]
@@ -39,7 +39,7 @@ graph TD
 %%   C --> D[Move <SwmToken path="base/src/lgdpvs01.cbl" pos="78:3:7" line-data="           Move CA-Policy-Num      To WF-Policy-Num">`CA-Policy-Num`</SwmToken> to WF-Policy-Num]
 %%   D --> E[Move <SwmToken path="base/src/lgdpvs01.cbl" pos="79:3:7" line-data="           Move CA-Customer-Num    To WF-Customer-Num">`CA-Customer-Num`</SwmToken> to WF-Customer-Num]
 %%   E --> F[Delete File 'KSDSPOLY']
-%%   F --> G{WS-RESP = DFHRESP(NORMAL)?}
+%%   F --> G{"WS-RESP = DFHRESP(NORMAL)?"}
 %%   G -->|No| H[Move <SwmToken path="base/src/lgdpvs01.cbl" pos="87:3:3" line-data="             Move EIBRESP2 To WS-RESP2">`EIBRESP2`</SwmToken> to WS-RESP2]
 %%   H --> I[Move '81' to CA-RETURN-CODE]
 %%   I --> J[Perform WRITE-ERROR-MESSAGE]
@@ -164,4 +164,4 @@ More about LGSTSQ: <SwmLink doc-title="Handling Messages (LGSTSQ)">[Handling Mes
 
 *This is an auto-generated document by Swimm 🌊 and has not yet been verified by a human*
 
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](/)</sup></SwmMeta>
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>

@@ -32,7 +32,6 @@ classDef a7ccb414a color:#000000,fill:#5afa0a
 ```mermaid
 graph TD
   mainline("MAINLINE<br>Program Start"):::ab9b3e5e1 --> a-gain("A-GAIN<br>Paragraph A-GAIN")
-  a-gain --> a-gain("A-GAIN<br>Paragraph A-GAIN")
   classDef ab9b3e5e1 color:#000000,fill:#7CB9F4
 ```
 
@@ -252,7 +251,7 @@ Next, we handle the deletion of an existing motor policy. The system sets the re
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgtestp1.cbl" line="167">
+<SwmSnippet path="/base/src/lgtestp1.cbl" line="95">
 
 ---
 
@@ -369,7 +368,7 @@ graph TD
 %%   J -- Failure --> N[No Update]
 ```
 
-<SwmSnippet path="/base/src/lgtestp1.cbl" line="170">
+<SwmSnippet path="/base/src/lgtestp1.cbl" line="69">
 
 ---
 
@@ -387,7 +386,7 @@ First, we set the request ID to <SwmToken path="base/src/lgtestp1.cbl" pos="170:
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgtestp1.cbl" line="173">
+<SwmSnippet path="/base/src/lgtestp1.cbl" line="72">
 
 ---
 
@@ -408,7 +407,7 @@ More about <SwmToken path="base/src/lgtestp1.cbl" pos="173:10:10" line-data="   
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgtestp1.cbl" line="177">
+<SwmSnippet path="/base/src/lgtestp1.cbl" line="76">
 
 ---
 
@@ -426,7 +425,7 @@ Then, we check if the return code is greater than 0. If it is, we go to the <Swm
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgtestp1.cbl" line="181">
+<SwmSnippet path="/base/src/lgtestp1.cbl" line="80">
 
 ---
 
@@ -549,7 +548,7 @@ Next, we transfer the updated policy data from the communication area to the res
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgtestp1.cbl" line="229">
+<SwmSnippet path="/base/src/lgtestp1.cbl" line="91">
 
 ---
 
@@ -717,7 +716,7 @@ First, the program sends a message to the user using the <SwmToken path="base/sr
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgtestp1.cbl" line="270">
+<SwmSnippet path="/base/src/lgtestp1.cbl" line="254">
 
 ---
 
@@ -743,7 +742,7 @@ graph TD
   A[Initialize Screen] --> B[Send Initial Screen] --> C[Return Control]
 ```
 
-<SwmSnippet path="/base/src/lgtestp1.cbl" line="275">
+<SwmSnippet path="/base/src/lgtestp1.cbl" line="35">
 
 ---
 
@@ -778,7 +777,7 @@ Next, the initial screen is sent to the user using the <SwmToken path="base/src/
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgtestp1.cbl" line="281">
+<SwmSnippet path="/base/src/lgtestp1.cbl" line="258">
 
 ---
 
@@ -811,7 +810,7 @@ graph TD
   id-6 --> id-3
   id-1 -->|NO-DATA| id-7[Move 'No data was returned.' To ERP1FLDO]
   id-7 --> id-3
-  id-3 --> id-8[EXEC CICS SEND MAP ('SSMAPP1')]
+  id-3 --> id-8["EXEC CICS SEND MAP ('SSMAPP1')"]
   id-8 --> id-9[Initialize SSMAPP1I, SSMAPP1O, COMM-AREA]
 
 %% Swimm:
@@ -826,7 +825,7 @@ graph TD
 %%   id-6 --> id-3
 %%   id-1 -->|NO-DATA| id-7[Move 'No data was returned.' To ERP1FLDO]
 %%   id-7 --> id-3
-%%   id-3 --> id-8[EXEC CICS SEND MAP ('SSMAPP1')]
+%%   id-3 --> id-8["EXEC CICS SEND MAP ('SSMAPP1')"]
 %%   id-8 --> id-9[Initialize <SwmToken path="base/src/lgtestp1.cbl" pos="35:3:3" line-data="           Initialize SSMAPP1I.">`SSMAPP1I`</SwmToken>, <SwmToken path="base/src/lgtestp1.cbl" pos="36:3:3" line-data="           Initialize SSMAPP1O.">`SSMAPP1O`</SwmToken>, COMM-AREA]
 ```
 
@@ -935,4 +934,4 @@ Finally, the <SwmToken path="base/src/lgtestp1.cbl" pos="308:1:3" line-data="   
 
 *This is an auto-generated document by Swimm 🌊 and has not yet been verified by a human*
 
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](/)</sup></SwmMeta>
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>

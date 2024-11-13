@@ -98,7 +98,9 @@ Then, the program converts the customer number from the <SwmToken path="base/src
 
 ## Call <SwmToken path="base/src/lgucdb01.cbl" pos="136:9:9" line-data="           EXEC CICS LINK Program(LGUCVS01)">`LGUCVS01`</SwmToken>
 
-Moving to the next step, the program calls <SwmToken path="base/src/lgucdb01.cbl" pos="136:9:9" line-data="           EXEC CICS LINK Program(LGUCVS01)">`LGUCVS01`</SwmToken> using the <SwmToken path="base/src/lgucdb01.cbl" pos="116:7:7" line-data="      * If NO commarea received issue an ABEND">`commarea`</SwmToken>. This call is essential for further processing or validation that might be required by the <SwmToken path="base/src/lgucdb01.cbl" pos="136:9:9" line-data="           EXEC CICS LINK Program(LGUCVS01)">`LGUCVS01`</SwmToken> program.
+Moving to the next step, the program calls <SwmToken path="base/src/lgucdb01.cbl" pos="136:9:9" line-data="           EXEC CICS LINK Program(LGUCVS01)">`LGUCVS01`</SwmToken> using the <SwmToken path="base/src/lgucdb01.cbl" pos="116:7:7" line-data="      * If NO commarea received issue an ABEND">`commarea`</SwmToken>. This call updates the customer records.
+
+More about LGUCVS01: <SwmLink doc-title="Updating Customer Records (LGUCVS01)">[Updating Customer Records (LGUCVS01)](/.swm/updating-customer-records-lgucvs01.g1etz950.sw.md)</SwmLink>
 
 ```cobol
            EXEC CICS LINK Program(LGUCVS01)
@@ -132,4 +134,4 @@ Finally, the program returns control to the caller, marking the end of the <SwmT
 
 *This is an auto-generated document by Swimm 🌊 and has not yet been verified by a human*
 
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](/)</sup></SwmMeta>
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>

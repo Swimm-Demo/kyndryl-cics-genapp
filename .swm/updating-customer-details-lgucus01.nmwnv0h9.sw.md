@@ -22,10 +22,10 @@ Lets' zoom into the flow:
 graph TD
   mainline("MAINLINE<br>Program Start"):::ab9b3e5e1
   mainline -..-> id-1{{"If CA-REQUEST-ID NOT = '01UCUS'"}}
-  id-1 -->|Yes| end-program("END-PROGRAM<br>Paragraph END-PROGRAM")
+  id-1 -->|Yes| endd-program("END-PROGRAM<br>Paragraph END-PROGRAM")
   id-1 -->|And then| update-customer-info("UPDATE-CUSTOMER-INFO<br>Paragraph UPDATE-CUSTOMER-INFO")
-  end-program --> update-customer-info("UPDATE-CUSTOMER-INFO<br>Paragraph UPDATE-CUSTOMER-INFO")
-  update-customer-info --> end-program("END-PROGRAM<br>Paragraph END-PROGRAM")
+  endd-program --> update-customer-info("UPDATE-CUSTOMER-INFO<br>Paragraph UPDATE-CUSTOMER-INFO")
+  update-customer-info --> endd-program("END-PROGRAM<br>Paragraph END-PROGRAM")
   update-customer-info --> id-2("LGUCDB01<br>Call to LGUCDB01")
   classDef ab9b3e5e1 color:#000000,fill:#7CB9F4
 
@@ -33,10 +33,10 @@ graph TD
 %% graph TD
 %%   mainline("MAINLINE<br>Program Start"):::ab9b3e5e1
 %%   mainline -..-> id-1{{"If <SwmToken path="base/src/lgucus01.cbl" pos="110:3:7" line-data="           If CA-REQUEST-ID NOT = &#39;01UCUS&#39;">`CA-REQUEST-ID`</SwmToken> NOT = '01UCUS'"}}
-%%   id-1 -->|Yes| end-program("END-PROGRAM<br>Paragraph END-PROGRAM")
+%%   id-1 -->|Yes| endd-program("END-PROGRAM<br>Paragraph END-PROGRAM")
 %%   id-1 -->|And then| update-customer-info("UPDATE-CUSTOMER-INFO<br>Paragraph UPDATE-CUSTOMER-INFO")
-%%   end-program --> update-customer-info("UPDATE-CUSTOMER-INFO<br>Paragraph UPDATE-CUSTOMER-INFO")
-%%   update-customer-info --> end-program("END-PROGRAM<br>Paragraph END-PROGRAM")
+%%   endd-program --> update-customer-info("UPDATE-CUSTOMER-INFO<br>Paragraph UPDATE-CUSTOMER-INFO")
+%%   update-customer-info --> endd-program("END-PROGRAM<br>Paragraph END-PROGRAM")
 %%   update-customer-info --> id-2("LGUCDB01<br>Call to LGUCDB01")
 %%   classDef ab9b3e5e1 color:#000000,fill:#7CB9F4
 ```
@@ -159,4 +159,4 @@ Finally, the program returns control to the caller by executing the <SwmToken pa
 
 *This is an auto-generated document by Swimm 🌊 and has not yet been verified by a human*
 
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](/)</sup></SwmMeta>
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
