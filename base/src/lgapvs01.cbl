@@ -27,11 +27,16 @@
            05  WF-Request-ID           Pic X.
            05  WF-Customer-Num         Pic X(10).
            05  WF-Policy-Num           Pic X(10).
-         03 WF-Policy-Data             Pic X(43).
+         03 WF-Policy-Data             Pic X(83).
          03 WF-C-Policy-Data Redefines WF-Policy-Data.
            05  WF-B-Postcode           Pic X(8).
            05  WF-B-Status             Pic 9(4).
            05  WF-B-Customer           Pic X(31).
+           05  WF-B-Risk-Score         Pic 999.
+           05  WF-B-Fire-Premium       Pic 9(8).
+           05  WF-B-Crime-Premium      Pic 9(8).
+           05  WF-B-Flood-Premium      Pic 9(8).
+           05  WF-B-Weather-Premium    Pic 9(8).
          03 WF-E-Policy-Data Redefines WF-Policy-Data.
            05  WF-E-WITH-PROFITS       Pic X.
            05  WF-E-EQUITIES           Pic X.
@@ -103,9 +108,14 @@
            Evaluate WF-Request-ID
 
              When 'C'
-               Move CA-B-Postcode  To WF-B-Postcode
-               Move CA-B-Status    To WF-B-Status
-               Move CA-B-Customer  To WF-B-Customer
+               Move CA-B-Postcode     To WF-B-Postcode
+               Move CA-B-Status       To WF-B-Status
+               Move CA-B-Customer     To WF-B-Customer
+               Move WS-RISK-SCORE     To WF-B-Risk-Score
+               Move CA-B-FirePremium  To WF-B-Fire-Premium
+               Move CA-B-CrimePremium To WF-B-Crime-Premium
+               Move CA-B-FloodPremium To WF-B-Flood-Premium
+               Move CA-B-WeatherPremium To WF-B-Weather-Premium
 
              When 'E'
                Move CA-E-WITH-PROFITS To  WF-E-WITH-PROFITS
@@ -134,7 +144,7 @@
       *---------------------------------------------------------------*
            Exec CICS Write File('KSDSPOLY')
                      From(WF-Policy-Info)
-                     Length(64)
+                     Length(104)
                      Ridfld(WF-Policy-Key)
                      KeyLength(21)
                      RESP(WS-RESP)
