@@ -137,9 +137,10 @@
            05 WS-WEATHER-PERIL        PIC 9(4).
            05 WS-WEATHER-PREMIUM      PIC 9(8).
 
-       01  WS-PROGRAM-NAMES.
-           05 WS-RISK-PROG            PIC X(8) VALUE 'LGRKS01'.
-           05 WS-PREMIUM-PROG         PIC X(8) VALUE 'LGPRM01'.
+       01  WS-RISK-SCORE              PIC 999 VALUE ZERO.
+       01  WS-DISCOUNT-FACTOR         PIC V99 VALUE 1.00.
+       01  WS-STATUS                  PIC 9 VALUE 0.
+       01  WS-REJECT-REASON           PIC X(50).
 
        01  WS-RESP                    PIC S9(8) COMP.
        01  WS-RESP2                   PIC S9(8) COMP.
@@ -510,69 +511,89 @@
       * Issue INSERT on commercial table with values passed in commarea*
       *================================================================*
        INSERT-COMMERCIAL SECTION.
-           PERFORM INITIALIZE-BUSINESS-DATA
-           PERFORM CALL-RISK-ASSESSMENT
-           
-           IF WS-RESP = DFHRESP(NORMAL)
-              PERFORM CALL-PREMIUM-CALCULATION
-           END-IF
-           
-           IF WS-RESP = DFHRESP(NORMAL)
-              PERFORM INSERT-DB2-RECORD
-           END-IF.
-           
+           PERFORM CALC-RISK-SCORE
+           PERFORM DETERMINE-POLICY-STATUS
+           PERFORM CALC-PREMIUMS
+           PERFORM INSERT-DB2-RECORD
            EXIT.
-       INITIALIZE-BUSINESS-DATA.
-           MOVE CA-B-PropType  TO WS-PROP-TYPE
-           MOVE CA-B-Postcode  TO WS-POSTCODE
-           
-           MOVE CA-B-FirePeril    TO WS-FIRE-PERIL
-           MOVE CA-B-CrimePeril   TO WS-CRIME-PERIL
-           MOVE CA-B-FloodPeril   TO WS-FLOOD-PERIL
-           MOVE CA-B-WeatherPeril TO WS-WEATHER-PERIL.
-           EXIT.
-           
-       CALL-RISK-ASSESSMENT.
-           EXEC CICS LINK
-                PROGRAM(WS-RISK-PROG)
-                COMMAREA(WS-RISK-DATA)
-                LENGTH(LENGTH OF WS-RISK-DATA)
-                RESP(WS-RESP)
-                RESP2(WS-RESP2)
-           END-EXEC
-           
-           IF WS-RESP NOT = DFHRESP(NORMAL)
-              MOVE '90' TO CA-RETURN-CODE
-              PERFORM WRITE-ERROR-MESSAGE
-              EXEC CICS RETURN END-EXEC
+
+      *================================================================*
+       CALC-RISK-SCORE.
+      * Initialize base risk score
+           MOVE 100 TO WS-RISK-SCORE
+
+      * Property type risk evaluation    
+           EVALUATE CA-B-PropType
+             WHEN 'WAREHOUSE'
+               ADD 50 TO WS-RISK-SCORE
+             WHEN 'FACTORY' 
+               ADD 75 TO WS-RISK-SCORE
+             WHEN 'OFFICE'
+               ADD 25 TO WS-RISK-SCORE
+             WHEN 'RETAIL'
+               ADD 40 TO WS-RISK-SCORE
+           END-EVALUATE
+
+      * High-risk postcode check
+           IF CA-B-Postcode(1:2) = 'FL' OR
+              CA-B-Postcode(1:2) = 'CR'
+             ADD 30 TO WS-RISK-SCORE
            END-IF
-           
+
+           EXIT.
+
+      *================================================================*
+       DETERMINE-POLICY-STATUS.
+      * Set status based on calculated risk
+           IF WS-RISK-SCORE > 200
+             MOVE 2 TO WS-STATUS
+             MOVE 'High Risk Score - Manual Review Required' 
+               TO WS-REJECT-REASON
+           ELSE
+             IF WS-RISK-SCORE > 150
+               MOVE 1 TO WS-STATUS
+               MOVE 'Medium Risk - Pending Review'
+                 TO WS-REJECT-REASON
+             ELSE
+               MOVE 0 TO WS-STATUS
+               MOVE SPACES TO WS-REJECT-REASON
+             END-IF
+           END-IF
+
            MOVE WS-STATUS TO CA-B-Status
-           MOVE WS-REJECT-REASON TO CA-B-RejectReason.
+           MOVE WS-REJECT-REASON TO CA-B-RejectReason
+
            EXIT.
-           
-       CALL-PREMIUM-CALCULATION.
-           MOVE WS-RISK-SCORE TO WS-PREMIUM-DATA
-      
-           EXEC CICS LINK
-                PROGRAM(WS-PREMIUM-PROG)
-                COMMAREA(WS-PREMIUM-DATA)
-                LENGTH(LENGTH OF WS-PREMIUM-DATA)
-                RESP(WS-RESP)
-                RESP2(WS-RESP2)
-           END-EXEC
-           
-           IF WS-RESP NOT = DFHRESP(NORMAL)
-              MOVE '91' TO CA-RETURN-CODE
-              PERFORM WRITE-ERROR-MESSAGE
-              EXEC CICS RETURN END-EXEC
+
+      *================================================================*
+       CALC-PREMIUMS.
+      * Check for multi-peril discount     
+           IF CA-B-FirePeril > 0 AND
+              CA-B-CrimePeril > 0 AND
+              CA-B-FloodPeril > 0 AND
+              CA-B-WeatherPeril > 0
+             MOVE 0.90 TO WS-DISCOUNT-FACTOR
            END-IF
+
+      * Calculate individual peril premiums
+           COMPUTE CA-B-FirePremium =
+             ((WS-RISK-SCORE * 0.8) * CA-B-FirePeril *
+               WS-DISCOUNT-FACTOR)
            
-           MOVE WS-FIRE-PREMIUM    TO CA-B-FirePremium
-           MOVE WS-CRIME-PREMIUM   TO CA-B-CrimePremium
-           MOVE WS-FLOOD-PREMIUM   TO CA-B-FloodPremium
-           MOVE WS-WEATHER-PREMIUM TO CA-B-WeatherPremium.
+           COMPUTE CA-B-CrimePremium =
+             ((WS-RISK-SCORE * 0.6) * CA-B-CrimePeril *
+               WS-DISCOUNT-FACTOR)
+           
+           COMPUTE CA-B-FloodPremium =
+             ((WS-RISK-SCORE * 1.2) * CA-B-FloodPeril *
+               WS-DISCOUNT-FACTOR)
+           
+           COMPUTE CA-B-WeatherPremium =
+             ((WS-RISK-SCORE * 0.9) * CA-B-WeatherPeril *
+               WS-DISCOUNT-FACTOR)
+
            EXIT.
+
       *----------------------------------------------------------------*
        INSERT-DB2-RECORD.
       * Convert commarea values to DB2 integer format
@@ -634,11 +655,10 @@
            IF SQLCODE NOT = 0
               MOVE '92' TO CA-RETURN-CODE
               PERFORM WRITE-ERROR-MESSAGE
-      *       Issue Abend to cause backout
               EXEC CICS ABEND ABCODE('LGSQ') NODUMP END-EXEC
               EXEC CICS RETURN END-EXEC
            END-IF.
-
+           
            EXIT.
       *================================================================*
       * Procedure to write error message to Queues                     *
