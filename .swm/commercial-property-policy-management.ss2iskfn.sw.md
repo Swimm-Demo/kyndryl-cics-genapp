@@ -13,44 +13,45 @@ The screen looks roughly like this:
 
 ```mermaid
 flowchart TD
-    A[LGAPDB01]:::a4f5fbfea  -->|CICS LINK| B[LGRKS01]:::a261ec6c4
-    
-    subgraph Risk Assessment - LGRSK01
-        B --> C[Base Risk Score: 100]
-        C --> D{Property Type}
-        D -->|Warehouse| E[+50 Risk]
-        D -->|Factory| F[+75 Risk]
-        D -->|Office| G[+25 Risk]
-        D -->|Retail| H[+40 Risk]
-
+    A[Start INSERT-COMMERCIAL] --> B[CALC-RISK-SCORE]:::a261ec6c4
+    label>LGAPDB01 - Combined Business Rules & Storage Handler]:::a4f5fbfea
+    subgraph Risk Score Calculation
+        B --> C[Set Base Score: 100 ]
+        C --> D{Property Type?}
+        D -->|Warehouse| E[+50]
+        D -->|Factory| F[+75]
+        D -->|Office| G[+25]
+        D -->|Retail| H[+40]
         E & F & G & H --> I{High Risk Postcode?}
-        I -->|Yes| J[+30 Risk]
-        I -->|No| L
-        J --> L[Final Risk Score]
-        L --> M{Risk Level?}
-        M -->|>200| N[Set Status: Manual Review]
-        M -->|151-200| O[Set Status: Pending Review]
-        M -->|≤150| P[Set Status: Auto-Approved]
+        I -->|Yes FL/CR| J[+30]
+        I -->|No| K[No Addition]
     end
 
-    N & O & P -->|Return Risk Score & Status| Q[LGAPDB01]:::a4f5fbfea 
-    Q -->|CICS LINK| R[LGPRM01]:::a0b8c7d0e 
+    J & K --> L[DETERMINE-POLICY-STATUS]:::a4271316e 
 
-    subgraph Premium Calculation - LGPRM01
-        R --> S[Calculate Base Premiums]
-        S --> T[Fire: Risk x 0.8]
-        S --> U[Crime: Risk x 0.6]
-        S --> V[Flood: Risk x 1.2]
-        S --> W[Weather: Risk x 0.9]
-        T & U & V & W --> X{All Perils Selected?}
-        X -->|Yes| Y[Apply 10% Discount]
-        X -->|No| Z[No Discount]
+    subgraph Status Determination
+        L --> M{Final Risk Score}
+        M -->|>200| N[Status 2: Manual Review]
+        M -->|151-200| O[Status 1: Pending Review]
+        M -->|≤150| P[Status 0: Auto-Approved]
     end
 
-    Y & Z -->|Return Premium Values| AA[LGAPDB01]:::a4f5fbfea 
-    AA --> AB[Write to DB2]
-    AA --> AC[Write to VSAM]
+    N & O & P --> Q[CALC-PREMIUMS]:::a0b8c7d0e
 
+    subgraph Premium Calculation
+        Q --> R{Check All Perils}
+        R -->|All Selected| S[Set Discount 0.90]
+        R -->|Not All| T[No Discount]
+        S & T --> U[Calculate Premiums]
+        U --> V1[Fire: Risk x 0.8]
+        U --> V2[Crime: Risk x 0.6]
+        U --> V3[Flood: Risk x 1.2]
+        U --> V4[Weather: Risk x 0.9]
+    end
+
+    V1 & V2 & V3 & V4 --> W[INSERT-DB2-RECORD]:::a0298c687
+    W --> X[Store in DB2]
+    W --> Y[Call LGAPVS01 to write to VSAM]
 
 classDef a0b8c7d0e color:#000000,fill:#7CB9F4
 classDef a261ec6c4 color:#000000,fill:#00FFAA
@@ -58,48 +59,48 @@ classDef a4f5fbfea color:#000000,fill:#00FFF4
 classDef a4271316e color:#000000,fill:#FFFF00
 classDef a0298c687 color:#000000,fill:#AA7CB9
 classDef a911b8d83 color:#000000,fill:#5afa0a
- 
 
 %% Swimm:
 %% flowchart TD
-%%     A[<SwmToken path="/base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>]:::a4f5fbfea  -->|CICS LINK| B[<SwmToken path="/base/src/lgapdb01.cbl" pos="141:19:19" line-data="           05 WS-RISK-PROG            PIC X(8) VALUE &#39;LGRKS01&#39;.">`LGRKS01`</SwmToken>]:::a261ec6c4
-%%     
-%%     subgraph Risk Assessment - LGRSK01
-%%         B --> C[Base Risk Score: <SwmToken path="/base/src/lgrsk01.cbl" pos="18:3:3" line-data="           MOVE 100 TO WS-RISK-SCORE.">`100`</SwmToken>]
-%%         C --> D{Property Type}
-%%         D -->|Warehouse| E[+<SwmToken path="/base/src/lgrsk01.cbl" pos="23:3:3" line-data="               ADD 50 TO WS-RISK-SCORE">`50`</SwmToken> Risk]
-%%         D -->|Factory| F[+<SwmToken path="/base/src/lgrsk01.cbl" pos="25:3:3" line-data="               ADD 75 TO WS-RISK-SCORE">`75`</SwmToken> Risk]
-%%         D -->|Office| G[+<SwmToken path="/base/src/lgrsk01.cbl" pos="27:3:3" line-data="               ADD 25 TO WS-RISK-SCORE">`25`</SwmToken> Risk]
-%%         D -->|Retail| H[+<SwmToken path="/base/src/lgrsk01.cbl" pos="29:3:3" line-data="               ADD 40 TO WS-RISK-SCORE">`40`</SwmToken> Risk]
-%% 
+%%     A[Start <SwmToken path="/base/src/lgapdb01.cbl" pos="513:1:3" line-data="       INSERT-COMMERCIAL SECTION.">`INSERT-COMMERCIAL`</SwmToken>] --> B[<SwmToken path="/base/src/lgapdb01.cbl" pos="514:3:7" line-data="           PERFORM CALC-RISK-SCORE">`CALC-RISK-SCORE`</SwmToken>]:::a261ec6c4
+%%     label><SwmToken path="/base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> - Combined Business Rules & Storage Handler]:::a4f5fbfea
+%%     subgraph Risk Score Calculation
+%%         B --> C[Set Base Score: <SwmToken path="/base/src/lgapdb01.cbl" pos="523:3:3" line-data="           MOVE 100 TO WS-RISK-SCORE">`100`</SwmToken> ]
+%%         C --> D{Property Type?}
+%%         D -->|Warehouse| E[+<SwmToken path="/base/src/lgapdb01.cbl" pos="528:3:3" line-data="               ADD 50 TO WS-RISK-SCORE">`50`</SwmToken>]
+%%         D -->|Factory| F[+<SwmToken path="/base/src/lgapdb01.cbl" pos="530:3:3" line-data="               ADD 75 TO WS-RISK-SCORE">`75`</SwmToken>]
+%%         D -->|Office| G[+25]
+%%         D -->|Retail| H[+40]
 %%         E & F & G & H --> I{High Risk Postcode?}
-%%         I -->|Yes| J[+30 Risk]
-%%         I -->|No| L
-%%         J --> L[Final Risk Score]
-%%         L --> M{Risk Level?}
-%%         M -->|><SwmToken path="/base/src/lgrsk01.cbl" pos="39:11:11" line-data="           IF WS-RISK-SCORE &gt; 200">`200`</SwmToken>| N[Set Status: Manual Review]
-%%         M -->|151-<SwmToken path="/base/src/lgrsk01.cbl" pos="39:11:11" line-data="           IF WS-RISK-SCORE &gt; 200">`200`</SwmToken>| O[Set Status: Pending Review]
-%%         M -->|≤<SwmToken path="/base/src/lgrsk01.cbl" pos="44:11:11" line-data="             IF WS-RISK-SCORE &gt; 150">`150`</SwmToken>| P[Set Status: Auto-Approved]
+%%         I -->|Yes FL/CR| J[+30]
+%%         I -->|No| K[No Addition]
 %%     end
 %% 
-%%     N & O & P -->|Return Risk Score & Status| Q[<SwmToken path="/base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>]:::a4f5fbfea 
-%%     Q -->|CICS LINK| R[<SwmToken path="/base/src/lgprm01.cbl" pos="2:6:6" line-data="       PROGRAM-ID. LGPRM01.">`LGPRM01`</SwmToken>]:::a0b8c7d0e 
+%%     J & K --> L[<SwmToken path="/base/src/lgapdb01.cbl" pos="515:3:7" line-data="           PERFORM DETERMINE-POLICY-STATUS">`DETERMINE-POLICY-STATUS`</SwmToken>]:::a4271316e 
 %% 
-%%     subgraph Premium Calculation - <SwmToken path="/base/src/lgprm01.cbl" pos="2:6:6" line-data="       PROGRAM-ID. LGPRM01.">`LGPRM01`</SwmToken>
-%%         R --> S[Calculate Base Premiums]
-%%         S --> T[Fire: Risk x <SwmToken path="/base/src/lgprm01.cbl" pos="32:11:13" line-data="             ((LS-RISK-SCORE * 0.8) * LS-FIRE-PERIL *">`0.8`</SwmToken>]
-%%         S --> U[Crime: Risk x <SwmToken path="/base/src/lgprm01.cbl" pos="36:11:13" line-data="             ((LS-RISK-SCORE * 0.6) * LS-CRIME-PERIL *">`0.6`</SwmToken>]
-%%         S --> V[Flood: Risk x <SwmToken path="/base/src/lgprm01.cbl" pos="40:11:13" line-data="             ((LS-RISK-SCORE * 1.2) * LS-FLOOD-PERIL *">`1.2`</SwmToken>]
-%%         S --> W[Weather: Risk x <SwmToken path="/base/src/lgprm01.cbl" pos="44:11:13" line-data="             ((LS-RISK-SCORE * 0.9) * LS-WEATHER-PERIL *">`0.9`</SwmToken>]
-%%         T & U & V & W --> X{All Perils Selected?}
-%%         X -->|Yes| Y[Apply 10% Discount]
-%%         X -->|No| Z[No Discount]
+%%     subgraph Status Determination
+%%         L --> M{Final Risk Score}
+%%         M -->|>200| N[Status 2: Manual Review]
+%%         M -->|151-200| O[Status 1: Pending Review]
+%%         M -->|≤150| P[Status 0: Auto-Approved]
 %%     end
 %% 
-%%     Y & Z -->|Return Premium Values| AA[<SwmToken path="/base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>]:::a4f5fbfea 
-%%     AA --> AB[Write to <SwmToken path="/base/src/lgapdb01.cbl" pos="577:3:3" line-data="       INSERT-DB2-RECORD.">`DB2`</SwmToken>]
-%%     AA --> AC[Write to VSAM]
+%%     N & O & P --> Q[<SwmToken path="/base/src/lgapdb01.cbl" pos="516:3:5" line-data="           PERFORM CALC-PREMIUMS">`CALC-PREMIUMS`</SwmToken>]:::a0b8c7d0e
 %% 
+%%     subgraph Premium Calculation
+%%         Q --> R{Check All Perils}
+%%         R -->|All Selected| S[Set Discount <SwmToken path="/base/src/lgapdb01.cbl" pos="575:3:5" line-data="             MOVE 0.90 TO WS-DISCOUNT-FACTOR">`0.90`</SwmToken>]
+%%         R -->|Not All| T[No Discount]
+%%         S & T --> U[Calculate Premiums]
+%%         U --> V1[Fire: Risk x <SwmToken path="/base/src/lgapdb01.cbl" pos="580:11:13" line-data="             ((WS-RISK-SCORE * 0.8) * CA-B-FirePeril *">`0.8`</SwmToken>]
+%%         U --> V2[Crime: Risk x <SwmToken path="/base/src/lgapdb01.cbl" pos="584:11:13" line-data="             ((WS-RISK-SCORE * 0.6) * CA-B-CrimePeril *">`0.6`</SwmToken>]
+%%         U --> V3[Flood: Risk x <SwmToken path="/base/src/lgapdb01.cbl" pos="588:11:13" line-data="             ((WS-RISK-SCORE * 1.2) * CA-B-FloodPeril *">`1.2`</SwmToken>]
+%%         U --> V4[Weather: Risk x <SwmToken path="/base/src/lgapdb01.cbl" pos="592:11:13" line-data="             ((WS-RISK-SCORE * 0.9) * CA-B-WeatherPeril *">`0.9`</SwmToken>]
+%%     end
+%% 
+%%     V1 & V2 & V3 & V4 --> W[<SwmToken path="/base/src/lgapdb01.cbl" pos="517:3:7" line-data="           PERFORM INSERT-DB2-RECORD">`INSERT-DB2-RECORD`</SwmToken>]:::a0298c687
+%%     W --> X[Store in <SwmToken path="/base/src/lgapdb01.cbl" pos="598:3:3" line-data="       INSERT-DB2-RECORD.">`DB2`</SwmToken>]
+%%     W --> Y[Call <SwmToken path="/base/src/lgapdb01.cbl" pos="270:9:9" line-data="             EXEC CICS Link Program(LGAPVS01)">`LGAPVS01`</SwmToken> to write to VSAM]
 %% 
 %% classDef a0b8c7d0e color:#000000,fill:#7CB9F4
 %% classDef a261ec6c4 color:#000000,fill:#00FFAA
@@ -107,7 +108,6 @@ classDef a911b8d83 color:#000000,fill:#5afa0a
 %% classDef a4271316e color:#000000,fill:#FFFF00
 %% classDef a0298c687 color:#000000,fill:#AA7CB9
 %% classDef a911b8d83 color:#000000,fill:#5afa0a
-%%  
 ```
 
 ## Technical Flow Diagram
@@ -118,19 +118,28 @@ In high level, these are the main components:
 flowchart TD
     A[SSMAPP4 Screen - 3270 Interface] -->|Screen Input| B[LGTESTP4 - Screen Handler]
     B -->|CICS LINK| C[LGAPOL01 - Business Logic Orchestrator]
-    C -->|CICS LINK| D[LGAPDB01 - DB2/Business Rules Handler]:::a4f5fbfea 
+    C -->|CICS LINK| D[LGAPDB01 - Combined Business Rules & Storage Handler]:::a4f5fbfea
     
-        D -->|CICS LINK| E[LGRSK01 - Risk Assessment Calculator]:::a261ec6c4
-        E -->|Return Risk Score| D
-        D -->|CICS LINK| F[LGPRM01 - Premium Calculator]:::a0b8c7d0e
-        F -->|Return Premiums| D
-        D -->|After Calculations| G[DB2 INSERT]
-        D -->|CICS LINK| H[LGAPVS01 - VSAM File Handler]
-        H -->|Write to VSAM| I[VSAM Storage]
-  
-    
-    G -->|Store in| J[(DB2 Database)]
-    classDef a0b8c7d0e color:#000000,fill:#7CB9F4
+    subgraph LGAPDB01[LGAPDB01 Processing]
+        D1[Risk Score Calculation]:::a261ec6c4 --> D11[Status Determination]:::a4271316e -->
+        D2[Premium Calculation Logic]:::a0b8c7d0e 
+        D3[DB2 Operations]:::a0298c687
+        D4[Call VSAM Handler]
+        D2 --> D3
+        D3 --> D4
+    end
+
+    D4 -->|CICS LINK| E[LGAPVS01 - VSAM File Handler]
+
+    subgraph Storage[Data Storage]
+        F[(DB2 Database)]
+        G[(VSAM Files)]
+    end
+
+    D3 -->|Store in| F
+    E -->|Write to| G
+
+classDef a0b8c7d0e color:#000000,fill:#7CB9F4
 classDef a261ec6c4 color:#000000,fill:#00FFAA
 classDef a4f5fbfea color:#000000,fill:#00FFF4
 classDef a4271316e color:#000000,fill:#FFFF00
@@ -141,19 +150,28 @@ classDef a911b8d83 color:#000000,fill:#5afa0a
 %% flowchart TD
 %%     A[<SwmToken path="/base/src/lgtestp4.cbl" pos="52:11:11" line-data="           EXEC CICS SEND MAP (&#39;SSMAPP4&#39;)">`SSMAPP4`</SwmToken> Screen - 3270 Interface] -->|Screen Input| B[<SwmToken path="/base/src/lgtestp4.cbl" pos="11:6:6" line-data="       PROGRAM-ID. LGTESTP4.">`LGTESTP4`</SwmToken> - Screen Handler]
 %%     B -->|CICS LINK| C[<SwmToken path="/base/src/lgtestp4.cbl" pos="178:10:10" line-data="                 EXEC CICS LINK PROGRAM(&#39;LGAPOL01&#39;)">`LGAPOL01`</SwmToken> - Business Logic Orchestrator]
-%%     C -->|CICS LINK| D[<SwmToken path="/base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> - DB2/Business Rules Handler]:::a4f5fbfea 
+%%     C -->|CICS LINK| D[<SwmToken path="/base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> - Combined Business Rules & Storage Handler]:::a4f5fbfea
 %%     
-%%         D -->|CICS LINK| E[LGRSK01 - Risk Assessment Calculator]:::a261ec6c4
-%%         E -->|Return Risk Score| D
-%%         D -->|CICS LINK| F[<SwmToken path="/base/src/lgprm01.cbl" pos="2:6:6" line-data="       PROGRAM-ID. LGPRM01.">`LGPRM01`</SwmToken> - Premium Calculator]:::a0b8c7d0e
-%%         F -->|Return Premiums| D
-%%         D -->|After Calculations| G[<SwmToken path="/base/src/lgapdb01.cbl" pos="577:3:3" line-data="       INSERT-DB2-RECORD.">`DB2`</SwmToken> INSERT]
-%%         D -->|CICS LINK| H[LGAPVS01 - VSAM File Handler]
-%%         H -->|Write to VSAM| I[VSAM Storage]
-%%   
-%%     
-%%     G -->|Store in| J[(DB2 Database)]
-%%     classDef a0b8c7d0e color:#000000,fill:#7CB9F4
+%%     subgraph <SwmToken path="/base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>[<SwmToken path="/base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> Processing]
+%%         D1[Risk Score Calculation]:::a261ec6c4 --> D11[Status Determination]:::a4271316e -->
+%%         D2[Premium Calculation Logic]:::a0b8c7d0e 
+%%         D3[DB2 Operations]:::a0298c687
+%%         D4[Call VSAM Handler]
+%%         D2 --> D3
+%%         D3 --> D4
+%%     end
+%% 
+%%     D4 -->|CICS LINK| E[LGAPVS01 - VSAM File Handler]
+%% 
+%%     subgraph Storage[Data Storage]
+%%         F[(DB2 Database)]
+%%         G[(VSAM Files)]
+%%     end
+%% 
+%%     D3 -->|Store in| F
+%%     E -->|Write to| G
+%% 
+%% classDef a0b8c7d0e color:#000000,fill:#7CB9F4
 %% classDef a261ec6c4 color:#000000,fill:#00FFAA
 %% classDef a4f5fbfea color:#000000,fill:#00FFF4
 %% classDef a4271316e color:#000000,fill:#FFFF00
@@ -220,74 +238,38 @@ Then <SwmToken path="/base/src/lgtestp4.cbl" pos="178:10:10" line-data="        
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgapdb01.cbl" line="512">
+<SwmSnippet path="base/src/lgapdb01.cbl" line="513">
 
 ---
 
 Here we initialize the business data and then call risk assessment:
 
-```cobol
+```
        INSERT-COMMERCIAL SECTION.
-           PERFORM INITIALIZE-BUSINESS-DATA
-           PERFORM CALL-RISK-ASSESSMENT
+           PERFORM CALC-RISK-SCORE
+           PERFORM DETERMINE-POLICY-STATUS
+           PERFORM CALC-PREMIUMS
+           PERFORM INSERT-DB2-RECORD
+           EXIT.
 ```
 
 ---
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgapdb01.cbl" line="525">
+### Calculating Risk Score
 
----
-
-Initializing the data means propogating the information provided from the screen:
-
-```cobol
-       INITIALIZE-BUSINESS-DATA.
-           MOVE CA-B-PropType  TO WS-PROP-TYPE
-           MOVE CA-B-Postcode  TO WS-POSTCODE
-           
-           MOVE CA-B-FirePeril    TO WS-FIRE-PERIL
-```
-
----
-
-</SwmSnippet>
-
-<SwmSnippet path="/base/src/lgapdb01.cbl" line="535">
-
----
-
-And calling the Risk Assessment program:
-
-```cobol
-       CALL-RISK-ASSESSMENT.
-           EXEC CICS LINK
-                PROGRAM(WS-RISK-PROG)
-                COMMAREA(WS-RISK-DATA)
-                LENGTH(LENGTH OF WS-RISK-DATA)
-                RESP(WS-RESP)
-                RESP2(WS-RESP2)
-           END-EXEC
-```
-
----
-
-</SwmSnippet>
-
-### Risk Assessment
-
-<SwmSnippet path="/base/src/lgrsk01.cbl" line="18">
+<SwmSnippet path="base/src/lgapdb01.cbl" line="523">
 
 ---
 
 Where the property type is evaluated, and the risk factor is assigned accordingly:
 
-```cobol
-           MOVE 100 TO WS-RISK-SCORE.
-      
-      * Property type risk evaluation
-           EVALUATE LS-PROP-TYPE
+```
+           MOVE 100 TO WS-RISK-SCORE
+
+      * Property type risk evaluation    
+           EVALUATE CA-B-PropType
              WHEN 'WAREHOUSE'
                ADD 50 TO WS-RISK-SCORE
              WHEN 'FACTORY' 
@@ -296,52 +278,53 @@ Where the property type is evaluated, and the risk factor is assigned accordingl
                ADD 25 TO WS-RISK-SCORE
              WHEN 'RETAIL'
                ADD 40 TO WS-RISK-SCORE
-           END-EVALUATE.
+           END-EVALUATE
 ```
 
 ---
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgrsk01.cbl" line="32">
+<SwmSnippet path="base/src/lgapdb01.cbl" line="538">
 
 ---
 
 In case of a high-risk post code, there is an additional risk factor:
 
-```cobol
-      * High-risk postcode check
-           IF LS-POSTCODE(1:2) = 'FL' OR
-              LS-POSTCODE(1:2) = 'CR'
+```
+           IF CA-B-Postcode(1:2) = 'FL' OR
+              CA-B-Postcode(1:2) = 'CR'
              ADD 30 TO WS-RISK-SCORE
-           END-IF.
+           END-IF
 ```
 
 ---
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgrsk01.cbl" line="39">
+### Determine Policy Status
+
+<SwmSnippet path="base/src/lgapdb01.cbl" line="548">
 
 ---
 
 The risk score leads to accepting or rejecting:
 
-```cobol
+```
            IF WS-RISK-SCORE > 200
-             MOVE 2 TO LS-STATUS
+             MOVE 2 TO WS-STATUS
              MOVE 'High Risk Score - Manual Review Required' 
-               TO LS-REJECT-REASON
+               TO WS-REJECT-REASON
            ELSE
              IF WS-RISK-SCORE > 150
-               MOVE 1 TO LS-STATUS
+               MOVE 1 TO WS-STATUS
                MOVE 'Medium Risk - Pending Review'
-                 TO LS-REJECT-REASON
+                 TO WS-REJECT-REASON
              ELSE
-               MOVE 0 TO LS-STATUS
-               MOVE SPACES TO LS-REJECT-REASON
+               MOVE 0 TO WS-STATUS
+               MOVE SPACES TO WS-REJECT-REASON
              END-IF
-           END-IF.
+           END-IF
 ```
 
 ---
@@ -350,36 +333,13 @@ The risk score leads to accepting or rejecting:
 
 ### Premium Calculation
 
-<SwmSnippet path="/base/src/lgapdb01.cbl" line="554">
+<SwmSnippet path="base/src/lgapdb01.cbl" line="141">
 
 ---
 
-After calculating the risk score, it is provided as input to the Premium Calculation program:
+The default discount factor is <SwmToken path="/base/src/lgapdb01.cbl" pos="141:15:17" line-data="       01  WS-DISCOUNT-FACTOR         PIC V99 VALUE 1.00.">`1.00`</SwmToken> - that is, no discount.
 
-```cobol
-       CALL-PREMIUM-CALCULATION.
-           MOVE WS-RISK-SCORE TO WS-PREMIUM-DATA
-      
-           EXEC CICS LINK
-                PROGRAM(WS-PREMIUM-PROG)
-                COMMAREA(WS-PREMIUM-DATA)
-                LENGTH(LENGTH OF WS-PREMIUM-DATA)
-                RESP(WS-RESP)
-                RESP2(WS-RESP2)
-           END-EXEC
 ```
-
----
-
-</SwmSnippet>
-
-<SwmSnippet path="/base/src/lgprm01.cbl" line="6">
-
----
-
-The default discount factor is <SwmToken path="/base/src/lgprm01.cbl" pos="6:15:17" line-data="       01  WS-DISCOUNT-FACTOR         PIC V99 VALUE 1.00.">`1.00`</SwmToken> - that is, no discount.
-
-```cobol
        01  WS-DISCOUNT-FACTOR         PIC V99 VALUE 1.00.
 ```
 
@@ -387,47 +347,47 @@ The default discount factor is <SwmToken path="/base/src/lgprm01.cbl" pos="6:15:
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgprm01.cbl" line="23">
+<SwmSnippet path="base/src/lgapdb01.cbl" line="571">
 
 ---
 
 If all perils are selected - a discount is provided:
 
-```cobol
-           IF LS-FIRE-PERIL > 0 AND
-              LS-CRIME-PERIL > 0 AND
-              LS-FLOOD-PERIL > 0 AND
-              LS-WEATHER-PERIL > 0
+```
+           IF CA-B-FirePeril > 0 AND
+              CA-B-CrimePeril > 0 AND
+              CA-B-FloodPeril > 0 AND
+              CA-B-WeatherPeril > 0
              MOVE 0.90 TO WS-DISCOUNT-FACTOR
-           END-IF.
+           END-IF
 ```
 
 ---
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgprm01.cbl" line="31">
+<SwmSnippet path="base/src/lgapdb01.cbl" line="579">
 
 ---
 
 The Premium is calculated based on the risk:
 
-```cobol
-           COMPUTE LS-FIRE-PREMIUM =
-             ((LS-RISK-SCORE * 0.8) * LS-FIRE-PERIL *
-               WS-DISCOUNT-FACTOR).
+```
+           COMPUTE CA-B-FirePremium =
+             ((WS-RISK-SCORE * 0.8) * CA-B-FirePeril *
+               WS-DISCOUNT-FACTOR)
            
-           COMPUTE LS-CRIME-PREMIUM =
-             ((LS-RISK-SCORE * 0.6) * LS-CRIME-PERIL *
-               WS-DISCOUNT-FACTOR).
+           COMPUTE CA-B-CrimePremium =
+             ((WS-RISK-SCORE * 0.6) * CA-B-CrimePeril *
+               WS-DISCOUNT-FACTOR)
            
-           COMPUTE LS-FLOOD-PREMIUM =
-             ((LS-RISK-SCORE * 1.2) * LS-FLOOD-PERIL *
-               WS-DISCOUNT-FACTOR).
+           COMPUTE CA-B-FloodPremium =
+             ((WS-RISK-SCORE * 1.2) * CA-B-FloodPeril *
+               WS-DISCOUNT-FACTOR)
            
-           COMPUTE LS-WEATHER-PREMIUM =
-             ((LS-RISK-SCORE * 0.9) * LS-WEATHER-PERIL *
-               WS-DISCOUNT-FACTOR).
+           COMPUTE CA-B-WeatherPremium =
+             ((WS-RISK-SCORE * 0.9) * CA-B-WeatherPeril *
+               WS-DISCOUNT-FACTOR)
 ```
 
 ---
@@ -436,11 +396,11 @@ The Premium is calculated based on the risk:
 
 ### Writing to Storage
 
-<SwmSnippet path="/base/src/lgapdb01.cbl" line="577">
+<SwmSnippet path="/base/src/lgapdb01.cbl" line="598">
 
 ---
 
-The Premium is written to <SwmToken path="/base/src/lgapdb01.cbl" pos="577:3:3" line-data="       INSERT-DB2-RECORD.">`DB2`</SwmToken>:
+The Premium is written to <SwmToken path="/base/src/lgapdb01.cbl" pos="598:3:3" line-data="       INSERT-DB2-RECORD.">`DB2`</SwmToken>:
 
 ```cobol
        INSERT-DB2-RECORD.
@@ -460,11 +420,11 @@ The Premium is written to <SwmToken path="/base/src/lgapdb01.cbl" pos="577:3:3" 
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/lgapdb01.cbl" line="269">
+<SwmSnippet path="/base/src/lgapdb01.cbl" line="270">
 
 ---
 
-And to VSAM by calling <SwmToken path="/base/src/lgapdb01.cbl" pos="269:9:9" line-data="             EXEC CICS Link Program(LGAPVS01)">`LGAPVS01`</SwmToken>:
+And to VSAM by calling <SwmToken path="/base/src/lgapdb01.cbl" pos="270:9:9" line-data="             EXEC CICS Link Program(LGAPVS01)">`LGAPVS01`</SwmToken>:
 
 ```cobol
              EXEC CICS Link Program(LGAPVS01)
