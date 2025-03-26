@@ -377,6 +377,110 @@
         }
       }
     },
+    "3a74a8fc-7a5c-4622-b988-a0c5a2892ba3": {
+      "name": "WS-LOC-F",
+      "rule": {
+        "type": "regex",
+        "regex": "\\bWS-LOC-F\\b",
+        "ignoreCase": false
+      },
+      "actions": {
+        "ide": {
+          "message": "WS-LOC-F: WS-LOC-F is used to store the Location Risk Factor associated with policies\n  \nUsed in the following path:\n\nbase/src/lgarsk01.cbl"
+        }
+      }
+    },
+    "3a74a8fc-7a5c-4622-b988-a0c5a2892ba7": {
+      "name": "WS-CL-F",
+      "rule": {
+        "type": "regex",
+        "regex": "\\bWS-CL-F\\b",
+        "ignoreCase": false
+      },
+      "actions": {
+        "ide": {
+          "message": "WS-CL-F: WS-CL-F is used to store the Claim Factor associated with policies\n  \nUsed in the following path:\n\nbase/src/lgarsk01.cbl"
+        }
+      }
+    },
+    "3a74a8fc-7a5c-4622-b988-a0c5a2892ba9": {
+      "name": "WS-F-RSK",
+      "rule": {
+        "type": "regex",
+        "regex": "\\bWS-F-RSK\\b",
+        "ignoreCase": false
+      },
+      "actions": {
+        "ide": {
+          "message": "WS-F-RSK: WS-F-RSK is used to store the Final Risk associated with policies\n  \nUsed in the following path:\n\nbase/src/lgarsk01.cbl"
+        }
+      }
+    },
+    "3a74a8fc-7a5c-4622-b988-a0c5a2892ba8": {
+      "name": "WS-BS-RS",
+      "rule": {
+        "type": "regex",
+        "regex": "\\bWS-BS-RS\\b",
+        "ignoreCase": false
+      },
+      "actions": {
+        "ide": {
+          "message": "WS-BS-RS: WS-BS-RS is used to store the Base Risk associated with policies\n  \nUsed in the following path:\n\nbase/src/lgarsk01.cbl"
+        }
+      }
+    },
+    "3a74a8fc-7a5c-4622-b988-a0c5a2892ba4": {
+      "name": "IN-FR-PR",
+      "rule": {
+        "type": "regex",
+        "regex": "\\bIN-FR-PR\\b",
+        "ignoreCase": false
+      },
+      "actions": {
+        "ide": {
+          "message": "IN-FR-PERIL: IN-FR-PERIL is used to store the Fire Peril risk associated with a certain commercial policy\n  \nUsed in the following path:\n\nbase/src/lgarsk01.cbl"
+        }
+      }
+    },
+    "3a74a8fc-7a5c-4622-b988-a0c5a2892ba5": {
+      "name": "IN-CR-PR",
+      "rule": {
+        "type": "regex",
+        "regex": "\\bIN-CR-PR\\b",
+        "ignoreCase": false
+      },
+      "actions": {
+        "ide": {
+          "message": "IN-CR-PR: IN-CR-PR is used to store the Crime Peril risk associated with a certain commercial policy\n  \nUsed in the following path:\n\nbase/src/lgarsk01.cbl"
+        }
+      }
+    },
+    "3a74a8fc-7a5c-4622-b988-a0c5a2892ba6a": {
+      "name": "IN-FL-PR",
+      "rule": {
+        "type": "regex",
+        "regex": "\\bIN-FL-PR\\b",
+        "ignoreCase": false
+      },
+      "actions": {
+        "ide": {
+          "message": "IN-FL-PR: IN-FL-PR is used to store the Flood Peril risk associated with a certain commercial policy\n  \nUsed in the following path:\n\nbase/src/lgarsk01.cbl"
+        }
+      }
+    },
+    "3a74a8fc-7a5c-4622-b988-a0c5a2892ba6": {
+      "name": "IN-WE-PR",
+      "rule": {
+        "type": "regex",
+        "regex": "\\bIN-WE-PR\\b",
+        "ignoreCase": false
+      },
+      "actions": {
+        "ide": {
+          "message": "IN-WE-PR: IN-WE-PR is used to store the Weather Peril risk associated with a certain commercial policy\n  \nUsed in the following path:\n\nbase/src/lgarsk01.cbl"
+        }
+      }
+    },
     "fa3b5b7c-ecfe-4c29-9496-cbdcc85e425b": {
       "name": "WS-DATE",
       "rule": {
