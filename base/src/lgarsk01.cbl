@@ -130,10 +130,10 @@ IDENTIFICATION DIVISION.
 
       * Calculate location factor based on perils
            COMPUTE WS-LOCATION-FACTOR = 1 +
-               (IN-FIRE-PERIL * 0.1) +
-               (IN-CRIME-PERIL * 0.1) +
-               (IN-FLOOD-PERIL * 0.15) +
-               (IN-WEATHER-PERIL * 0.1)
+               (IN-FIRE-PERIL * 0.2) +
+               (IN-CRIME-PERIL * 0.2) +
+               (IN-FLOOD-PERIL * 0.3) +
+               (IN-WEATHER-PERIL * 0.2)
 
       * Calculate final risk score
            COMPUTE WS-FINAL-RISK ROUNDED =
