@@ -111,15 +111,15 @@ classDef a911b8d83 color:#000000,fill:#5afa0a
 %%         BaseRisk -->|"OTHER<br/>Base = 1.75"| Claims
 %%         
 %%         Claims{Apply Claim Factor}
-%%         Claims -->|"No Claims<br/>Factor = <SwmToken path="/base/src/lgarsk01.cbl" pos="124:3:5" line-data="               MOVE 0.80 TO WS-CL-F">`0.80`</SwmToken>"| Location
-%%         Claims -->|"1-2 Claims<br/>Factor = <SwmToken path="/base/src/lgarsk01.cbl" pos="126:3:5" line-data="               MOVE 1.30 TO WS-CL-F">`1.30`</SwmToken>"| Location
-%%         Claims -->|"3+ Claims<br/>Factor = <SwmToken path="/base/src/lgarsk01.cbl" pos="128:3:5" line-data="               MOVE 1.50 TO WS-CL-F">`1.50`</SwmToken>"| Location
+%%         Claims -->|"No Claims<br/>Factor = <SwmToken path="/base/src/lgarsk01.cbl" pos="122:3:5" line-data="               MOVE 0.80 TO WS-CL-F">`0.80`</SwmToken>"| Location
+%%         Claims -->|"1-2 Claims<br/>Factor = <SwmToken path="/base/src/lgarsk01.cbl" pos="124:3:5" line-data="               MOVE 1.30 TO WS-CL-F">`1.30`</SwmToken>"| Location
+%%         Claims -->|"3+ Claims<br/>Factor = <SwmToken path="/base/src/lgarsk01.cbl" pos="126:3:5" line-data="               MOVE 1.50 TO WS-CL-F">`1.50`</SwmToken>"| Location
 %%         
 %%         Location{Calculate Location Factor} 
-%%         Location -->|"Fire Peril<br/>Impact = <SwmToken path="/base/src/lgarsk01.cbl" pos="133:10:12" line-data="               (IN-FR-PR * 0.2) +">`0.2`</SwmToken> per level"| CalcLoc
-%%         Location -->|"Crime Peril<br/>Impact = <SwmToken path="/base/src/lgarsk01.cbl" pos="134:10:12" line-data="               (IN-CR-PR * 0.2) +">`0.2`</SwmToken> per level"| CalcLoc
-%%         Location -->|"Flood Peril<br/>Impact = <SwmToken path="/base/src/lgarsk01.cbl" pos="135:10:12" line-data="               (IN-FL-PR * 0.3) +">`0.3`</SwmToken> per level"| CalcLoc
-%%         Location -->|"Weather Peril<br/>Impact = <SwmToken path="/base/src/lgarsk01.cbl" pos="136:10:12" line-data="               (IN-WE-PR * 0.2)">`0.2`</SwmToken> per level"| CalcLoc
+%%         Location -->|"Fire Peril<br/>Impact = <SwmToken path="/base/src/lgarsk01.cbl" pos="130:10:12" line-data="               (IN-FR-PR * 0.2) +">`0.2`</SwmToken> per level"| CalcLoc
+%%         Location -->|"Crime Peril<br/>Impact = <SwmToken path="/base/src/lgarsk01.cbl" pos="131:10:12" line-data="               (IN-CR-PR * 0.2) +">`0.2`</SwmToken> per level"| CalcLoc
+%%         Location -->|"Flood Peril<br/>Impact = <SwmToken path="/base/src/lgarsk01.cbl" pos="132:10:12" line-data="               (IN-FL-PR * 0.3) +">`0.3`</SwmToken> per level"| CalcLoc
+%%         Location -->|"Weather Peril<br/>Impact = <SwmToken path="/base/src/lgarsk01.cbl" pos="133:10:12" line-data="               (IN-WE-PR * 0.2)">`0.2`</SwmToken> per level"| CalcLoc
 %%         
 %%         CalcLoc[Calculate Total Location Factor] --> FinalCalc
 %%         
@@ -306,7 +306,7 @@ Data validation is done here:
 
 ### 
 
-<SwmSnippet path="/base/src/lgarsk01.cbl" line="109">
+<SwmSnippet path="/base/src/lgarsk01.cbl" line="108">
 
 ---
 
@@ -335,7 +335,7 @@ Based on the property type, we calculate the base risk:
 
 ### 
 
-<SwmSnippet path="/base/src/lgarsk01.cbl" line="123">
+<SwmSnippet path="/base/src/lgarsk01.cbl" line="121">
 
 ---
 
@@ -357,7 +357,7 @@ Based on the property type, we calculate the base risk:
 
 ### 
 
-<SwmSnippet path="/base/src/lgarsk01.cbl" line="132">
+<SwmSnippet path="/base/src/lgarsk01.cbl" line="129">
 
 ---
 
@@ -377,19 +377,18 @@ Based on the property type, we calculate the base risk:
 
 ### 
 
-<SwmSnippet path="/base/src/lgarsk01.cbl" line="139">
+<SwmSnippet path="/base/src/lgarsk01.cbl" line="135">
 
 ---
 
 ### Calculate Final Risk
 
-Note there is a maximum of <SwmToken path="/base/src/lgarsk01.cbl" pos="143:11:13" line-data="           IF WS-F-RSK &gt; 9.99">`9.99`</SwmToken>
+Note there is a maximum of <SwmToken path="/base/src/lgarsk01.cbl" pos="138:11:13" line-data="           IF WS-F-RSK &gt; 9.99">`9.99`</SwmToken>
 
 ```
            COMPUTE WS-F-RSK ROUNDED =
                WS-BS-RS * WS-CL-F * WS-LOC-F
 
-      * Ensure risk score doesn't exceed maximum
            IF WS-F-RSK > 9.99
                MOVE 9.99 TO WS-F-RSK
            END-IF.
@@ -401,7 +400,7 @@ Note there is a maximum of <SwmToken path="/base/src/lgarsk01.cbl" pos="143:11:1
 
 ### 
 
-<SwmSnippet path="/base/src/lgarsk01.cbl" line="151">
+<SwmSnippet path="/base/src/lgarsk01.cbl" line="146">
 
 ---
 
@@ -551,6 +550,6 @@ Lastly we cleanup temporary files:
 | <SwmToken path="/base/src/lgarsk01.cbl" pos="56:3:7" line-data="           05 WS-BS-RS          PIC 9(3)V99.">`WS-BS-RS`</SwmToken> | <SwmToken path="/base/src/lgarsk01.cbl" pos="56:9:15" line-data="           05 WS-BS-RS          PIC 9(3)V99.">`PIC 9(3)V99`</SwmToken> | 0-999.99    | Base Risk.<br>Based on property type                                                                                                                                  |
 | <SwmToken path="/base/src/lgarsk01.cbl" pos="57:3:7" line-data="           05 WS-CL-F       PIC 9(1)V99.">`WS-CL-F`</SwmToken>      | <SwmToken path="/base/src/lgarsk01.cbl" pos="57:9:15" line-data="           05 WS-CL-F       PIC 9(1)V99.">`PIC 9(1)V99`</SwmToken>     | 0-9.99      | Claim Factor.<br>Based on claim history                                                                                                                               |
 | <SwmToken path="/base/src/lgarsk01.cbl" pos="58:3:7" line-data="           05 WS-LOC-F    PIC 9(1)V99.">`WS-LOC-F`</SwmToken>       | <SwmToken path="/base/src/lgarsk01.cbl" pos="58:9:15" line-data="           05 WS-LOC-F    PIC 9(1)V99.">`PIC 9(1)V99`</SwmToken>       | 0-9.99      | Location Factor.<br>Combined peril impacts                                                                                                                            |
-| <SwmToken path="/base/src/lgarsk01.cbl" pos="59:3:7" line-data="           05 WS-F-RSK         PIC 9(3)V99.">`WS-F-RSK`</SwmToken>  | <SwmToken path="/base/src/lgarsk01.cbl" pos="59:9:15" line-data="           05 WS-F-RSK         PIC 9(3)V99.">`PIC 9(3)V99`</SwmToken>  | 0-999.99    | Final Risk.<br>Capped at <SwmToken path="/base/src/lgarsk01.cbl" pos="143:11:13" line-data="           IF WS-F-RSK &gt; 9.99">`9.99`</SwmToken> for business purposes |
+| <SwmToken path="/base/src/lgarsk01.cbl" pos="59:3:7" line-data="           05 WS-F-RSK         PIC 9(3)V99.">`WS-F-RSK`</SwmToken>  | <SwmToken path="/base/src/lgarsk01.cbl" pos="59:9:15" line-data="           05 WS-F-RSK         PIC 9(3)V99.">`PIC 9(3)V99`</SwmToken>  | 0-999.99    | Final Risk.<br>Capped at <SwmToken path="/base/src/lgarsk01.cbl" pos="138:11:13" line-data="           IF WS-F-RSK &gt; 9.99">`9.99`</SwmToken> for business purposes |
 
 <SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
