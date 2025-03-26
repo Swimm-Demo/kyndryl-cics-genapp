@@ -105,7 +105,6 @@ IDENTIFICATION DIVISION.
            END-IF.
 
        2200-CALCULATE-RISK.
-      * Calculate base risk from property type
            EVALUATE IN-PROPERTY-TYPE
                WHEN 'OFFICE'
                    MOVE 1.00 TO WS-BS-RS
@@ -119,7 +118,6 @@ IDENTIFICATION DIVISION.
                    MOVE 1.75 TO WS-BS-RS
            END-EVALUATE
 
-      * Apply claim history factor
            IF IN-CLAIM-COUNT = 0
                MOVE 0.80 TO WS-CL-F
            ELSE IF IN-CLAIM-COUNT <= 2
@@ -128,18 +126,15 @@ IDENTIFICATION DIVISION.
                MOVE 1.50 TO WS-CL-F
            END-IF
 
-      * Calculate location factor based on perils
            COMPUTE WS-LOC-F = 1 +
                (IN-FR-PR * 0.2) +
                (IN-CR-PR * 0.2) +
                (IN-FL-PR * 0.3) +
                (IN-WE-PR * 0.2)
 
-      * Calculate final risk score
            COMPUTE WS-F-RSK ROUNDED =
                WS-BS-RS * WS-CL-F * WS-LOC-F
 
-      * Ensure risk score doesn't exceed maximum
            IF WS-F-RSK > 9.99
                MOVE 9.99 TO WS-F-RSK
            END-IF.
