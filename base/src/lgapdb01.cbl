@@ -1,14 +1,3 @@
-       PROCESS SQL
-      ******************************************************************
-      *                                                                *
-      * (C) Copyright IBM Corp. 2011, 2021                             *
-      *                                                                *
-      *                    ADD Policy                                  *
-      *                                                                *
-      *   To add full details of an individual policy:                 *
-      *     Endowment, House, Motor, Commercial                        *
-      *                                                                *
-      ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LGAPDB01.
        ENVIRONMENT DIVISION.
@@ -60,13 +49,10 @@
       *----------------------------------------------------------------*
       * Definitions required for data manipulation                     *
       *----------------------------------------------------------------*
-      * Fields to be used to check that commarea is correct length
        01  WS-COMMAREA-LENGTHS.
            03 WS-CA-HEADER-LEN         PIC S9(4) COMP VALUE +28.
            03 WS-REQUIRED-CA-LEN       PIC S9(4)      VALUE +0.
 
-      * Define a varying length character string to contain actual
-      * amount of data that will be inserted to Varchar field
        01 WS-VARY-FIELD.
           49 WS-VARY-LEN               PIC S9(4) COMP.
           49 WS-VARY-CHAR              PIC X(3900).
@@ -99,15 +85,15 @@
            03 DB2-M-CC-SINT            PIC S9(4) COMP.
            03 DB2-M-PREMIUM-int        PIC S9(9) COMP.
            03 DB2-M-ACCIDENTS-int      PIC S9(9) COMP.
-           03 DB2-B-FirePeril-Int      PIC S9(4) COMP.
-           03 DB2-B-FirePremium-Int    PIC S9(9) COMP.
-           03 DB2-B-CrimePeril-Int     PIC S9(4) COMP.
-           03 DB2-B-CrimePremium-Int   PIC S9(9) COMP.
-           03 DB2-B-FloodPeril-Int     PIC S9(4) COMP.
-           03 DB2-B-FloodPremium-Int   PIC S9(9) COMP.
-           03 DB2-B-WeatherPeril-Int   PIC S9(4) COMP.
-           03 DB2-B-WeatherPremium-Int PIC S9(9) COMP.
-           03 DB2-B-Status-Int         PIC S9(4) COMP.
+           03 DB2-B-P1-Int             PIC S9(4) COMP.
+           03 DB2-B-P1A-Int            PIC S9(9) COMP.
+           03 DB2-B-P2-Int             PIC S9(4) COMP.
+           03 DB2-B-P2A-Int            PIC S9(9) COMP.
+           03 DB2-B-P3-Int             PIC S9(4) COMP.
+           03 DB2-B-P3A-Int            PIC S9(9) COMP.
+           03 DB2-B-P4-Int             PIC S9(4) COMP.
+           03 DB2-B-P4A-Int            PIC S9(9) COMP.
+           03 DB2-B-Z9-Int             PIC S9(4) COMP.
            03 DB2-C-Policynum-Int      PIC S9(9) COMP.
            03 DB2-C-Num-INT            PIC S9(9) COMP Value +0.
            03 DB2-C-Paid-INT           PIC S9(9) COMP.
@@ -118,32 +104,63 @@
       *----------------------------------------------------------------*
        01  LGAPVS01                    PIC X(8)  VALUE 'LGAPVS01'.
 
-             * Business logic structures for risk and premium calculation
-       01  WS-RISK-DATA.
-           05 WS-PROP-TYPE            PIC X(15).
-           05 WS-POSTCODE             PIC X(8).
-           05 WS-RISK-SCORE           PIC 999.
-           05 WS-STATUS               PIC 9.
-           05 WS-REJECT-REASON        PIC X(50).
+       01  X1-DATA.
+           05 X1-PTY                  PIC X(15).
+           05 X1-PCD                  PIC X(8).
+           05 X1-VAL                  PIC 999.
+           05 X1-Z9                   PIC 9.
+           05 X1-REJ                  PIC X(50).
        
-       01  WS-PREMIUM-DATA.
-           05 WS-RISK-SCORE           PIC 999.
-           05 WS-FIRE-PERIL           PIC 9(4).
-           05 WS-FIRE-PREMIUM         PIC 9(8).
-           05 WS-CRIME-PERIL          PIC 9(4).
-           05 WS-CRIME-PREMIUM        PIC 9(8).
-           05 WS-FLOOD-PERIL          PIC 9(4).
-           05 WS-FLOOD-PREMIUM        PIC 9(8).
-           05 WS-WEATHER-PERIL        PIC 9(4).
-           05 WS-WEATHER-PREMIUM      PIC 9(8).
+       01  X2-DATA.
+           05 X2-VAL                  PIC 999.
+           05 X2-P1                   PIC 9(4).
+           05 X2-P1A                  PIC 9(8).
+           05 X2-P2                   PIC 9(4).
+           05 X2-P2A                  PIC 9(8).
+           05 X2-P3                   PIC 9(4).
+           05 X2-P3A                  PIC 9(8).
+           05 X2-P4                   PIC 9(4).
+           05 X2-P4A                  PIC 9(8).
 
-       01  WS-RISK-SCORE              PIC 999 VALUE ZERO.
-       01  WS-DISCOUNT-FACTOR         PIC V99 VALUE 1.00.
-       01  WS-STATUS                  PIC 9 VALUE 0.
-       01  WS-REJECT-REASON           PIC X(50).
+       01  X3-VAL                     PIC 999 VALUE ZERO.
+       01  X4-MULT                    PIC V99 VALUE 1.00.
+       01  X5-Z9                      PIC 9 VALUE 0.
+       01  X6-REJ                     PIC X(50).
 
        01  WS-RESP                    PIC S9(8) COMP.
        01  WS-RESP2                   PIC S9(8) COMP.
+      *----------------------------------------------------------------*
+      * Communication Area for Risk Calculation Services
+      *----------------------------------------------------------------*
+       01  WS-COMM-RISK-AREA.
+           03  WS-XCUSTID             PIC X(10).
+           03  WS-XPOLNUM             PIC X(10).
+           03  WS-XPROPTYPE           PIC X(15).
+           03  WS-XPOSTCODE           PIC X(8).
+           03  WS-XFP-FACTOR          PIC 9(4).
+           03  WS-XCP-FACTOR          PIC 9(4).
+           03  WS-XFLP-FACTOR         PIC 9(4).
+           03  WS-XWP-FACTOR          PIC 9(4).
+           03  WS-XADDRESS            PIC X(255).
+           03  WS-XLAT                PIC X(11).
+           03  WS-XLONG               PIC X(11).
+           03  WS-XCUSTNAME           PIC X(31).
+           03  WS-XISSUE              PIC X(10).
+           03  WS-XEXPIRY             PIC X(10).
+           03  WS-XLASTCHG            PIC X(26).
+           03  WS-XCALC-MATRIX.
+               05  WS-XM-TYPE         PIC X.
+               05  WS-XM-FACTORS      OCCURS 10 TIMES.
+                   07  WS-XMF-CODE    PIC XX.
+                   07  WS-XMF-VALUE   PIC S9(3)V99.
+           03  WS-ZRESULT-SCORE       PIC 999.
+           03  WS-ZSTATUS-IND         PIC 9.
+           03  WS-ZREJECT-TEXT        PIC X(50).
+           03  WS-ZFP-PREMIUM         PIC 9(8).
+           03  WS-ZCP-PREMIUM         PIC 9(8).
+           03  WS-ZFLP-PREMIUM        PIC 9(8).
+           03  WS-ZWP-PREMIUM         PIC 9(8).
+           03  WS-ZRISK-FACTORS       PIC X(100).
       *----------------------------------------------------------------*
       *    DB2 CONTROL
       *----------------------------------------------------------------*
@@ -172,40 +189,30 @@
       *----------------------------------------------------------------*
        MAINLINE SECTION.
 
-      * initialize working storage variables
            INITIALIZE WS-HEADER.
-      * set up general variable
            MOVE EIBTRNID TO WS-TRANSID.
            MOVE EIBTRMID TO WS-TERMID.
            MOVE EIBTASKN TO WS-TASKNUM.
            MOVE EIBCALEN TO WS-CALEN.
       *----------------------------------------------------------------*
 
-      * initialize DB2 host variables
            INITIALIZE DB2-IN-INTEGERS.
            INITIALIZE DB2-OUT-INTEGERS.
 
-      *----------------------------------------------------------------*
-      * Check commarea and obtain required details                     *
-      *----------------------------------------------------------------*
-      * If NO commarea received issue an ABEND
+
            IF EIBCALEN IS EQUAL TO ZERO
                MOVE ' NO COMMAREA RECEIVED' TO EM-VARIABLE
                PERFORM WRITE-ERROR-MESSAGE
                EXEC CICS ABEND ABCODE('LGCA') NODUMP END-EXEC
            END-IF
 
-      * initialize commarea return code to zero
            MOVE '00' TO CA-RETURN-CODE
            SET WS-ADDR-DFHCOMMAREA TO ADDRESS OF DFHCOMMAREA.
 
-      * Convert commarea customer & policy nums to DB2 integer format
            MOVE CA-CUSTOMER-NUM TO DB2-CUSTOMERNUM-INT
            MOVE ZERO            TO DB2-C-PolicyNum-INT
-      * and save in error msg field incase required
            MOVE CA-CUSTOMER-NUM TO EM-CUSNUM
 
-      * Check commarea length
            ADD WS-CA-HEADER-LEN TO WS-REQUIRED-CA-LEN
 
            EVALUATE CA-REQUEST-ID
@@ -227,42 +234,33 @@
                MOVE 'C' TO DB2-POLICYTYPE
 
              WHEN OTHER
-      *        Request is not recognised or supported
                MOVE '99' TO CA-RETURN-CODE
                EXEC CICS RETURN END-EXEC
 
            END-EVALUATE
 
-      *    if less set error return code and return to caller
            IF EIBCALEN IS LESS THAN WS-REQUIRED-CA-LEN
              MOVE '98' TO CA-RETURN-CODE
              EXEC CICS RETURN END-EXEC
            END-IF
 
-      *----------------------------------------------------------------*
-      *    Perform the INSERTs against appropriate tables              *
-      *----------------------------------------------------------------*
-      *    Call procedure to Insert row in policy table
-           PERFORM INSERT-POLICY
+           PERFORM P100-T
 
-      *    Call appropriate routine to insert row to specific
-      *    policy type table.
            EVALUATE CA-REQUEST-ID
 
              WHEN '01AEND'
-               PERFORM INSERT-ENDOW
+               PERFORM P200-E
 
              WHEN '01AHOU'
-               PERFORM INSERT-HOUSE
+               PERFORM P300-H
 
              WHEN '01AMOT'
-               PERFORM INSERT-MOTOR
+               PERFORM P400-M
 
              WHEN '01ACOM'
-               PERFORM INSERT-COMMERCIAL
+               PERFORM P500-BIZ
 
              WHEN OTHER
-      *        Request is not recognised or supported
                MOVE '99' TO CA-RETURN-CODE
 
            END-EVALUATE
@@ -280,14 +278,8 @@
            EXIT.
       *----------------------------------------------------------------*
 
+       P100-T.
 
-      *================================================================*
-      *  Issue INSERT on Policy table using values passed in commarea  *
-      * set the timestamp and allow DB2 to allocate a policy number.   *
-      *================================================================*
-       INSERT-POLICY.
-
-      *    Move numeric fields to integer format
            MOVE CA-BROKERID TO DB2-BROKERID-INT
            MOVE CA-PAYMENT TO DB2-PAYMENT-INT
 
@@ -331,15 +323,12 @@
 
            END-Evaluate.
 
-      *    get value of assigned policy number
            EXEC SQL
              SET :DB2-POLICYNUM-INT = IDENTITY_VAL_LOCAL()
            END-EXEC
            MOVE DB2-POLICYNUM-INT TO CA-POLICY-NUM
-      *    and save in error msg field incase required
            MOVE CA-POLICY-NUM TO EM-POLNUM
 
-      *    get value of assigned Timestamp
            EXEC SQL
              SELECT LASTCHANGED
                INTO :CA-LASTCHANGED
@@ -351,7 +340,7 @@
       *================================================================*
       * Issue INSERT on endowment table using values passed in commarea*
       *================================================================*
-       INSERT-ENDOW.
+       P200-E.
 
       *    Move numeric fields to integer format
            MOVE CA-E-TERM        TO DB2-E-TERM-SINT
@@ -382,9 +371,9 @@
                             LIFEASSURED,
                             PADDINGDATA    )
                    VALUES ( :DB2-POLICYNUM-INT,
-                            :CA-E-WITH-PROFITS,
-                            :CA-E-EQUITIES,
-                            :CA-E-MANAGED-FUND,
+                            :CA-E-W-PRO,
+                            :CA-E-EQU,
+                            :CA-E-M-FUN,
                             :CA-E-FUND-NAME,
                             :DB2-E-TERM-SINT,
                             :DB2-E-SUMASSURED-INT,
@@ -403,9 +392,9 @@
                             SUMASSURED,
                             LIFEASSURED    )
                    VALUES ( :DB2-POLICYNUM-INT,
-                            :CA-E-WITH-PROFITS,
-                            :CA-E-EQUITIES,
-                            :CA-E-MANAGED-FUND,
+                            :CA-E-W-PRO,
+                            :CA-E-EQU,
+                            :CA-E-M-FUN,
                             :CA-E-FUND-NAME,
                             :DB2-E-TERM-SINT,
                             :DB2-E-SUMASSURED-INT,
@@ -423,14 +412,10 @@
 
            EXIT.
 
-      *================================================================*
-      * Issue INSERT on house table using values passed in commarea    *
-      *================================================================*
-       INSERT-HOUSE.
+       P300-H.
 
-      *    Move numeric fields to integer format
-           MOVE CA-H-VALUE       TO DB2-H-VALUE-INT
-           MOVE CA-H-BEDROOMS    TO DB2-H-BEDROOMS-SINT
+           MOVE CA-H-VAL       TO DB2-H-VALUE-INT
+           MOVE CA-H-BED    TO DB2-H-BEDROOMS-SINT
 
            MOVE ' INSERT HOUSE ' TO EM-SQLREQ
            EXEC SQL
@@ -443,28 +428,24 @@
                          HOUSENUMBER,
                          POSTCODE          )
                 VALUES ( :DB2-POLICYNUM-INT,
-                         :CA-H-PROPERTY-TYPE,
+                         :CA-H-P-TYP,
                          :DB2-H-BEDROOMS-SINT,
                          :DB2-H-VALUE-INT,
-                         :CA-H-HOUSE-NAME,
+                         :CA-H-H-NAM,
                          :CA-H-HOUSE-NUMBER,
-                         :CA-H-POSTCODE      )
+                         :CA-H-PCD      )
            END-EXEC
 
            IF SQLCODE NOT EQUAL 0
              MOVE '90' TO CA-RETURN-CODE
              PERFORM WRITE-ERROR-MESSAGE
-      *      Issue Abend to cause backout of update to Policy table
              EXEC CICS ABEND ABCODE('LGSQ') NODUMP END-EXEC
              EXEC CICS RETURN END-EXEC
            END-IF.
 
            EXIT.
 
-      *================================================================*
-      * Issue INSERT on motor table using values passed in commarea    *
-      *================================================================*
-       INSERT-MOTOR.
+       P400-M.
 
       *    Move numeric fields to integer format
            MOVE CA-M-VALUE       TO DB2-M-VALUE-INT
@@ -500,7 +481,6 @@
            IF SQLCODE NOT EQUAL 0
              MOVE '90' TO CA-RETURN-CODE
              PERFORM WRITE-ERROR-MESSAGE
-      *      Issue Abend to cause backout of update to Policy table
              EXEC CICS ABEND ABCODE('LGSQ') NODUMP END-EXEC
              EXEC CICS RETURN END-EXEC
            END-IF.
@@ -510,102 +490,76 @@
       *================================================================*
       * Issue INSERT on commercial table with values passed in commarea*
       *================================================================*
-       INSERT-COMMERCIAL SECTION.
-           PERFORM CALC-RISK-SCORE
-           PERFORM DETERMINE-POLICY-STATUS
-           PERFORM CALC-PREMIUMS
-           PERFORM INSERT-DB2-RECORD
+       P500-BIZ SECTION.
+           MOVE CA-CUSTOMER-NUM TO WS-XCUSTID
+           MOVE CA-POLICY-NUM TO WS-XPOLNUM
+           MOVE CA-B-PropType TO WS-XPROPTYPE
+           MOVE CA-B-PST TO WS-XPOSTCODE
+           MOVE CA-B-FP TO WS-XFP-FACTOR
+           MOVE CA-B-CP TO WS-XCP-FACTOR
+           MOVE CA-B-FLP TO WS-XFLP-FACTOR
+           MOVE CA-B-WP TO WS-XWP-FACTOR
+           MOVE CA-B-Address TO WS-XADDRESS
+           MOVE CA-B-Latitude TO WS-XLAT
+           MOVE CA-B-Longitude TO WS-XLONG
+           MOVE CA-B-Customer TO WS-XCUSTNAME
+           MOVE CA-ISSUE-DATE TO WS-XISSUE
+           MOVE CA-EXPIRY-DATE TO WS-XEXPIRY
+           MOVE CA-LASTCHANGED TO WS-XLASTCHG
+           
+           EXEC CICS LINK PROGRAM('LGCOMCAL')
+                COMMAREA(WS-COMM-RISK-AREA)
+                LENGTH(LENGTH OF WS-COMM-RISK-AREA)
+           END-EXEC
+           
+           MOVE WS-ZRESULT-SCORE TO X3-VAL
+           MOVE WS-ZSTATUS-IND TO X5-Z9
+           MOVE WS-ZREJECT-TEXT TO X6-REJ
+           MOVE WS-ZFP-PREMIUM TO CA-B-CA-B-FPR
+           MOVE WS-ZCP-PREMIUM TO CA-B-CPR
+           MOVE WS-ZFLP-PREMIUM TO CA-B-FLPR
+           MOVE WS-ZWP-PREMIUM TO CA-B-WPR
+           
+           MOVE X5-Z9 TO CA-B-ST
+           MOVE X6-REJ TO CA-B-RejectReason
+           
+           PERFORM P546-CHK-MATRIX
+           
+           PERFORM P548-BINS
+           
            EXIT.
 
       *================================================================*
-       CALC-RISK-SCORE.
-      * Initialize base risk score
-           MOVE 100 TO WS-RISK-SCORE
-
-      * Property type risk evaluation    
-           EVALUATE CA-B-PropType
-             WHEN 'WAREHOUSE'
-               ADD 50 TO WS-RISK-SCORE
-             WHEN 'FACTORY' 
-               ADD 75 TO WS-RISK-SCORE
-             WHEN 'OFFICE'
-               ADD 25 TO WS-RISK-SCORE
-             WHEN 'RETAIL'
-               ADD 40 TO WS-RISK-SCORE
-           END-EVALUATE
-
-      * High-risk postcode check
-           IF CA-B-Postcode(1:2) = 'FL' OR
-              CA-B-Postcode(1:2) = 'CR'
-             ADD 30 TO WS-RISK-SCORE
-           END-IF
-
-           EXIT.
-
-      *================================================================*
-       DETERMINE-POLICY-STATUS.
-      * Set status based on calculated risk
-           IF WS-RISK-SCORE > 200
-             MOVE 2 TO WS-STATUS
-             MOVE 'High Risk Score - Manual Review Required' 
-               TO WS-REJECT-REASON
-           ELSE
-             IF WS-RISK-SCORE > 150
-               MOVE 1 TO WS-STATUS
-               MOVE 'Medium Risk - Pending Review'
-                 TO WS-REJECT-REASON
-             ELSE
-               MOVE 0 TO WS-STATUS
-               MOVE SPACES TO WS-REJECT-REASON
-             END-IF
-           END-IF
-
-           MOVE WS-STATUS TO CA-B-Status
-           MOVE WS-REJECT-REASON TO CA-B-RejectReason
-
-           EXIT.
-
-      *================================================================*
-       CALC-PREMIUMS.
-      * Check for multi-peril discount     
-           IF CA-B-FirePeril > 0 AND
-              CA-B-CrimePeril > 0 AND
-              CA-B-FloodPeril > 0 AND
-              CA-B-WeatherPeril > 0
-             MOVE 0.90 TO WS-DISCOUNT-FACTOR
-           END-IF
-
-      * Calculate individual peril premiums
-           COMPUTE CA-B-FirePremium =
-             ((WS-RISK-SCORE * 0.8) * CA-B-FirePeril *
-               WS-DISCOUNT-FACTOR)
+       P546-CHK-MATRIX.
+           EVALUATE TRUE
+               WHEN X3-VAL > 200 AND X5-Z9 NOT = 2
+                 MOVE 2 TO X5-Z9
+                 MOVE 'Critical Matrix Override - Manual Review' TO X6-REJ
+               WHEN X3-VAL > 150 AND X3-VAL <= 200 AND X5-Z9 NOT = 1
+                 MOVE 1 TO X5-Z9
+                 MOVE 'Matrix Override - Pending Verification' TO X6-REJ 
+               WHEN X5-Z9 NOT = 0 AND X3-VAL <= 150
+                 MOVE 0 TO X5-Z9
+                 MOVE SPACES TO X6-REJ
+               WHEN OTHER
+                 CONTINUE
+           END-EVALUATE.
            
-           COMPUTE CA-B-CrimePremium =
-             ((WS-RISK-SCORE * 0.6) * CA-B-CrimePeril *
-               WS-DISCOUNT-FACTOR)
-           
-           COMPUTE CA-B-FloodPremium =
-             ((WS-RISK-SCORE * 1.2) * CA-B-FloodPeril *
-               WS-DISCOUNT-FACTOR)
-           
-           COMPUTE CA-B-WeatherPremium =
-             ((WS-RISK-SCORE * 0.9) * CA-B-WeatherPeril *
-               WS-DISCOUNT-FACTOR)
-
+           MOVE X5-Z9 TO CA-B-ST
+           MOVE X6-REJ TO CA-B-RejectReason.
            EXIT.
 
       *----------------------------------------------------------------*
-       INSERT-DB2-RECORD.
-      * Convert commarea values to DB2 integer format
-           MOVE CA-B-FirePeril     TO DB2-B-FirePeril-Int
-           MOVE CA-B-FirePremium   TO DB2-B-FirePremium-Int
-           MOVE CA-B-CrimePeril    TO DB2-B-CrimePeril-Int
-           MOVE CA-B-CrimePremium  TO DB2-B-CrimePremium-Int
-           MOVE CA-B-FloodPeril    TO DB2-B-FloodPeril-Int
-           MOVE CA-B-FloodPremium  TO DB2-B-FloodPremium-Int
-           MOVE CA-B-WeatherPeril  TO DB2-B-WeatherPeril-Int
-           MOVE CA-B-WeatherPremium TO DB2-B-WeatherPremium-Int
-           MOVE CA-B-Status        TO DB2-B-Status-Int
+       P548-BINS.
+           MOVE CA-B-FP     TO DB2-B-P1-Int
+           MOVE CA-B-CA-B-FPR   TO DB2-B-P1A-Int
+           MOVE CA-B-CP    TO DB2-B-P2-Int
+           MOVE CA-B-CPR  TO DB2-B-P2A-Int
+           MOVE CA-B-FLP    TO DB2-B-P3-Int
+           MOVE CA-B-FLPR  TO DB2-B-P3A-Int
+           MOVE CA-B-WP  TO DB2-B-P4-Int
+           MOVE CA-B-WPR TO DB2-B-P4A-Int
+           MOVE CA-B-ST        TO DB2-B-Z9-Int
            
            MOVE ' INSERT COMMER' TO EM-SQLREQ
            EXEC SQL
@@ -621,7 +575,7 @@
                         Customer,
                         PropertyType,
                         FirePeril,
-                        FirePremium,
+                        CA-B-FPR,
                         CrimePeril,
                         CrimePremium,
                         FloodPeril,
@@ -635,20 +589,20 @@
                         :CA-ISSUE-DATE,
                         :CA-EXPIRY-DATE,
                         :CA-B-Address,
-                        :CA-B-Postcode,
+                        :CA-B-PST,
                         :CA-B-Latitude,
                         :CA-B-Longitude,
                         :CA-B-Customer,
                         :CA-B-PropType,
-                        :DB2-B-FirePeril-Int,
-                        :DB2-B-FirePremium-Int,
-                        :DB2-B-CrimePeril-Int,
-                        :DB2-B-CrimePremium-Int,
-                        :DB2-B-FloodPeril-Int,
-                        :DB2-B-FloodPremium-Int,
-                        :DB2-B-WeatherPeril-Int,
-                        :DB2-B-WeatherPremium-Int,
-                        :DB2-B-Status-Int,
+                        :DB2-B-P1-Int,
+                        :DB2-B-P1A-Int,
+                        :DB2-B-P2-Int,
+                        :DB2-B-P2A-Int,
+                        :DB2-B-P3-Int,
+                        :DB2-B-P3A-Int,
+                        :DB2-B-P4-Int,
+                        :DB2-B-P4A-Int,
+                        :DB2-B-Z9-Int,
                         :CA-B-RejectReason)
            END-EXEC
            
@@ -660,15 +614,10 @@
            END-IF.
            
            EXIT.
-      *================================================================*
-      * Procedure to write error message to Queues                     *
-      *   message will include Date, Time, Program Name, Customer      *
-      *   Number, Policy Number and SQLCODE.                           *
+
       *================================================================*
        WRITE-ERROR-MESSAGE.
-      * Save SQLCODE in message
            MOVE SQLCODE TO EM-SQLRC
-      * Obtain and format current time and date
            EXEC CICS ASKTIME ABSTIME(ABS-TIME)
            END-EXEC
            EXEC CICS FORMATTIME ABSTIME(ABS-TIME)
@@ -677,12 +626,10 @@
            END-EXEC
            MOVE DATE1 TO EM-DATE
            MOVE TIME1 TO EM-TIME
-      * Write output message to TDQ
            EXEC CICS LINK PROGRAM('LGSTSQ')
                      COMMAREA(ERROR-MSG)
                      LENGTH(LENGTH OF ERROR-MSG)
            END-EXEC.
-      * Write 90 bytes or as much as we have of commarea to TDQ
            IF EIBCALEN > 0 THEN
              IF EIBCALEN < 91 THEN
                MOVE DFHCOMMAREA(1:EIBCALEN) TO CA-DATA

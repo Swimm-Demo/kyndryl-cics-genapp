@@ -1,12 +1,3 @@
-      ******************************************************************
-      *                                                                *
-      * (C) Copyright IBM Corp. 2011, 2020                             *
-      *                                                                *
-      *               Commercial Policy Menu                           *
-      *                                                                *
-      * Menu for Commercial Policy Transactions                        *
-      *                                                                *
-      ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LGTESTP4.
        ENVIRONMENT DIVISION.
@@ -18,7 +9,7 @@
        77 MSGEND                       PIC X(24) VALUE
                                         'Transaction ended      '.
 
-       COPY SSMAP.
+       COPY XMAP.
        01 COMM-AREA.
        COPY LGCMAREA.
 
@@ -30,10 +21,10 @@
        MAINLINE SECTION.
 
            IF EIBCALEN > 0
-              GO TO A-GAIN.
+              GO TO B-PROC.
 
-           Initialize SSMAPP4I.
-           Initialize SSMAPP4O.
+           Initialize XMAPP4I.
+           Initialize XMAPP4O.
            Initialize COMM-AREA.
            MOVE '0000000000'   To ENP4CNOO.
            MOVE '0000000000'   To ENP4PNOO.
@@ -48,24 +39,23 @@
            MOVE LOW-VALUES     To ENP4STAO.
 
 
-      * Display Main Menu
-           EXEC CICS SEND MAP ('SSMAPP4')
-                     MAPSET ('SSMAP')
+           EXEC CICS SEND MAP ('XMAPP4')
+                     MAPSET ('XMAP')
                      ERASE
                      END-EXEC.
 
-       A-GAIN.
+       B-PROC.
 
            EXEC CICS HANDLE AID
-                     CLEAR(CLEARIT)
-                     PF3(ENDIT) END-EXEC.
+                     CLEAR(C-CLR)
+                     PF3(D-END) END-EXEC.
            EXEC CICS HANDLE CONDITION
-                     MAPFAIL(ENDIT)
+                     MAPFAIL(D-END)
                      END-EXEC.
 
-           EXEC CICS RECEIVE MAP('SSMAPP4')
-                     INTO(SSMAPP4I)
-                     MAPSET('SSMAP') END-EXEC.
+           EXEC CICS RECEIVE MAP('XMAPP4')
+                     INTO(XMAPP4I)
+                     MAPSET('XMAP') END-EXEC.
 
 
            EVALUATE ENP4OPTO
@@ -113,7 +103,7 @@
                      ENP4HPCO NOT = 00000000
                                                    )
                         Move '05ICOM'   To CA-REQUEST-ID
-                        Move ENP4HPCO   To CA-B-PostCode
+                        Move ENP4HPCO   To CA-B-PST
                  End-If
                  End-If
                  End-If
@@ -124,7 +114,7 @@
                            LENGTH(32500)
                  END-EXEC
                  IF CA-RETURN-CODE > 0
-                   GO TO NO-DATA
+                   GO TO E-NODAT
                  END-IF
               
                  Move CA-POLICY-NUM        To  ENP4PNOI
@@ -132,26 +122,26 @@
                  Move CA-ISSUE-DATE        To  ENP4IDAI
                  Move CA-EXPIRY-DATE       To  ENP4EDAI
                  Move CA-B-Address         To  ENP4ADDI
-                 Move CA-B-Postcode        To  ENP4HPCI
+                 Move CA-B-PST        To  ENP4HPCI
                  Move CA-B-Latitude        To  ENP4LATI
                  Move CA-B-Longitude       To  ENP4LONI
                  Move CA-B-Customer        To  ENP4CUSI
                  Move CA-B-PropType        To  ENP4PTYI
-                 Move CA-B-FirePeril       To  ENP4FPEI
-                 Move CA-B-FirePremium     To  ENP4FPRI
-                 Move CA-B-CrimePeril      To  ENP4CPEI
-                 Move CA-B-CrimePremium    To  ENP4CPRI
-                 Move CA-B-FloodPeril      To  ENP4XPEI
-                 Move CA-B-FloodPremium    To  ENP4XPRI
-                 Move CA-B-WeatherPeril    To  ENP4WPEI
-                 Move CA-B-WeatherPremium  To  ENP4WPRI
-                 Move CA-B-Status          To  ENP4STAI
+                 Move CA-B-FP       To  ENP4FPEI
+                 Move CA-B-CA-B-FPR     To  ENP4FPRI
+                 Move CA-B-CP      To  ENP4CPEI
+                 Move CA-B-CPR    To  ENP4CPRI
+                 Move CA-B-FLP      To  ENP4XPEI
+                 Move CA-B-FLPR    To  ENP4XPRI
+                 Move CA-B-WP    To  ENP4WPEI
+                 Move CA-B-WPR  To  ENP4WPRI
+                 Move CA-B-ST          To  ENP4STAI
                  Move CA-B-RejectReason    To  ENP4REJI
-                 EXEC CICS SEND MAP ('SSMAPP4')
-                           FROM(SSMAPP4O)
-                           MAPSET ('SSMAP')
+                 EXEC CICS SEND MAP ('XMAPP4')
+                           FROM(XMAPP4O)
+                           MAPSET ('XMAP')
                  END-EXEC
-                 GO TO ENDIT-STARTIT
+                 GO TO D-EXEC
 
              WHEN '2'
                  Move '01ACOM'             To  CA-REQUEST-ID
@@ -159,20 +149,20 @@
                  Move ENP4IDAO             To  CA-ISSUE-DATE
                  Move ENP4EDAO             To  CA-EXPIRY-DATE
                  Move ENP4ADDO             To  CA-B-Address
-                 Move ENP4HPCO             To  CA-B-Postcode
+                 Move ENP4HPCO             To  CA-B-PST
                  Move ENP4LATO             To  CA-B-Latitude
                  Move ENP4LONO             To  CA-B-Longitude
                  Move ENP4CUSO             To  CA-B-Customer
                  Move ENP4PTYO             To  CA-B-PropType
-                 Move ENP4FPEO             To  CA-B-FirePeril
-                 Move ENP4FPRO             To  CA-B-FirePremium
-                 Move ENP4CPEO             To  CA-B-CrimePeril
-                 Move ENP4CPRO             To  CA-B-CrimePremium
-                 Move ENP4XPEO             To  CA-B-FloodPeril
-                 Move ENP4XPRO             To  CA-B-FloodPremium
-                 Move ENP4WPEO             To  CA-B-WeatherPeril
-                 Move ENP4WPRO             To  CA-B-WeatherPremium
-                 Move ENP4STAO             To  CA-B-Status
+                 Move ENP4FPEO             To  CA-B-FP
+                 Move ENP4FPRO             To  CA-B-CA-B-FPR
+                 Move ENP4CPEO             To  CA-B-CP
+                 Move ENP4CPRO             To  CA-B-CPR
+                 Move ENP4XPEO             To  CA-B-FLP
+                 Move ENP4XPRO             To  CA-B-FLPR
+                 Move ENP4WPEO             To  CA-B-WP
+                 Move ENP4WPRO             To  CA-B-WPR
+                 Move ENP4STAO             To  CA-B-ST
                  Move ENP4REJO             To  CA-B-RejectReason
 
                  EXEC CICS LINK PROGRAM('LGAPOL01')
@@ -181,18 +171,18 @@
                  END-EXEC
                  IF CA-RETURN-CODE > 0
                    Exec CICS Syncpoint Rollback End-Exec
-                   GO TO NO-ADD
+                   GO TO E-NOADD
                  END-IF
                  Move CA-CUSTOMER-NUM To ENP4CNOI
                  Move CA-POLICY-NUM   To ENP4PNOI
                  Move ' '             To ENP4OPTI
                  Move 'New Commercial Policy Inserted'
                    To  ERP4FLDO
-                 EXEC CICS SEND MAP ('SSMAPP4')
-                           FROM(SSMAPP4O)
-                           MAPSET ('SSMAP')
+                 EXEC CICS SEND MAP ('XMAPP4')
+                           FROM(XMAPP4O)
+                           MAPSET ('XMAP')
                  END-EXEC
-                 GO TO ENDIT-STARTIT
+                 GO TO D-EXEC
 
              WHEN '3'
                  Move '01DCOM'   To CA-REQUEST-ID
@@ -204,7 +194,7 @@
                  END-EXEC
                  IF CA-RETURN-CODE > 0
                    Exec CICS Syncpoint Rollback End-Exec
-                   GO TO NO-DELETE
+                   GO TO E-NODEL
                  END-IF
 
                  Move Spaces             To ENP4EDAI
@@ -227,11 +217,11 @@
                  Move ' '             To ENP4OPTI
                  Move 'Commercial Policy Deleted'
                    To  ERP4FLDO
-                 EXEC CICS SEND MAP ('SSMAPP4')
-                           FROM(SSMAPP4O)
-                           MAPSET ('SSMAP')
+                 EXEC CICS SEND MAP ('XMAPP4')
+                           FROM(XMAPP4O)
+                           MAPSET ('XMAP')
                  END-EXEC
-                 GO TO ENDIT-STARTIT
+                 GO TO D-EXEC
 
              WHEN OTHER
 
@@ -239,28 +229,27 @@
                    To  ERP4FLDO
                  Move -1 To ENP4OPTL
 
-                 EXEC CICS SEND MAP ('SSMAPP4')
-                           FROM(SSMAPP4O)
-                           MAPSET ('SSMAP')
+                 EXEC CICS SEND MAP ('XMAPP4')
+                           FROM(XMAPP4O)
+                           MAPSET ('XMAP')
                            CURSOR
                  END-EXEC
-                 GO TO ENDIT-STARTIT
+                 GO TO D-EXEC
 
            END-EVALUATE.
 
 
-      *    Send message to terminal and return
 
            EXEC CICS RETURN
            END-EXEC.
 
-       ENDIT-STARTIT.
+       D-EXEC.
            EXEC CICS RETURN
                 TRANSID('SSP4')
                 COMMAREA(COMM-AREA)
                 END-EXEC.
 
-       ENDIT.
+       D-END.
            EXEC CICS SEND TEXT
                      FROM(MSGEND)
                      LENGTH(LENGTH OF MSGEND)
@@ -270,11 +259,11 @@
            EXEC CICS RETURN
            END-EXEC.
 
-       CLEARIT.
+       C-CLR.
 
-           Initialize SSMAPP4I.
-           EXEC CICS SEND MAP ('SSMAPP4')
-                     MAPSET ('SSMAP')
+           Initialize XMAPP4I.
+           EXEC CICS SEND MAP ('XMAPP4')
+                     MAPSET ('XMAP')
                      MAPONLY
            END-EXEC
 
@@ -283,36 +272,36 @@
                 COMMAREA(COMM-AREA)
                 END-EXEC.
 
-       NO-ADD.
+       E-NOADD.
            Evaluate CA-RETURN-CODE
              When 70
                Move 'Customer does not exist'        To  ERP4FLDO
-               Go To ERROR-OUT
+               Go To F-ERR
              When Other
                Move 'Error Adding Commercial Policy' To  ERP4FLDO
-               Go To ERROR-OUT
+               Go To F-ERR
            End-Evaluate.
 
-       NO-UPD.
+       E-NOUPD.
            Move 'Error Updating Commercial Policy'   To  ERP4FLDO
-           Go To ERROR-OUT.
+           Go To F-ERR.
 
-       NO-DELETE.
+       E-NODEL.
            Move 'Error Deleting Commercial Policy'   To  ERP4FLDO
-           Go To ERROR-OUT.
+           Go To F-ERR.
 
-       NO-DATA.
+       E-NODAT.
            Move 'No data was returned.'              To  ERP4FLDO
-           Go To ERROR-OUT.
+           Go To F-ERR.
 
-       ERROR-OUT.
-           EXEC CICS SEND MAP ('SSMAPP4')
-                     FROM(SSMAPP4O)
-                     MAPSET ('SSMAP')
+       F-ERR.
+           EXEC CICS SEND MAP ('XMAPP4')
+                     FROM(XMAPP4O)
+                     MAPSET ('XMAP')
            END-EXEC.
 
-           Initialize SSMAPP4I.
-           Initialize SSMAPP4O.
+           Initialize XMAPP4I.
+           Initialize XMAPP4O.
            Initialize COMM-AREA.
 
-           GO TO ENDIT-STARTIT.
+           GO TO D-EXEC.

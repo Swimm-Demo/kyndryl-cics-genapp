@@ -1,14 +1,3 @@
-      ******************************************************************
-      *                                                                *
-      * (C) Copyright IBM Corp. 2011, 2020                             *
-      *                                                                *
-      *                    ADD Policy                                  *
-      *                                                                *
-      *  Add Policy business logic                                     *
-      *   To add full details of an individual policy:                 *
-      *     Endowment, House, Motor, Commercial                        *
-      *                                                                *
-      ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LGAPOL01.
        ENVIRONMENT DIVISION.
@@ -21,29 +10,28 @@
       *----------------------------------------------------------------*
       * Common defintions                                              *
       *----------------------------------------------------------------*
-      * Run time (debug) infomation for this invocation
-        01  WS-HEADER.
-           03 WS-EYECATCHER            PIC X(16)
+        01  W1-CONTROL.
+           03 W1-EYE                   PIC X(16)
                                         VALUE 'LGAPOL01------WS'.
-           03 WS-TRANSID               PIC X(4).
-           03 WS-TERMID                PIC X(4).
-           03 WS-TASKNUM               PIC 9(7).
-           03 WS-FILLER                PIC X.
-           03 WS-ADDR-DFHCOMMAREA      USAGE is POINTER.
-           03 WS-CALEN                 PIC S9(4) COMP.
+           03 W1-TID                   PIC X(4).
+           03 W1-TRM                   PIC X(4).
+           03 W1-TSK                   PIC 9(7).
+           03 W1-FILL                  PIC X.
+           03 W1-PTR                   USAGE is POINTER.
+           03 W1-LEN                   PIC S9(4) COMP.
 
       * Variables for time/date processing
-       01  ABS-TIME                    PIC S9(8) COMP VALUE +0.
-       01  TIME1                       PIC X(8)  VALUE SPACES.
-       01  DATE1                       PIC X(10) VALUE SPACES.
+       01  W2-TIME                     PIC S9(8) COMP VALUE +0.
+       01  W2-DATE1                    PIC X(8)  VALUE SPACES.
+       01  W2-DATE2                    PIC X(10) VALUE SPACES.
 
       * Error Message structure
-       01  ERROR-MSG.
-           03 EM-DATE                  PIC X(8)  VALUE SPACES.
+       01  W3-MESSAGE.
+           03 W3-DATE                  PIC X(8)  VALUE SPACES.
            03 FILLER                   PIC X     VALUE SPACES.
-           03 EM-TIME                  PIC X(6)  VALUE SPACES.
+           03 W3-TIME                  PIC X(6)  VALUE SPACES.
            03 FILLER                   PIC X(9)  VALUE ' LGAPOL01'.
-           03 EM-VARIABLE              PIC X(21) VALUE SPACES.
+           03 W3-DETAIL                PIC X(21) VALUE SPACES.
 
        01  CA-ERROR-MSG.
            03 FILLER                   PIC X(9)  VALUE 'COMMAREA='.
@@ -55,9 +43,9 @@
       * Definitions required for data manipulation                     *
       *----------------------------------------------------------------*
       * Fields to be used to check that commarea is correct length
-       01  WS-COMMAREA-LENGTHS.
-           03 WS-CA-HEADER-LEN         PIC S9(4) COMP VALUE +28.
-           03 WS-REQUIRED-CA-LEN       PIC S9(4)      VALUE +0.
+       01  W4-COMM-LENS.
+           03 W4-HDR-LEN               PIC S9(4) COMP VALUE +28.
+           03 W4-REQ-LEN               PIC S9(4)      VALUE +0.
 
       *----------------------------------------------------------------*
 
@@ -77,40 +65,34 @@
        PROCEDURE DIVISION.
 
       *----------------------------------------------------------------*
-       MAINLINE SECTION.
+       P100-MAIN SECTION.
 
       *----------------------------------------------------------------*
       * Common code                                                    *
       *----------------------------------------------------------------*
-      * initialize working storage variables
-           INITIALIZE WS-HEADER.
-      * set up general variable
-           MOVE EIBTRNID TO WS-TRANSID.
-           MOVE EIBTRMID TO WS-TERMID.
-           MOVE EIBTASKN TO WS-TASKNUM.
-           MOVE EIBCALEN TO WS-CALEN.
+           INITIALIZE W1-CONTROL.
+           MOVE EIBTRNID TO W1-TID.
+           MOVE EIBTRMID TO W1-TRM.
+           MOVE EIBTASKN TO W1-TSK.
+           MOVE EIBCALEN TO W1-LEN.
       *----------------------------------------------------------------*
 
       *----------------------------------------------------------------*
       * Check commarea and obtain required details                     *
       *----------------------------------------------------------------*
-      * If NO commarea received issue an ABEND
            IF EIBCALEN IS EQUAL TO ZERO
-               MOVE ' NO COMMAREA RECEIVED' TO EM-VARIABLE
-               PERFORM WRITE-ERROR-MESSAGE
+               MOVE ' NO COMMAREA RECEIVED' TO W3-DETAIL
+               PERFORM P999-ERROR
                EXEC CICS ABEND ABCODE('LGCA') NODUMP END-EXEC
            END-IF
 
-      * initialize commarea return code to zero
            MOVE '00' TO CA-RETURN-CODE
-           SET WS-ADDR-DFHCOMMAREA TO ADDRESS OF DFHCOMMAREA.
+           SET W1-PTR TO ADDRESS OF DFHCOMMAREA.
 
-      * Check commarea length
-           ADD WS-CA-HEADER-LEN TO WS-REQUIRED-CA-LEN
+           ADD W4-HDR-LEN TO W4-REQ-LEN
 
 
-      *    if less set error return code and return to caller
-           IF EIBCALEN IS LESS THAN WS-REQUIRED-CA-LEN
+           IF EIBCALEN IS LESS THAN W4-REQ-LEN
              MOVE '98' TO CA-RETURN-CODE
              EXEC CICS RETURN END-EXEC
            END-IF
@@ -125,7 +107,7 @@
 
            EXEC CICS RETURN END-EXEC.
 
-       MAINLINE-EXIT.
+       P100-EXIT.
            EXIT.
       *----------------------------------------------------------------*
 
@@ -134,21 +116,21 @@
       *   message will include Date, Time, Program Name, Customer      *
       *   Number, Policy Number and SQLCODE.                           *
       *================================================================*
-       WRITE-ERROR-MESSAGE.
+       P999-ERROR.
       * Save SQLCODE in message
       * Obtain and format current time and date
-           EXEC CICS ASKTIME ABSTIME(ABS-TIME)
+           EXEC CICS ASKTIME ABSTIME(W2-TIME)
            END-EXEC
-           EXEC CICS FORMATTIME ABSTIME(ABS-TIME)
-                     MMDDYYYY(DATE1)
-                     TIME(TIME1)
+           EXEC CICS FORMATTIME ABSTIME(W2-TIME)
+                     MMDDYYYY(W2-DATE1)
+                     TIME(W2-DATE2)
            END-EXEC
-           MOVE DATE1 TO EM-DATE
-           MOVE TIME1 TO EM-TIME
+           MOVE W2-DATE1 TO W3-DATE
+           MOVE W2-DATE2 TO W3-TIME
       * Write output message to TDQ
            EXEC CICS LINK PROGRAM('LGSTSQ')
-                     COMMAREA(ERROR-MSG)
-                     LENGTH(LENGTH OF ERROR-MSG)
+                     COMMAREA(W3-MESSAGE)
+                     LENGTH(LENGTH OF W3-MESSAGE)
            END-EXEC.
       * Write 90 bytes or as much as we have of commarea to TDQ
            IF EIBCALEN > 0 THEN

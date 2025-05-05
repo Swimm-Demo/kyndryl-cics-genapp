@@ -1,12 +1,3 @@
-      ******************************************************************
-      *                                                                *
-      * (C) Copyright IBM Corp. 2011, 2020                             *
-      *                                                                *
-      *                    ADD Policy                                  *
-      *                                                                *
-      * VSAM KSDS Policy record ADD                                    *
-      *                                                                *
-      ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LGAPVS01.
        ENVIRONMENT DIVISION.
@@ -15,50 +6,50 @@
        DATA DIVISION.
        WORKING-STORAGE SECTION.
 
-       01  WS-RESP                   PIC S9(8) COMP.
-       01  WS-RESP2                  PIC S9(8) COMP.
-       01  WS-Comm-Len               PIC S9(8) COMP.
-       01  WS-STARTCODE              PIC XX Value spaces.
-       01  WS-SYSID                  PIC X(4) Value spaces.
-       01  WS-Commarea-Len           PIC S9(4) COMP.
+       01  V1-RCD1                   PIC S9(8) COMP.
+       01  V1-RCD2                   PIC S9(8) COMP.
+       01  V1-LEN                    PIC S9(8) COMP.
+       01  V1-CODE                   PIC XX Value spaces.
+       01  V1-SYS                    PIC X(4) Value spaces.
+       01  V1-COMM                   PIC S9(4) COMP.
       ******************************
-       01  WF-Policy-Info.
-         03  WF-Policy-Key.
-           05  WF-Request-ID           Pic X.
-           05  WF-Customer-Num         Pic X(10).
-           05  WF-Policy-Num           Pic X(10).
-         03 WF-Policy-Data             Pic X(83).
-         03 WF-C-Policy-Data Redefines WF-Policy-Data.
-           05  WF-B-Postcode           Pic X(8).
-           05  WF-B-Status             Pic 9(4).
-           05  WF-B-Customer           Pic X(31).
-           05  WF-B-Risk-Score         Pic 999.
-           05  WF-B-Fire-Premium       Pic 9(8).
-           05  WF-B-Crime-Premium      Pic 9(8).
-           05  WF-B-Flood-Premium      Pic 9(8).
-           05  WF-B-Weather-Premium    Pic 9(8).
-         03 WF-E-Policy-Data Redefines WF-Policy-Data.
-           05  WF-E-WITH-PROFITS       Pic X.
-           05  WF-E-EQUITIES           Pic X.
-           05  WF-E-MANAGED-FUND       Pic X.
-           05  WF-E-FUND-NAME          Pic X(10).
-           05  WF-E-LIFE-ASSURED       Pic X(30).
-         03 WF-H-Policy-Data Redefines WF-Policy-Data.
-           05  WF-H-PROPERTY-TYPE      Pic X(15).
-           05  WF-H-BEDROOMS           Pic 999.
-           05  WF-H-VALUE              Pic 9(8).
-           05  WF-H-POSTCODE           Pic X(8).
-           05  WF-H-HOUSE-NAME         Pic X(9).
-         03 WF-M-Policy-Data Redefines WF-Policy-Data.
-           05  WF-M-MAKE               Pic X(15).
-           05  WF-M-MODEL              Pic X(15).
-           05  WF-M-VALUE              Pic 9(6).
-           05  WF-M-REGNUMBER          Pic X(7).
+       01  V2-RECORD.
+         03  V2-KEY.
+           05  V2-REQ                  Pic X.
+           05  V2-CUST                 Pic X(10).
+           05  V2-POL                  Pic X(10).
+         03 V2-DATA                    Pic X(83).
+         03 V2-C-DATA Redefines V2-DATA.
+           05  V2-C-PCD                Pic X(8).
+           05  V2-C-Z9                 Pic 9(4).
+           05  V2-C-CUST               Pic X(31).
+           05  V2-C-VAL                Pic 999.
+           05  V2-C-P1VAL              Pic 9(8).
+           05  V2-C-P2VAL              Pic 9(8).
+           05  V2-C-P3VAL              Pic 9(8).
+           05  V2-C-P4VAL              Pic 9(8).
+         03 V2-E-DATA Redefines V2-DATA.
+           05  V2-E-OPT1               Pic X.
+           05  V2-E-OPT2               Pic X.
+           05  V2-E-OPT3               Pic X.
+           05  V2-E-NAME               Pic X(10).
+           05  V2-E-LIFE               Pic X(30).
+         03 V2-H-DATA Redefines V2-DATA.
+           05  V2-H-TYPE               Pic X(15).
+           05  V2-H-ROOMS              Pic 999.
+           05  V2-H-COST               Pic 9(8).
+           05  V2-H-PCD                Pic X(8).
+           05  V2-H-NAME               Pic X(9).
+         03 V2-M-DATA Redefines V2-DATA.
+           05  V2-M-MAKE               Pic X(15).
+           05  V2-M-MODEL              Pic X(15).
+           05  V2-M-COST               Pic 9(6).
+           05  V2-M-NUM                Pic X(7).
       ******************************
       * Variables for time/date processing
-       01  WS-ABSTIME                  PIC S9(8) COMP VALUE +0.
-       01  WS-TIME                     PIC X(8)  VALUE SPACES.
-       01  WS-DATE                     PIC X(10) VALUE SPACES.
+       01  V3-TIME                     PIC S9(8) COMP VALUE +0.
+       01  V3-DATE1                    PIC X(8)  VALUE SPACES.
+       01  V3-DATE2                    PIC X(10) VALUE SPACES.
       * Error Message structure
        01  ERROR-MSG.
            03 EM-DATE                  PIC X(8)  VALUE SPACES.
@@ -96,86 +87,86 @@
        PROCEDURE DIVISION.
 
       *---------------------------------------------------------------*
-       MAINLINE SECTION.
+       P100-ENTRY SECTION.
       *
       *---------------------------------------------------------------*
-           Move EIBCALEN To WS-Commarea-Len.
+           Move EIBCALEN To V1-COMM.
       *---------------------------------------------------------------*
-           Move CA-Request-ID(4:1) To WF-Request-ID
-           Move CA-Policy-Num      To WF-Policy-Num
-           Move CA-Customer-Num    To WF-Customer-Num
+           Move CA-Request-ID(4:1) To V2-REQ
+           Move CA-Policy-Num      To V2-POL
+           Move CA-Customer-Num    To V2-CUST
 
-           Evaluate WF-Request-ID
+           Evaluate V2-REQ
 
              When 'C'
-               Move CA-B-Postcode     To WF-B-Postcode
-               Move CA-B-Status       To WF-B-Status
-               Move CA-B-Customer     To WF-B-Customer
-               Move WS-RISK-SCORE     To WF-B-Risk-Score
-               Move CA-B-FirePremium  To WF-B-Fire-Premium
-               Move CA-B-CrimePremium To WF-B-Crime-Premium
-               Move CA-B-FloodPremium To WF-B-Flood-Premium
-               Move CA-B-WeatherPremium To WF-B-Weather-Premium
+               Move CA-B-PST     To V2-C-PCD
+               Move CA-B-ST       To V2-C-Z9
+               Move CA-B-Customer     To V2-C-CUST
+               Move WS-RISK-SCORE     To V2-C-VAL
+               Move CA-B-CA-B-FPR  To V2-C-P1VAL
+               Move CA-B-CPR To V2-C-P2VAL
+               Move CA-B-FLPR To V2-C-P3VAL
+               Move CA-B-WPR To V2-C-P4VAL
 
              When 'E'
-               Move CA-E-WITH-PROFITS To  WF-E-WITH-PROFITS
-               Move CA-E-EQUITIES     To  WF-E-EQUITIES
-               Move CA-E-MANAGED-FUND To  WF-E-MANAGED-FUND
-               Move CA-E-FUND-NAME    To  WF-E-FUND-NAME
-               Move CA-E-LIFE-ASSURED To  WF-E-LIFE-ASSURED
+               Move CA-E-W-PRO        To  V2-E-OPT1
+               Move CA-E-EQU          To  V2-E-OPT2
+               Move CA-E-M-FUN        To  V2-E-OPT3
+               Move CA-E-FUND-NAME    To  V2-E-NAME
+               Move CA-E-LIFE-ASSURED To  V2-E-LIFE
 
              When 'H'
-               Move CA-H-PROPERTY-TYPE To  WF-H-PROPERTY-TYPE
-               Move CA-H-BEDROOMS      To  WF-H-BEDROOMS
-               Move CA-H-VALUE         To  WF-H-VALUE
-               Move CA-H-POSTCODE      To  WF-H-POSTCODE
-               Move CA-H-HOUSE-NAME    To  WF-H-HOUSE-NAME
+               Move CA-H-P-TYP         To  V2-H-TYPE
+               Move CA-H-BED           To  V2-H-ROOMS
+               Move CA-H-VAL           To  V2-H-COST
+               Move CA-H-PCD           To  V2-H-PCD
+               Move CA-H-H-NAM         To  V2-H-NAME
 
              When 'M'
-               Move CA-M-MAKE          To  WF-M-MAKE
-               Move CA-M-MODEL         To  WF-M-MODEL
-               Move CA-M-VALUE         To  WF-M-VALUE
-               Move CA-M-REGNUMBER     To  WF-M-REGNUMBER
+               Move CA-M-MAKE          To  V2-M-MAKE
+               Move CA-M-MODEL         To  V2-M-MODEL
+               Move CA-M-VALUE         To  V2-M-COST
+               Move CA-M-REGNUMBER     To  V2-M-NUM
 
              When Other
-               Move Spaces To WF-Policy-Data
+               Move Spaces To V2-DATA
            End-Evaluate
 
       *---------------------------------------------------------------*
            Exec CICS Write File('KSDSPOLY')
-                     From(WF-Policy-Info)
+                     From(V2-RECORD)
                      Length(104)
-                     Ridfld(WF-Policy-Key)
+                     Ridfld(V2-KEY)
                      KeyLength(21)
-                     RESP(WS-RESP)
+                     RESP(V1-RCD1)
            End-Exec.
-           If WS-RESP Not = DFHRESP(NORMAL)
-             Move EIBRESP2 To WS-RESP2
+           If V1-RCD1 Not = DFHRESP(NORMAL)
+             Move EIBRESP2 To V1-RCD2
              MOVE '80' TO CA-RETURN-CODE
-             PERFORM WRITE-ERROR-MESSAGE
+             PERFORM P999-ERROR
              EXEC CICS RETURN END-EXEC
            End-If.
 
       *---------------------------------------------------------------*
 
-       A-EXIT.
+       P100-EXIT.
            EXIT.
            GOBACK.
       *---------------------------------------------------------------*
-       WRITE-ERROR-MESSAGE.
-           EXEC CICS ASKTIME ABSTIME(WS-ABSTIME)
+       P999-ERROR.
+           EXEC CICS ASKTIME ABSTIME(V3-TIME)
            END-EXEC
-           EXEC CICS FORMATTIME ABSTIME(WS-ABSTIME)
-                     MMDDYYYY(WS-DATE)
-                     TIME(WS-TIME)
+           EXEC CICS FORMATTIME ABSTIME(V3-TIME)
+                     MMDDYYYY(V3-DATE1)
+                     TIME(V3-DATE2)
            END-EXEC
       *
-           MOVE WS-DATE TO EM-DATE
-           MOVE WS-TIME TO EM-TIME
+           MOVE V3-DATE1 TO EM-DATE
+           MOVE V3-DATE2 TO EM-TIME
            Move CA-Customer-Num To EM-Cusnum
            Move CA-Policy-Num   To EM-POLNUM 
-           Move WS-RESP         To EM-RespRC
-           Move WS-RESP2        To EM-Resp2RC
+           Move V1-RCD1         To EM-RespRC
+           Move V1-RCD2         To EM-Resp2RC
            EXEC CICS LINK PROGRAM('LGSTSQ')
                      COMMAREA(ERROR-MSG)
                      LENGTH(LENGTH OF ERROR-MSG)
