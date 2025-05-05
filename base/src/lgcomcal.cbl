@@ -283,7 +283,6 @@
            
            MOVE 'COMMERCIAL' TO RMS-TYPE
            MOVE '1.0.5' TO RMS-VERSION
-           MOVE 100 TO RMS-BASE
       
            EVALUATE CA-XPROPTYPE
                WHEN 'WAREHOUSE'

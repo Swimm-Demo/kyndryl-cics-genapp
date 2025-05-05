@@ -1262,7 +1262,7 @@
       }
     },
     "f2cc5d7e-4593-4d1c-bba0-03a92926ad9f": {
-      "name": "CA-B-Postcode",
+      "name": "CA-B-PST",
       "rule": {
         "type": "regex",
         "regex": "\\bCA-B-Postcode\\b",
