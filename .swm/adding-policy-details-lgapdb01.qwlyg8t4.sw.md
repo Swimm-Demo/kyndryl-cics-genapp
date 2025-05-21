@@ -14,28 +14,28 @@ The main steps are:
 ```mermaid
 sequenceDiagram
   participant User
-  participant LGAPDB01
+  participant LGAPDB01 (Adding Policy Details)
   participant Database
-  User->>LGAPDB01: Provide policy details
-  LGAPDB01->>LGAPDB01: Initialize transaction variables
-  LGAPDB01->>LGAPDB01: Convert policy numbers
-  LGAPDB01->>LGAPDB01: Determine policy type
-  LGAPDB01->>Database: Insert policy details
-  LGAPDB01->>LGAPVS01: Add policy records to a VSAM KSDS file
-  LGAPDB01->>User: Return control
+  User->>LGAPDB01 (Adding Policy Details): Provide policy details
+  LGAPDB01 (Adding Policy Details)->>LGAPDB01 (Adding Policy Details): Initialize transaction variables
+  LGAPDB01 (Adding Policy Details)->>LGAPDB01 (Adding Policy Details): Convert policy numbers
+  LGAPDB01 (Adding Policy Details)->>LGAPDB01 (Adding Policy Details): Determine policy type
+  LGAPDB01 (Adding Policy Details)->>Database: Insert policy details
+  LGAPDB01 (Adding Policy Details)->>LGAPVS01 (Adding Policy Details to VSAM KSDS file): Add policy records to a VSAM KSDS file
+  LGAPDB01 (Adding Policy Details)->>User: Return control
 
 %% Swimm:
 %% sequenceDiagram
 %%   participant User
-%%   participant <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>
+%%   participant <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> (Adding Policy Details)
 %%   participant Database
-%%   User->><SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>: Provide policy details
-%%   <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>->><SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>: Initialize transaction variables
-%%   <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>->><SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>: Convert policy numbers
-%%   <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>->><SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>: Determine policy type
-%%   <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>->>Database: Insert policy details
-%%   <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>->>LGAPVS01: Add policy records to a VSAM KSDS file
-%%   <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken>->>User: Return control
+%%   User->><SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> (Adding Policy Details): Provide policy details
+%%   <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> (Adding Policy Details)->><SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> (Adding Policy Details): Initialize transaction variables
+%%   <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> (Adding Policy Details)->><SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> (Adding Policy Details): Convert policy numbers
+%%   <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> (Adding Policy Details)->><SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> (Adding Policy Details): Determine policy type
+%%   <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> (Adding Policy Details)->>Database: Insert policy details
+%%   <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> (Adding Policy Details)->>LGAPVS01 (Adding Policy Details to VSAM KSDS file): Add policy records to a VSAM KSDS file
+%%   <SwmToken path="base/src/lgapdb01.cbl" pos="13:6:6" line-data="       PROGRAM-ID. LGAPDB01.">`LGAPDB01`</SwmToken> (Adding Policy Details)->>User: Return control
 ```
 
 # Dependencies
@@ -724,4 +724,4 @@ After returning from <SwmToken path="base/src/lgapdb01.cbl" pos="235:3:5" line-d
 
 *This is an auto-generated document by Swimm 🌊 and has not yet been verified by a human*
 
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="cics-genapp"><sup>Powered by [Swimm](https://staging.swimm.cloud/)</sup></SwmMeta>
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="cics-genapp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
