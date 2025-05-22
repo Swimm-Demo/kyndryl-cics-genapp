@@ -21,21 +21,29 @@ The process runs through two linked JCL jobs and a COBOL program that applies th
 flowchart TD
     subgraph JCL1[COMRISK1]
         direction TB
-        J1[/"1. Extract Active Policies\n2. Get Claims History\n3. Create Temporary Dataset"/]
-        Submit["Submit COMRISK2 via\nInternal Reader"]
+        J1[1 - Extract Active Policies
+2 - Get Claims History
+3 - Create Temporary Dataset]
+        Submit["Submit COMRISK2 via
+Internal Reader"]
     end
 
     subgraph JCL2[COMRISK2]
         direction TB
-        J2[/"1. Execute RISKPROG\n2. Update DB with Results\n3. Generate Reports\n4. Cleanup Temp Files"/]
+        J2[1 - Execute RISKPROG
+2 - Update DB with Results
+3 - Generate Reports
+4 - Cleanup Temp Files]
     end
 
     subgraph COBOL[RISKPROG]
-        C1["Calculate Risk Scores\nApply Business Rules"]
+        C1["Calculate Risk Scores
+Apply Business Rules"]
     end
 
     %% Data flow between components
-    J1 --> |"Temporary Dataset\nPolicy & Claims Data"| C1:::a0b8c7d0e 
+    J1 --> |"Temporary Dataset
+Policy & Claims Data"| C1:::a0b8c7d0e 
     Submit --> JCL2
     C1 --> |"Risk Score File"| J2
 
