@@ -19,7 +19,7 @@ The system presents a <SwmToken path="/base/src/ssmap.bms" pos="112:7:7" line-da
 SSP4       General Insurance Commercial Policy Menu                                 
                                                                                 
                                                                                 
-       1. Policy Inquiry           Policy Number [0000000000]                  
+       1. Policy Inquiry          Policy Number [0000000000]                  
        2. Policy Add              Cust Number [0000000000]                    
        3. Policy Delete           Start date [          ] (yyyy-mm-dd)        
                                   Expiry date [          ] (yyyy-mm-dd)       
@@ -322,7 +322,7 @@ The system provides three primary business operations:
 
  3. System validates customer number exists
 
-    - If not, display: <SwmToken path="/base/src/lgtestp4.cbl" pos="278:4:10" line-data="               Move &#39;Customer does not exist&#39;        To  ERP4FLDO">`Customer does not exist`</SwmToken>&nbsp;
+    - If not, display: <SwmToken path="/base/src/lgtestp4.cbl" pos="278:4:10" line-data="               Move &#39;Customer does not exist&#39;        To  ERP4FLDO">`Customer does not exist`</SwmToken>
 
  4. System calls business orchestrator (LGAPOL01)
 
