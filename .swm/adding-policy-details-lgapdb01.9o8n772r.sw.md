@@ -70,6 +70,98 @@ click q0n6r openCode "base/src/lgapdb01.cbl:1"
 %%     classDef currentEntity color:#000000,fill:#7CB9F4
 ```
 
+# Functional Specification
+
+\- The system must accept the following input fields when creating a new policy:
+
+&nbsp;&nbsp;- Customer number (string, maximum 20 characters)
+
+&nbsp;&nbsp;- Issue date (string, format YYYY-MM-DD)
+
+&nbsp;&nbsp;- Expiry date (string, format YYYY-MM-DD)
+
+&nbsp;&nbsp;- Broker ID (string, maximum 10 characters)
+
+&nbsp;&nbsp;- Payment amount (decimal, two decimal places)
+
+&nbsp;&nbsp;- Broker’s reference (string, maximum 30 characters)
+
+&nbsp;&nbsp;- Policy type (string, one character: 'C' for commercial, any other value for non-commercial)
+
+&nbsp;&nbsp;- If policy type is 'C' (commercial):
+
+&nbsp;&nbsp;&nbsp;&nbsp;- Property type (string: one of 'WAREHOUSE', 'FACTORY', 'OFFICE', 'RETAIL', or other)
+
+&nbsp;&nbsp;&nbsp;&nbsp;- Postcode (string, maximum 8 characters)
+
+&nbsp;&nbsp;&nbsp;&nbsp;- Peril coverage indicators for fire, crime, flood, and weather (each an integer, 0 or 1)
+
+\- Upon creation of a new policy, the system must generate and return:
+
+&nbsp;&nbsp;- A unique policy number (string, maximum 15 characters)
+
+&nbsp;&nbsp;- Creation timestamp (string, ISO 8601 format)
+
+\- For commercial policies (policy type = 'C'):
+
+[&nbsp;&nbsp;- The system must calculate a risk score as follows:](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#assessing-risk-for-commercial-policy)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Start with a base risk score of 100](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#assessing-risk-for-commercial-policy)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Add 50 if property type is 'WAREHOUSE'](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#assessing-risk-for-commercial-policy)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Add 75 if property type is 'FACTORY'](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#assessing-risk-for-commercial-policy)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Add 25 if property type is 'OFFICE'](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#assessing-risk-for-commercial-policy)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Add 40 if property type is 'RETAIL'](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#assessing-risk-for-commercial-policy)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Add 30 if the postcode starts with 'FL' or 'CR'](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#assessing-risk-for-commercial-policy)
+
+[&nbsp;&nbsp;- The system must determine the policy status and rejection reason based on the risk score:](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#evaluating-policy-status-based-on-risk)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- If risk score is greater than 200: status = 2, rejection reason = 'High Risk Score - Manual Review Required'](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#evaluating-policy-status-based-on-risk)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- If risk score is greater than 150 and less than or equal to 200: status = 1, rejection reason = 'Medium Risk - Pending Review'](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#evaluating-policy-status-based-on-risk)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- If risk score is 150 or less: status = 0, rejection reason = '' (empty string)](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#evaluating-policy-status-based-on-risk)
+
+[&nbsp;&nbsp;- The system must calculate premiums for each peril as follows:](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#premium-calculation-for-commercial-policy)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- If all peril coverage indicators are 1, apply a discount factor of 0.90 to all premiums; otherwise, use a discount factor of 1.0](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#premium-calculation-for-commercial-policy)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Fire premium = (risk score × 0.8) × fire peril indicator × discount factor](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#premium-calculation-for-commercial-policy)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Crime premium = (risk score × 0.6) × crime peril indicator × discount factor](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#premium-calculation-for-commercial-policy)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Flood premium = (risk score × 1.2) × flood peril indicator × discount factor](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#premium-calculation-for-commercial-policy)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Weather premium = (risk score × 0.9) × weather peril indicator × discount factor](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#premium-calculation-for-commercial-policy)
+
+[&nbsp;&nbsp;- The following output data must be produced for commercial policies:](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#storing-commercial-policy-in-database)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Policy number (string)](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#storing-commercial-policy-in-database)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Creation timestamp (string, ISO 8601 format)](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#storing-commercial-policy-in-database)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Status (integer: 0, 1, or 2)](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#storing-commercial-policy-in-database)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Rejection reason (string)](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#storing-commercial-policy-in-database)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Fire premium (decimal, two decimal places)](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#storing-commercial-policy-in-database)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Crime premium (decimal, two decimal places)](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#storing-commercial-policy-in-database)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Flood premium (decimal, two decimal places)](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#storing-commercial-policy-in-database)
+
+[&nbsp;&nbsp;&nbsp;&nbsp;- Weather premium (decimal, two decimal places)](https://app.swimm.io/workspaces/IFeDB6zprlQhZCBSIOwg/repos/Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=/branch/generated-docs/docs/9o8n772r/edit#storing-commercial-policy-in-database)
+
+\- For non-commercial policies (policy type not equal to 'C'):
+
+&nbsp;&nbsp;- The system must return the provided input data and the assigned policy number and creation timestamp as output.
+
+&nbsp;&nbsp;- No risk score or premium calculations are performed for non-commercial policies.
+
 # Initiating Policy Insertion
 
 ```mermaid
