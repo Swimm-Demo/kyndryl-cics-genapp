@@ -1386,7 +1386,7 @@ flowchart TD
     click node1 openCode "base/src/LGAPDB03.cbl:43:43"
     node1 --> node2{"Risk score"}
     click node2 openCode "base/src/LGAPDB03.cbl:74:90"
-    node2 -->|"> 200"| node3["Set status: REJECTED
+    node2 -->|"\> 200"| node3["Set status: REJECTED
 Reason: High Risk Score - Manual Review Required"]
     click node3 openCode "base/src/LGAPDB03.cbl:75:78"
     node2 -->|"151-200"| node4["Set status: PENDING
@@ -1406,7 +1406,7 @@ Reason: Medium Risk - Pending Review"]
 %%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB03.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB03.cbl`</SwmPath>:43:43"
 %%     node1 --> node2{"Risk score"}
 %%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB03.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB03.cbl`</SwmPath>:74:90"
-%%     node2 -->|"> 200"| node3["Set status: REJECTED
+%%     node2 -->|"\> 200"| node3["Set status: REJECTED
 %% Reason: High Risk Score - Manual Review Required"]
 %%     click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB03.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB03.cbl`</SwmPath>:75:78"
 %%     node2 -->|"151-200"| node4["Set status: PENDING
