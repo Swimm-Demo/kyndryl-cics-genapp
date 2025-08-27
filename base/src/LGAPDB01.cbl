@@ -113,7 +113,11 @@
            PERFORM P013.
 
        P010.
-           CALL 'LGAPDB02' USING IN-PROPERTY-TYPE, IN-POSTCODE, WS-RISK-SCR.
+           CALL 'LGAPDB02' USING IN-PROPERTY-TYPE, IN-POSTCODE, 
+                                IN-LATITUDE, IN-LONGITUDE,
+                                IN-FIRE-COVERAGE, IN-CRIME-COVERAGE,
+                                IN-FLOOD-COVERAGE, IN-WEATHER-COVERAGE,
+                                IN-CUSTOMER-HISTORY, WS-RISK-SCR.
 
        P011.
            CALL 'LGAPDB03' USING WS-RISK-SCR, IN-FIRE-PERIL, IN-CRIME-PERIL,
