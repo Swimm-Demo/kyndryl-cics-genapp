@@ -1,5 +1,5 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. LGAPDB01.
+       PROGRAM-ID. LGAPDB09.
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
       *
@@ -13,7 +13,7 @@
       * Run time (debug) infomation for this invocation
         01  WS-HEADER.
            03 WS-EYECATCHER            PIC X(16)
-                                        VALUE 'LGAPDB01------WS'.
+                                        VALUE 'LGAPDB09------WS'.
            03 WS-TRANSID               PIC X(4).
            03 WS-TERMID                PIC X(4).
            03 WS-TASKNUM               PIC 9(7).
@@ -31,7 +31,7 @@
            03 EM-DATE                  PIC X(8)  VALUE SPACES.
            03 FILLER                   PIC X     VALUE SPACES.
            03 EM-TIME                  PIC X(6)  VALUE SPACES.
-           03 FILLER                   PIC X(9)  VALUE ' LGAPDB01'.
+           03 FILLER                   PIC X(9)  VALUE ' LGAPDB09'.
            03 EM-VARIABLE.
              05 FILLER                 PIC X(6)  VALUE ' CNUM='.
              05 EM-CUSNUM              PIC X(10)  VALUE SPACES.
