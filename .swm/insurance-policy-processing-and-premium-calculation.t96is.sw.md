@@ -1503,11 +1503,11 @@ This section governs the actuarial premium calculation for commercial property i
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/LGAPDB04.cbl" line="464" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="base/src/P999.cpy" line="1" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
 
 ---
 
-<SwmToken path="/base/src/LGAPDB04.cbl" pos="464:1:3" line-data="       P999-FINAL." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P999-FINAL`</SwmToken> wraps up the premium calculation by summing all components, subtracting discounts, adding tax, and then calculating the final rate factor as a ratio of premium to insured value. If the rate factor is above 0.05, it's capped and the premium is recalculated to match the cap.
+<SwmToken path="/base/src/P999.cpy" pos="1:1:3" line-data="       P999-FINAL." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P999-FINAL`</SwmToken> wraps up the premium calculation by summing all components, subtracting discounts, adding tax, and then calculating the final rate factor as a ratio of premium to insured value. If the rate factor is above 0.05, it's capped and the premium is recalculated to match the cap.
 
 ```cobol
        P999-FINAL.
