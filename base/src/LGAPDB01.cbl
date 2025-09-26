@@ -32,10 +32,10 @@
        
        FILE SECTION.
        FD  INPUT-FILE.
-           COPY INPUTREC2.
+           COPY "base/src/INPUTREC2".
 
        FD  OUTPUT-FILE.
-           COPY OUTPUTREC.
+           COPY "base/src/OUTPUTREC".
            
        FD  CONFIG-FILE.
        01  CONFIG-RECORD.
@@ -64,7 +64,7 @@
        01  SUMMARY-RECORD             PIC X(132).
 
        WORKING-STORAGE SECTION.
-           COPY WORKSTOR.
+           COPY "base/src/WORKSTOR".
 
        01  WS-SUM-STAT                 PIC X(2).
            88 SUMMARY-OK               VALUE '00'.
@@ -77,7 +77,7 @@
            05 WS-HIGH-RISK-CNT         PIC 9(6) VALUE ZERO.
 
        01  WS-ACTUARIAL-INTERFACE.
-           COPY LGAPACT.
+           COPY "base/src/LGAPACT".
 
        01  WS-CONFIG-VALUES.
            05 WS-MAX-RISK-SCORE        PIC 999 VALUE 250.
