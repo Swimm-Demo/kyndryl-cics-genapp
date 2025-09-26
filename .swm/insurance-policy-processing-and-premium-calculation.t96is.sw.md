@@ -1,5 +1,5 @@
 ---
-title: Insurance Policy Processing and Premium Calculation (LGAPDB01)
+title: Insurance Policy Processing and Premium Calculation
 ---
 # Flow Overview
 
