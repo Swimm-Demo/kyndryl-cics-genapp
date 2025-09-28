@@ -461,4 +461,4 @@
                 
            MOVE WS-TAX-AMOUNT TO LK-TAX-AMT.
 
-       COPY "base/src/P999".
+      $INCLUDE "base/src/P999" ("PROCEDURE")
