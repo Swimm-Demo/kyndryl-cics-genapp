@@ -19,4 +19,6 @@
            05 FILLER                   PIC X VALUE SPACE.
            05 OUT-STATUS               PIC X(20).
            05 FILLER                   PIC X VALUE SPACE.
-           05 OUT-REJECT-REASON        PIC X(50). 
+           05 OUT-REJECT-REASON        PIC X(50).
+           05 FILLER                   PIC X VALUE SPACE.
+           05 OUT-TRANSACTION-CODE     PIC X(8).
