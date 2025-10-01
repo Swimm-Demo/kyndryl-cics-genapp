@@ -43,7 +43,7 @@ click gng7a openCode "base/src/LGAPDB01.cbl:1"
 
 %% Swimm:
 %% graph TD
-%%   s65n1("Processing and Validating Policy Data (LGAPOL01)") --> gng7a("Enhanced Policy Premium Calculation (<SwmToken path="/base/src/LGAPDB01.cbl" pos="2:6:6" line-data="       PROGRAM-ID. LGAPDB01." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`LGAPDB01`</SwmToken>)"):::currentEntity
+%%   s65n1("Processing and Validating Policy Data (<SwmToken path="/base/src/lgapol01.cbl" pos="2:6:6" line-data="       PROGRAM-ID. LGAPOL01." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`LGAPOL01`</SwmToken>)") --> gng7a("Enhanced Policy Premium Calculation (<SwmToken path="/base/src/LGAPDB01.cbl" pos="2:6:6" line-data="       PROGRAM-ID. LGAPDB01." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`LGAPDB01`</SwmToken>)"):::currentEntity
 %% click s65n1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/lgapol01.cbl">`(kyndryl-cics-genapp) base/src/lgapol01.cbl`</SwmPath>:1"
 %% clfr0("LGAPJOB") --> gng7a("Enhanced Policy Premium Calculation (<SwmToken path="/base/src/LGAPDB01.cbl" pos="2:6:6" line-data="       PROGRAM-ID. LGAPDB01." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`LGAPDB01`</SwmToken>)"):::currentEntity
 %% click clfr0 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/cntl/lgapjob.jcl">`(kyndryl-cics-genapp) base/cntl/lgapjob.jcl`</SwmPath>:1"
@@ -59,12 +59,13 @@ click gng7a openCode "base/src/LGAPDB01.cbl:1"
 
 ```mermaid
 sequenceDiagram
-    participant JCL as LGAPJOB.jcl<br/>(Job Controller)
-    participant MAIN as base/src/LGAPDB01.cbl<br/>(Premium Calculator)
-    participant RISK as base/src/LGAPDB02.cbl<br/>(Risk Assessor)
-    participant BASIC as base/src/LGAPDB03.cbl<br/>(Basic Pricer)
-    participant ACTUAR as base/src/LGAPDB04.cbl<br/>(Actuarial Engine)
-    participant DATA as Input/Output Files<br/>(Policy Data)
+    participant JCL as base/cntl/lgapjob.jcl<br/>*(Job Controller)*
+    participant MAIN as base/src/LGAPDB01.cbl<br/>*(Premium Calculator)*
+    participant RISK as base/src/LGAPDB02.cbl<br/>*(Risk Assessor)*
+    participant BASIC as base/src/LGAPDB03.cbl<br/>*(Basic Pricer)*
+    participant ACTUAR as base/src/LGAPDB04.cbl<br/>*(Actuarial Engine)*
+    participant TAC as base/src/LGAPTAC.alg<br/>*(TAC Generator)*
+    participant DATA as Input/Output Files<br/>*(Policy Data)*
 
     JCL->>MAIN: Execute premium calculation batch
     
@@ -81,6 +82,9 @@ sequenceDiagram
             ACTUAR-->>MAIN: Sophisticated premium
         end
         
+        MAIN->>TAC: Generate transaction auth code
+        TAC-->>MAIN: 8-char verification code
+        
         MAIN->>DATA: Write premium quote
     end
     
@@ -89,12 +93,13 @@ sequenceDiagram
 
 %% Swimm:
 %% sequenceDiagram
-%%     participant JCL as LGAPJOB.jcl<br/>(Job Controller)
-%%     participant MAIN as <SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath><br/>(Premium Calculator)
-%%     participant RISK as <SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB02.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB02.cbl`</SwmPath><br/>(Risk Assessor)
-%%     participant BASIC as <SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB03.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB03.cbl`</SwmPath><br/>(Basic Pricer)
-%%     participant ACTUAR as <SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath><br/>(Actuarial Engine)
-%%     participant DATA as Input/Output Files<br/>(Policy Data)
+%%     participant JCL as <SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/cntl/lgapjob.jcl">`(kyndryl-cics-genapp) base/cntl/lgapjob.jcl`</SwmPath><br/>*(Job Controller)*
+%%     participant MAIN as <SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath><br/>*(Premium Calculator)*
+%%     participant RISK as <SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB02.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB02.cbl`</SwmPath><br/>*(Risk Assessor)*
+%%     participant BASIC as <SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB03.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB03.cbl`</SwmPath><br/>*(Basic Pricer)*
+%%     participant ACTUAR as <SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath><br/>*(Actuarial Engine)*
+%%     participant TAC as <SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPTAC.alg">`(kyndryl-cics-genapp) base/src/LGAPTAC.alg`</SwmPath><br/>*(TAC Generator)*
+%%     participant DATA as Input/Output Files<br/>*(Policy Data)*
 %% 
 %%     JCL->>MAIN: Execute premium calculation batch
 %%     
@@ -111,6 +116,9 @@ sequenceDiagram
 %%             ACTUAR-->>MAIN: Sophisticated premium
 %%         end
 %%         
+%%         MAIN->>TAC: Generate transaction auth code
+%%         TAC-->>MAIN: 8-char verification code
+%%         
 %%         MAIN->>DATA: Write premium quote
 %%     end
 %%     
@@ -120,11 +128,11 @@ sequenceDiagram
 
 # Startup and Initialization
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="90" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="100" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-<SwmToken path="/base/src/LGAPDB01.cbl" pos="90:1:1" line-data="       P001." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P001`</SwmToken> kicks off the whole process: it initializes state, loads config values, opens files, processes records, closes files, generates a summary, and displays stats. We call <SwmToken path="/base/src/LGAPDB01.cbl" pos="92:3:7" line-data="           PERFORM P003-LOAD-CONFIG" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P003-LOAD-CONFIG`</SwmToken> right after initialization because we need config parameters (like risk score limits and minimum premium) before we can open files or process any records. These config values drive validation and calculation logic downstream.
+<SwmToken path="/base/src/LGAPDB01.cbl" pos="100:1:1" line-data="       P001." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P001`</SwmToken> kicks off the whole process: it initializes state, loads config values, opens files, processes records, closes files, generates a summary, and displays stats. We call <SwmToken path="/base/src/LGAPDB01.cbl" pos="102:3:7" line-data="           PERFORM P003-LOAD-CONFIG" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P003-LOAD-CONFIG`</SwmToken> right after initialization because we need config parameters (like risk score limits and minimum premium) before we can open files or process any records. These config values drive validation and calculation logic downstream.
 
 ```cobol
        P001.
@@ -148,16 +156,16 @@ sequenceDiagram
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
     node1["Start: Attempt to load configuration"] --> node2{"Is configuration file available and valid?"}
-    click node1 openCode "base/src/LGAPDB01.cbl:112:113"
+    click node1 openCode "base/src/LGAPDB01.cbl:122:123"
     node2 -->|"No"| node3["Show warning and use default configuration"]
-    click node2 openCode "base/src/LGAPDB01.cbl:114:115"
+    click node2 openCode "base/src/LGAPDB01.cbl:124:125"
     node3 --> node5["Set default configuration values"]
-    click node3 openCode "base/src/LGAPDB01.cbl:116:116"
-    click node5 openCode "base/src/LGAPDB01.cbl:116:116"
+    click node3 openCode "base/src/LGAPDB01.cbl:126:126"
+    click node5 openCode "base/src/LGAPDB01.cbl:126:126"
     node2 -->|"Yes"| node4["Load configuration values from file"]
-    click node4 openCode "base/src/LGAPDB01.cbl:118:118"
+    click node4 openCode "base/src/LGAPDB01.cbl:128:128"
     node4 --> node6["Finish"]
-    click node6 openCode "base/src/LGAPDB01.cbl:119:120"
+    click node6 openCode "base/src/LGAPDB01.cbl:129:130"
 
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 
@@ -165,16 +173,16 @@ classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
 %%     node1["Start: Attempt to load configuration"] --> node2{"Is configuration file available and valid?"}
-%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:112:113"
+%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:122:123"
 %%     node2 -->|"No"| node3["Show warning and use default configuration"]
-%%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:114:115"
+%%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:124:125"
 %%     node3 --> node5["Set default configuration values"]
-%%     click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:116:116"
-%%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:116:116"
+%%     click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:126:126"
+%%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:126:126"
 %%     node2 -->|"Yes"| node4["Load configuration values from file"]
-%%     click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:118:118"
+%%     click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:128:128"
 %%     node4 --> node6["Finish"]
-%%     click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:119:120"
+%%     click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:129:130"
 %% 
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 ```
@@ -187,11 +195,11 @@ This section governs how the application determines its configuration values at 
 | Business logic  | Load configuration from file     | If the configuration file is available and valid, the system must load all required configuration values from the file for use in subsequent application logic.                                                            |
 | Business logic  | Set default configuration values | If the configuration file is not available or invalid, the system must set all configuration values to predefined default values to ensure continued operation.                                                            |
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="112" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="122" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-<SwmToken path="/base/src/LGAPDB01.cbl" pos="112:1:5" line-data="       P003-LOAD-CONFIG." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P003-LOAD-CONFIG`</SwmToken> opens the config file and checks if it's available. If not, it sets defaults. If the file is there, it calls <SwmToken path="/base/src/LGAPDB01.cbl" pos="125:1:7" line-data="       P004-READ-CONFIG-VALUES." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P004-READ-CONFIG-VALUES`</SwmToken> to actually pull out the needed config parameters for use later in the flow.
+<SwmToken path="/base/src/LGAPDB01.cbl" pos="122:1:5" line-data="       P003-LOAD-CONFIG." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P003-LOAD-CONFIG`</SwmToken> opens the config file and checks if it's available. If not, it sets defaults. If the file is there, it calls <SwmToken path="/base/src/LGAPDB01.cbl" pos="135:1:7" line-data="       P004-READ-CONFIG-VALUES." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P004-READ-CONFIG-VALUES`</SwmToken> to actually pull out the needed config parameters for use later in the flow.
 
 ```cobol
        P003-LOAD-CONFIG.
@@ -215,41 +223,41 @@ This section governs how the application determines its configuration values at 
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
     node1["Read MAX_RISK_SCORE from configuration file"]
-    click node1 openCode "base/src/LGAPDB01.cbl:126:127"
+    click node1 openCode "base/src/LGAPDB01.cbl:136:137"
     node1 --> node2{"Is configuration valid and numeric?"}
-    click node2 openCode "base/src/LGAPDB01.cbl:128:130"
+    click node2 openCode "base/src/LGAPDB01.cbl:138:140"
     node2 -->|"Yes"| node3["Update maximum risk score"]
-    click node3 openCode "base/src/LGAPDB01.cbl:129:129"
+    click node3 openCode "base/src/LGAPDB01.cbl:139:139"
     node2 -->|"No"| node5["Read MIN_PREMIUM from configuration file"]
     node3 --> node5
-    click node5 openCode "base/src/LGAPDB01.cbl:132:133"
+    click node5 openCode "base/src/LGAPDB01.cbl:142:143"
     node5 --> node6{"Is configuration valid and numeric?"}
-    click node6 openCode "base/src/LGAPDB01.cbl:134:136"
+    click node6 openCode "base/src/LGAPDB01.cbl:144:146"
     node6 -->|"Yes"| node7["Update minimum premium"]
-    click node7 openCode "base/src/LGAPDB01.cbl:135:135"
+    click node7 openCode "base/src/LGAPDB01.cbl:145:145"
     node6 -->|"No"| node8["End"]
-    click node8 openCode "base/src/LGAPDB01.cbl:136:136"
+    click node8 openCode "base/src/LGAPDB01.cbl:146:146"
 
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 
 %% Swimm:
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
-%%     node1["Read <SwmToken path="/base/src/LGAPDB01.cbl" pos="126:4:4" line-data="           MOVE &#39;MAX_RISK_SCORE&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MAX_RISK_SCORE`</SwmToken> from configuration file"]
-%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:126:127"
+%%     node1["Read <SwmToken path="/base/src/LGAPDB01.cbl" pos="136:4:4" line-data="           MOVE &#39;MAX_RISK_SCORE&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MAX_RISK_SCORE`</SwmToken> from configuration file"]
+%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:136:137"
 %%     node1 --> node2{"Is configuration valid and numeric?"}
-%%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:128:130"
+%%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:138:140"
 %%     node2 -->|"Yes"| node3["Update maximum risk score"]
-%%     click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:129:129"
-%%     node2 -->|"No"| node5["Read <SwmToken path="/base/src/LGAPDB01.cbl" pos="132:4:4" line-data="           MOVE &#39;MIN_PREMIUM&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MIN_PREMIUM`</SwmToken> from configuration file"]
+%%     click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:139:139"
+%%     node2 -->|"No"| node5["Read <SwmToken path="/base/src/LGAPDB01.cbl" pos="142:4:4" line-data="           MOVE &#39;MIN_PREMIUM&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MIN_PREMIUM`</SwmToken> from configuration file"]
 %%     node3 --> node5
-%%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:132:133"
+%%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:142:143"
 %%     node5 --> node6{"Is configuration valid and numeric?"}
-%%     click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:134:136"
+%%     click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:144:146"
 %%     node6 -->|"Yes"| node7["Update minimum premium"]
-%%     click node7 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:135:135"
+%%     click node7 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:145:145"
 %%     node6 -->|"No"| node8["End"]
-%%     click node8 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:136:136"
+%%     click node8 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:146:146"
 %% 
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 ```
@@ -259,14 +267,14 @@ This section ensures that the application uses up-to-date and valid configuratio
 | Category        | Rule Name                      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | --------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Data validation | Configuration value validation | A configuration value is considered valid only if the configuration status is 'OK' and the configuration type is numeric.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| Business logic  | Maximum risk score assignment  | The maximum risk score used by the application must be set to the value of <SwmToken path="/base/src/LGAPDB01.cbl" pos="126:4:4" line-data="           MOVE &#39;MAX_RISK_SCORE&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MAX_RISK_SCORE`</SwmToken> from the configuration file if and only if the configuration value is present, valid, and numeric. Otherwise, the default value of 250 is retained.                                                                                                                                                                                                                                     |
-| Business logic  | Minimum premium assignment     | The minimum premium used by the application must be set to the value of <SwmToken path="/base/src/LGAPDB01.cbl" pos="132:4:4" line-data="           MOVE &#39;MIN_PREMIUM&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MIN_PREMIUM`</SwmToken> from the configuration file if and only if the configuration value is present, valid, and numeric. Otherwise, the default value of <SwmToken path="/base/src/LGAPDB04.cbl" pos="300:11:13" line-data="           IF WS-EXPOSURE-DENSITY &gt; 500.00" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`500.00`</SwmToken> is retained. |
+| Business logic  | Maximum risk score assignment  | The maximum risk score used by the application must be set to the value of <SwmToken path="/base/src/LGAPDB01.cbl" pos="136:4:4" line-data="           MOVE &#39;MAX_RISK_SCORE&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MAX_RISK_SCORE`</SwmToken> from the configuration file if and only if the configuration value is present, valid, and numeric. Otherwise, the default value of 250 is retained.                                                                                                                                                                                                                                     |
+| Business logic  | Minimum premium assignment     | The minimum premium used by the application must be set to the value of <SwmToken path="/base/src/LGAPDB01.cbl" pos="142:4:4" line-data="           MOVE &#39;MIN_PREMIUM&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MIN_PREMIUM`</SwmToken> from the configuration file if and only if the configuration value is present, valid, and numeric. Otherwise, the default value of <SwmToken path="/base/src/LGAPDB04.cbl" pos="300:11:13" line-data="           IF WS-EXPOSURE-DENSITY &gt; 500.00" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`500.00`</SwmToken> is retained. |
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="125" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="135" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-<SwmToken path="/base/src/LGAPDB01.cbl" pos="125:1:7" line-data="       P004-READ-CONFIG-VALUES." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P004-READ-CONFIG-VALUES`</SwmToken> reads <SwmToken path="/base/src/LGAPDB01.cbl" pos="126:4:4" line-data="           MOVE &#39;MAX_RISK_SCORE&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MAX_RISK_SCORE`</SwmToken> from config, checks it's valid and numeric, and assigns it if so.
+<SwmToken path="/base/src/LGAPDB01.cbl" pos="135:1:7" line-data="       P004-READ-CONFIG-VALUES." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P004-READ-CONFIG-VALUES`</SwmToken> reads <SwmToken path="/base/src/LGAPDB01.cbl" pos="136:4:4" line-data="           MOVE &#39;MAX_RISK_SCORE&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MAX_RISK_SCORE`</SwmToken> from config, checks it's valid and numeric, and assigns it if so.
 
 ```cobol
        P004-READ-CONFIG-VALUES.
@@ -281,11 +289,11 @@ This section ensures that the application uses up-to-date and valid configuratio
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="132" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="142" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-After reading <SwmToken path="/base/src/LGAPDB01.cbl" pos="126:4:4" line-data="           MOVE &#39;MAX_RISK_SCORE&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MAX_RISK_SCORE`</SwmToken>, we do the same for <SwmToken path="/base/src/LGAPDB01.cbl" pos="132:4:4" line-data="           MOVE &#39;MIN_PREMIUM&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MIN_PREMIUM`</SwmToken>: set the key, read, and assign if valid and numeric. These two config values are now set for use in validation and premium logic downstream.
+After reading <SwmToken path="/base/src/LGAPDB01.cbl" pos="136:4:4" line-data="           MOVE &#39;MAX_RISK_SCORE&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MAX_RISK_SCORE`</SwmToken>, we do the same for <SwmToken path="/base/src/LGAPDB01.cbl" pos="142:4:4" line-data="           MOVE &#39;MIN_PREMIUM&#39; TO CONFIG-KEY" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`MIN_PREMIUM`</SwmToken>: set the key, read, and assign if valid and numeric. These two config values are now set for use in validation and premium logic downstream.
 
 ```cobol
            MOVE 'MIN_PREMIUM' TO CONFIG-KEY
@@ -305,16 +313,16 @@ After reading <SwmToken path="/base/src/LGAPDB01.cbl" pos="126:4:4" line-data=" 
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
     node0["Start system setup"] --> node1["Open input file"]
-    click node1 openCode "base/src/LGAPDB01.cbl:139:139"
+    click node1 openCode "base/src/LGAPDB01.cbl:149:149"
     node1 --> node2["Open output file"]
-    click node2 openCode "base/src/LGAPDB01.cbl:140:140"
+    click node2 openCode "base/src/LGAPDB01.cbl:150:150"
     node2 --> node3["Open summary file"]
-    click node3 openCode "base/src/LGAPDB01.cbl:141:141"
+    click node3 openCode "base/src/LGAPDB01.cbl:151:151"
     node3 --> node4["Write headers"]
-    click node4 openCode "base/src/LGAPDB01.cbl:142:142"
+    click node4 openCode "base/src/LGAPDB01.cbl:152:152"
     node4 --> node5["System ready for processing"]
-    click node0 openCode "base/src/LGAPDB01.cbl:138:138"
-    click node5 openCode "base/src/LGAPDB01.cbl:142:142"
+    click node0 openCode "base/src/LGAPDB01.cbl:148:148"
+    click node5 openCode "base/src/LGAPDB01.cbl:152:152"
 
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 
@@ -322,16 +330,16 @@ classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
 %%     node0["Start system setup"] --> node1["Open input file"]
-%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:139:139"
+%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:149:149"
 %%     node1 --> node2["Open output file"]
-%%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:140:140"
+%%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:150:150"
 %%     node2 --> node3["Open summary file"]
-%%     click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:141:141"
+%%     click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:151:151"
 %%     node3 --> node4["Write headers"]
-%%     click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:142:142"
+%%     click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:152:152"
 %%     node4 --> node5["System ready for processing"]
-%%     click node0 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:138:138"
-%%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:142:142"
+%%     click node0 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:148:148"
+%%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:152:152"
 %% 
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 ```
@@ -344,11 +352,11 @@ The main product role of this section is to ensure that all files required for p
 | Data validation | System readiness confirmation | The system must confirm readiness for processing only after all files are open and headers are written, ensuring no partial setup occurs. |
 | Business logic  | Output header enforcement     | Headers must be written to output files to ensure that all subsequent data is correctly structured and easily interpretable.              |
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="138" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="148" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-<SwmToken path="/base/src/LGAPDB01.cbl" pos="138:1:5" line-data="       P005-OPEN-FILES." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P005-OPEN-FILES`</SwmToken> opens all files and writes headers so output is structured for later steps.
+<SwmToken path="/base/src/LGAPDB01.cbl" pos="148:1:5" line-data="       P005-OPEN-FILES." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P005-OPEN-FILES`</SwmToken> opens all files and writes headers so output is structured for later steps.
 
 ```cobol
        P005-OPEN-FILES.
@@ -368,29 +376,29 @@ The main product role of this section is to ensure that all files required for p
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
     node1["Read first input record"]
-    click node1 openCode "base/src/LGAPDB01.cbl:179:180"
+    click node1 openCode "base/src/LGAPDB01.cbl:190:191"
     subgraph loop1["For each input record until end"]
       node2["Increment record count"]
-      click node2 openCode "base/src/LGAPDB01.cbl:181:181"
+      click node2 openCode "base/src/LGAPDB01.cbl:192:192"
       node3["Input Validation and Error Logging"]
       
       node4{"Errors found?"}
-      click node4 openCode "base/src/LGAPDB01.cbl:183:187"
+      click node4 openCode "base/src/LGAPDB01.cbl:194:198"
       node4 -->|"No"| node5["Commercial vs Non-Commercial Record Handling"]
       
       node4 -->|"Yes"| node6["Process error record"]
-      click node6 openCode "base/src/LGAPDB01.cbl:183:187"
+      click node6 openCode "base/src/LGAPDB01.cbl:194:198"
       node5 --> node7["Commercial Policy Processing Sequence"]
       
       node6 --> node7
       node7 --> node8["Cumulative Statistics and Risk Tracking"]
       
       node8 --> node9{"End of input?"}
-      click node9 openCode "base/src/LGAPDB01.cbl:180:189"
+      click node9 openCode "base/src/LGAPDB01.cbl:191:200"
       node9 -->|"No"| node2
     end
     node9 -->|"Yes"| node10["End of processing"]
-    click node10 openCode "base/src/LGAPDB01.cbl:189:189"
+    click node10 openCode "base/src/LGAPDB01.cbl:200:200"
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 click node3 goToHeading "Input Validation and Error Logging"
 node3:::HeadingStyle
@@ -405,29 +413,29 @@ node8:::HeadingStyle
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
 %%     node1["Read first input record"]
-%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:179:180"
+%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:190:191"
 %%     subgraph loop1["For each input record until end"]
 %%       node2["Increment record count"]
-%%       click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:181:181"
+%%       click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:192:192"
 %%       node3["Input Validation and Error Logging"]
 %%       
 %%       node4{"Errors found?"}
-%%       click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:183:187"
+%%       click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:194:198"
 %%       node4 -->|"No"| node5["Commercial vs Non-Commercial Record Handling"]
 %%       
 %%       node4 -->|"Yes"| node6["Process error record"]
-%%       click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:183:187"
+%%       click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:194:198"
 %%       node5 --> node7["Commercial Policy Processing Sequence"]
 %%       
 %%       node6 --> node7
 %%       node7 --> node8["Cumulative Statistics and Risk Tracking"]
 %%       
 %%       node8 --> node9{"End of input?"}
-%%       click node9 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:180:189"
+%%       click node9 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:191:200"
 %%       node9 -->|"No"| node2
 %%     end
 %%     node9 -->|"Yes"| node10["End of processing"]
-%%     click node10 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:189:189"
+%%     click node10 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:200:200"
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 %% click node3 goToHeading "Input Validation and Error Logging"
 %% node3:::HeadingStyle
@@ -450,11 +458,11 @@ This section governs the main loop for processing input records, ensuring each r
 | Business logic  | Non-commercial record processing | Non-commercial records must be processed using the non-commercial policy sequence, which may have different premium and risk rules than commercial records.                             |
 | Business logic  | Cumulative statistics tracking   | Cumulative statistics must be updated after each record is processed, including total processed records, errors, warnings, and rejected records.                                        |
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="178" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="189" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-<SwmToken path="/base/src/LGAPDB01.cbl" pos="94:3:7" line-data="           PERFORM P006-PROCESS-RECORDS" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P006-PROCESS-RECORDS`</SwmToken> kicks off by reading input to start the record loop.
+<SwmToken path="/base/src/LGAPDB01.cbl" pos="104:3:7" line-data="           PERFORM P006-PROCESS-RECORDS" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P006-PROCESS-RECORDS`</SwmToken> kicks off by reading input to start the record loop.
 
 ```cobol
        P006-PROCESS-RECORDS.
@@ -465,11 +473,11 @@ This section governs the main loop for processing input records, ensuring each r
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="180" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="191" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-After reading each input record, we increment the record count and call <SwmToken path="/base/src/LGAPDB01.cbl" pos="182:3:9" line-data="               PERFORM P008-VALIDATE-INPUT-RECORD" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P008-VALIDATE-INPUT-RECORD`</SwmToken> to check the record's validity before doing anything else with it.
+After reading each input record, we increment the record count and call <SwmToken path="/base/src/LGAPDB01.cbl" pos="193:3:9" line-data="               PERFORM P008-VALIDATE-INPUT-RECORD" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P008-VALIDATE-INPUT-RECORD`</SwmToken> to check the record's validity before doing anything else with it.
 
 ```cobol
            PERFORM UNTIL INPUT-EOF
@@ -487,25 +495,25 @@ After reading each input record, we increment the record count and call <SwmToke
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
     node1["Start input record validation"]
-    click node1 openCode "base/src/LGAPDB01.cbl:195:196"
+    click node1 openCode "base/src/LGAPDB01.cbl:206:207"
     node1 --> node2{"Is policy type Commercial, Personal, or Farm?"}
-    click node2 openCode "base/src/LGAPDB01.cbl:198:204"
+    click node2 openCode "base/src/LGAPDB01.cbl:209:215"
     node2 -->|"No"| node3["Record not accepted: Invalid policy type"]
-    click node3 openCode "base/src/LGAPDB01.cbl:201:204"
+    click node3 openCode "base/src/LGAPDB01.cbl:212:215"
     node2 -->|"Yes"| node4{"Is customer number provided?"}
-    click node4 openCode "base/src/LGAPDB01.cbl:206:210"
+    click node4 openCode "base/src/LGAPDB01.cbl:217:221"
     node4 -->|"No"| node5["Record not accepted: Customer number required"]
-    click node5 openCode "base/src/LGAPDB01.cbl:207:210"
+    click node5 openCode "base/src/LGAPDB01.cbl:218:221"
     node4 -->|"Yes"| node6{"Is building or contents coverage limit > 0?"}
-    click node6 openCode "base/src/LGAPDB01.cbl:212:217"
+    click node6 openCode "base/src/LGAPDB01.cbl:223:228"
     node6 -->|"No"| node7["Record not accepted: At least one coverage limit required"]
-    click node7 openCode "base/src/LGAPDB01.cbl:214:217"
+    click node7 openCode "base/src/LGAPDB01.cbl:225:228"
     node6 -->|"Yes"| node8{"Does total coverage (building + contents + BI) exceed Total Insured Value ($50,000,000)?"}
-    click node8 openCode "base/src/LGAPDB01.cbl:219:224"
+    click node8 openCode "base/src/LGAPDB01.cbl:230:235"
     node8 -->|"Yes"| node9["Warning: Coverage exceeds maximum allowed, record accepted"]
-    click node9 openCode "base/src/LGAPDB01.cbl:221:224"
+    click node9 openCode "base/src/LGAPDB01.cbl:232:235"
     node8 -->|"No"| node10["Record accepted"]
-    click node10 openCode "base/src/LGAPDB01.cbl:195:224"
+    click node10 openCode "base/src/LGAPDB01.cbl:206:235"
 
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 
@@ -513,25 +521,25 @@ classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
 %%     node1["Start input record validation"]
-%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:195:196"
+%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:206:207"
 %%     node1 --> node2{"Is policy type Commercial, Personal, or Farm?"}
-%%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:198:204"
+%%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:209:215"
 %%     node2 -->|"No"| node3["Record not accepted: Invalid policy type"]
-%%     click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:201:204"
+%%     click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:212:215"
 %%     node2 -->|"Yes"| node4{"Is customer number provided?"}
-%%     click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:206:210"
+%%     click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:217:221"
 %%     node4 -->|"No"| node5["Record not accepted: Customer number required"]
-%%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:207:210"
+%%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:218:221"
 %%     node4 -->|"Yes"| node6{"Is building or contents coverage limit > 0?"}
-%%     click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:212:217"
+%%     click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:223:228"
 %%     node6 -->|"No"| node7["Record not accepted: At least one coverage limit required"]
-%%     click node7 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:214:217"
+%%     click node7 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:225:228"
 %%     node6 -->|"Yes"| node8{"Does total coverage (building + contents + BI) exceed Total Insured Value ($50,000,000)?"}
-%%     click node8 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:219:224"
+%%     click node8 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:230:235"
 %%     node8 -->|"Yes"| node9["Warning: Coverage exceeds maximum allowed, record accepted"]
-%%     click node9 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:221:224"
+%%     click node9 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:232:235"
 %%     node8 -->|"No"| node10["Record accepted"]
-%%     click node10 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:195:224"
+%%     click node10 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:206:235"
 %% 
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 ```
@@ -545,11 +553,11 @@ This section ensures that only valid insurance policy records are accepted for f
 | Data validation | Minimum coverage limit        | At least one coverage limit (building or contents) must be greater than zero for a record to be accepted. Records with both limits at zero are rejected.                         |
 | Business logic  | Maximum TIV warning           | If the sum of building, contents, and business interruption coverage exceeds the Total Insured Value (TIV) of $50,000,000, a warning is logged but the record is still accepted. |
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="195" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="206" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-In <SwmToken path="/base/src/LGAPDB01.cbl" pos="195:1:7" line-data="       P008-VALIDATE-INPUT-RECORD." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P008-VALIDATE-INPUT-RECORD`</SwmToken>, we check if the policy type is valid. If not, we call <SwmToken path="/base/src/LGAPDB01.cbl" pos="226:1:5" line-data="       P008A-LOG-ERROR." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P008A-LOG-ERROR`</SwmToken> to record the issue so the record gets flagged for error handling.
+In <SwmToken path="/base/src/LGAPDB01.cbl" pos="206:1:7" line-data="       P008-VALIDATE-INPUT-RECORD." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P008-VALIDATE-INPUT-RECORD`</SwmToken>, we check if the policy type is valid. If not, we call <SwmToken path="/base/src/LGAPDB01.cbl" pos="237:1:5" line-data="       P008A-LOG-ERROR." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P008A-LOG-ERROR`</SwmToken> to record the issue so the record gets flagged for error handling.
 
 ```cobol
        P008-VALIDATE-INPUT-RECORD.
@@ -568,11 +576,11 @@ In <SwmToken path="/base/src/LGAPDB01.cbl" pos="195:1:7" line-data="       P008-
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="226" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="237" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-<SwmToken path="/base/src/LGAPDB01.cbl" pos="226:1:5" line-data="       P008A-LOG-ERROR." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P008A-LOG-ERROR`</SwmToken> bumps the error count, uses it as an index, and stores error details in parallel arrays. This lets us track up to 20 errors per record for later handling.
+<SwmToken path="/base/src/LGAPDB01.cbl" pos="237:1:5" line-data="       P008A-LOG-ERROR." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P008A-LOG-ERROR`</SwmToken> bumps the error count, uses it as an index, and stores error details in parallel arrays. This lets us track up to 20 errors per record for later handling.
 
 ```cobol
        P008A-LOG-ERROR.
@@ -588,11 +596,11 @@ In <SwmToken path="/base/src/LGAPDB01.cbl" pos="195:1:7" line-data="       P008-
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="206" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="217" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-Back in <SwmToken path="/base/src/LGAPDB01.cbl" pos="195:1:7" line-data="       P008-VALIDATE-INPUT-RECORD." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P008-VALIDATE-INPUT-RECORD`</SwmToken>, after logging an error for invalid policy type, we check if the customer number is missing and log another error if needed. Each error logged increases the error count, which affects how the record is handled later.
+Back in <SwmToken path="/base/src/LGAPDB01.cbl" pos="206:1:7" line-data="       P008-VALIDATE-INPUT-RECORD." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P008-VALIDATE-INPUT-RECORD`</SwmToken>, after logging an error for invalid policy type, we check if the customer number is missing and log another error if needed. Each error logged increases the error count, which affects how the record is handled later.
 
 ```cobol
            IF IN-CUSTOMER-NUM = SPACES
@@ -606,7 +614,7 @@ Back in <SwmToken path="/base/src/LGAPDB01.cbl" pos="195:1:7" line-data="       
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="212" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="223" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
@@ -625,11 +633,11 @@ After checking customer number, we validate coverage limits. If both building an
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="219" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="230" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-Finally in <SwmToken path="/base/src/LGAPDB01.cbl" pos="195:1:7" line-data="       P008-VALIDATE-INPUT-RECORD." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P008-VALIDATE-INPUT-RECORD`</SwmToken>, we check if total coverage exceeds the max TIV and log a warning if it does. At this point, all errors and warnings for the record are logged and ready for downstream handling.
+Finally in <SwmToken path="/base/src/LGAPDB01.cbl" pos="206:1:7" line-data="       P008-VALIDATE-INPUT-RECORD." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P008-VALIDATE-INPUT-RECORD`</SwmToken>, we check if total coverage exceeds the max TIV and log a warning if it does. At this point, all errors and warnings for the record are logged and ready for downstream handling.
 
 ```cobol
            IF IN-BUILDING-LIMIT + IN-CONTENTS-LIMIT + 
@@ -646,11 +654,11 @@ Finally in <SwmToken path="/base/src/LGAPDB01.cbl" pos="195:1:7" line-data="    
 
 ## Valid vs Error Record Routing
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="183" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="194" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-Back in <SwmToken path="/base/src/LGAPDB01.cbl" pos="94:3:7" line-data="           PERFORM P006-PROCESS-RECORDS" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P006-PROCESS-RECORDS`</SwmToken>, after validation, we check the error count. If there are no errors, we process the record as valid by calling <SwmToken path="/base/src/LGAPDB01.cbl" pos="234:1:7" line-data="       P009-PROCESS-VALID-RECORD." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P009-PROCESS-VALID-RECORD`</SwmToken>. If there are errors, we route it to error handling instead.
+Back in <SwmToken path="/base/src/LGAPDB01.cbl" pos="104:3:7" line-data="           PERFORM P006-PROCESS-RECORDS" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P006-PROCESS-RECORDS`</SwmToken>, after validation, we check the error count. If there are no errors, we process the record as valid by calling <SwmToken path="/base/src/LGAPDB01.cbl" pos="245:1:7" line-data="       P009-PROCESS-VALID-RECORD." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P009-PROCESS-VALID-RECORD`</SwmToken>. If there are errors, we route it to error handling instead.
 
 ```cobol
                IF WS-ERROR-COUNT = ZERO
@@ -666,11 +674,11 @@ Back in <SwmToken path="/base/src/LGAPDB01.cbl" pos="94:3:7" line-data="        
 
 ## Commercial vs Non-Commercial Record Handling
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="234" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="245" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-<SwmToken path="/base/src/LGAPDB01.cbl" pos="234:1:7" line-data="       P009-PROCESS-VALID-RECORD." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P009-PROCESS-VALID-RECORD`</SwmToken> checks if the policy is commercial. If so, it calls <SwmToken path="/base/src/LGAPDB01.cbl" pos="236:3:7" line-data="               PERFORM P011-PROCESS-COMMERCIAL" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011-PROCESS-COMMERCIAL`</SwmToken> and bumps the processed count. Otherwise, it calls <SwmToken path="/base/src/LGAPDB01.cbl" pos="239:3:9" line-data="               PERFORM P012-PROCESS-NON-COMMERCIAL" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P012-PROCESS-NON-COMMERCIAL`</SwmToken> and bumps the error count. This splits the flow based on policy type.
+<SwmToken path="/base/src/LGAPDB01.cbl" pos="245:1:7" line-data="       P009-PROCESS-VALID-RECORD." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P009-PROCESS-VALID-RECORD`</SwmToken> checks if the policy is commercial. If so, it calls <SwmToken path="/base/src/LGAPDB01.cbl" pos="247:3:7" line-data="               PERFORM P011-PROCESS-COMMERCIAL" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011-PROCESS-COMMERCIAL`</SwmToken> and bumps the processed count. Otherwise, it calls <SwmToken path="/base/src/LGAPDB01.cbl" pos="250:3:9" line-data="               PERFORM P012-PROCESS-NON-COMMERCIAL" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P012-PROCESS-NON-COMMERCIAL`</SwmToken> and bumps the error count. This splits the flow based on policy type.
 
 ```cobol
        P009-PROCESS-VALID-RECORD.
@@ -693,51 +701,55 @@ Back in <SwmToken path="/base/src/LGAPDB01.cbl" pos="94:3:7" line-data="        
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
   node1["Calculate risk score"]
-  click node1 openCode "base/src/LGAPDB01.cbl:258:259"
+  click node1 openCode "base/src/LGAPDB01.cbl:270:271"
   node1 --> node2["Basic Premium Calculation via External Program"]
   
   node2 --> node3{"WS-STAT = 0 (Underwriting approved)?"}
-  click node3 openCode "base/src/LGAPDB01.cbl:261:263"
+  click node3 openCode "base/src/LGAPDB01.cbl:273:275"
   node3 -->|"Yes"| node4["Preparing Data for Actuarial Analysis"]
   
-  node3 -->|"No"| node5["Apply business rules"]
-  click node5 openCode "base/src/LGAPDB01.cbl:264:265"
+  node3 -->|"No"| node5["Applying Business Rules
+Generating TAC"]
+  click node5 goToHeading "Applying Business Rules, and Generating TAC"
   node4 --> node5
   node5 --> node6["Write output record"]
-  click node6 openCode "base/src/LGAPDB01.cbl:265:266"
+  click node6 openCode "base/src/LGAPDB01.cbl:278:278"
   node6 --> node7["Update statistics"]
-  click node7 openCode "base/src/LGAPDB01.cbl:266:267"
+  click node7 openCode "base/src/LGAPDB01.cbl:279:279"
 
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 click node2 goToHeading "Basic Premium Calculation via External Program"
 node2:::HeadingStyle
 click node4 goToHeading "Preparing Data for Actuarial Analysis"
 node4:::HeadingStyle
+node5:::HeadingStyle
 
 %% Swimm:
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
 %%   node1["Calculate risk score"]
-%%   click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:258:259"
+%%   click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:270:271"
 %%   node1 --> node2["Basic Premium Calculation via External Program"]
 %%   
-%%   node2 --> node3{"<SwmToken path="/base/src/LGAPDB01.cbl" pos="369:3:5" line-data="           EVALUATE WS-STAT" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`WS-STAT`</SwmToken> = 0 (Underwriting approved)?"}
-%%   click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:261:263"
+%%   node2 --> node3{"<SwmToken path="/base/src/LGAPDB01.cbl" pos="273:3:5" line-data="           IF WS-STAT = 0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`WS-STAT`</SwmToken> = 0 (Underwriting approved)?"}
+%%   click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:273:275"
 %%   node3 -->|"Yes"| node4["Preparing Data for Actuarial Analysis"]
 %%   
-%%   node3 -->|"No"| node5["Apply business rules"]
-%%   click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:264:265"
+%%   node3 -->|"No"| node5["Applying Business Rules
+%% Generating TAC"]
+%%   click node5 goToHeading "Applying Business Rules, and Generating TAC"
 %%   node4 --> node5
 %%   node5 --> node6["Write output record"]
-%%   click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:265:266"
+%%   click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:278:278"
 %%   node6 --> node7["Update statistics"]
-%%   click node7 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:266:267"
+%%   click node7 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:279:279"
 %% 
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 %% click node2 goToHeading "Basic Premium Calculation via External Program"
 %% node2:::HeadingStyle
 %% click node4 goToHeading "Preparing Data for Actuarial Analysis"
 %% node4:::HeadingStyle
+%% node5:::HeadingStyle
 ```
 
 This section governs the sequence for processing commercial insurance policies, ensuring that risk is assessed, premiums are calculated, underwriting decisions are respected, and all relevant business rules are applied before finalizing the policy record.
@@ -747,15 +759,15 @@ This section governs the sequence for processing commercial insurance policies, 
 | Data validation | Mandatory risk scoring                   | A risk score must be calculated for every commercial policy before any premium calculation is performed.                                                                                                                                                                                                                                                          |
 | Data validation | Output record requirement                | Every processed policy record must be written to the output, regardless of underwriting decision.                                                                                                                                                                                                                                                                 |
 | Business logic  | Premium calculation based on risk        | The basic premium for a policy must be calculated using the most current risk score and configuration-driven parameters.                                                                                                                                                                                                                                          |
-| Business logic  | Actuarial analysis for approved policies | If the underwriting decision is 'approved' (<SwmToken path="/base/src/LGAPDB01.cbl" pos="369:3:5" line-data="           EVALUATE WS-STAT" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`WS-STAT`</SwmToken> = 0), the policy data must be prepared for actuarial analysis.                          |
-| Business logic  | Conditional business rule application    | If the underwriting decision is not 'approved' (<SwmToken path="/base/src/LGAPDB01.cbl" pos="369:3:5" line-data="           EVALUATE WS-STAT" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`WS-STAT`</SwmToken> ≠ 0), additional business rules must be applied before the policy can be finalized. |
+| Business logic  | Actuarial analysis for approved policies | If the underwriting decision is 'approved' (<SwmToken path="/base/src/LGAPDB01.cbl" pos="399:3:5" line-data="           EVALUATE WS-STAT" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`WS-STAT`</SwmToken> = 0), the policy data must be prepared for actuarial analysis.                          |
+| Business logic  | Conditional business rule application    | If the underwriting decision is not 'approved' (<SwmToken path="/base/src/LGAPDB01.cbl" pos="399:3:5" line-data="           EVALUATE WS-STAT" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`WS-STAT`</SwmToken> ≠ 0), additional business rules must be applied before the policy can be finalized. |
 | Business logic  | Statistics update after processing       | Statistics must be updated after each policy is processed to ensure accurate reporting and analytics.                                                                                                                                                                                                                                                             |
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="258" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="270" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-In <SwmToken path="/base/src/LGAPDB01.cbl" pos="236:3:7" line-data="               PERFORM P011-PROCESS-COMMERCIAL" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011-PROCESS-COMMERCIAL`</SwmToken>, we first calculate the risk score, then call <SwmToken path="/base/src/LGAPDB01.cbl" pos="260:3:9" line-data="           PERFORM P011B-BASIC-PREMIUM-CALC" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011B-BASIC-PREMIUM-CALC`</SwmToken> to compute the basic premium. The risk score feeds directly into the premium calculation.
+In <SwmToken path="/base/src/LGAPDB01.cbl" pos="247:3:7" line-data="               PERFORM P011-PROCESS-COMMERCIAL" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011-PROCESS-COMMERCIAL`</SwmToken>, we first calculate the risk score, then call <SwmToken path="/base/src/LGAPDB01.cbl" pos="272:3:9" line-data="           PERFORM P011B-BASIC-PREMIUM-CALC" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011B-BASIC-PREMIUM-CALC`</SwmToken> to compute the basic premium. The risk score feeds directly into the premium calculation.
 
 ```cobol
        P011-PROCESS-COMMERCIAL.
@@ -769,11 +781,11 @@ In <SwmToken path="/base/src/LGAPDB01.cbl" pos="236:3:7" line-data="            
 
 ### Basic Premium Calculation via External Program
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="275" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="288" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-We call <SwmToken path="/base/src/LGAPDB01.cbl" pos="276:4:4" line-data="           CALL &#39;LGAPDB03&#39; USING WS-BASE-RISK-SCR, IN-FIRE-PERIL, " repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`LGAPDB03`</SwmToken> to get premium values, then use those results in the next steps.
+We call <SwmToken path="/base/src/LGAPDB01.cbl" pos="289:4:4" line-data="           CALL &#39;LGAPDB03&#39; USING WS-BASE-RISK-SCR, IN-FIRE-PERIL, " repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`LGAPDB03`</SwmToken> to get premium values, then use those results in the next steps.
 
 ```cobol
        P011B-BASIC-PREMIUM-CALC.
@@ -996,11 +1008,11 @@ This section governs how insurance application risk factors and peril values are
 
 ### Conditional Enhanced Actuarial Calculation
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="261" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="273" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-After getting basic premium results in <SwmToken path="/base/src/LGAPDB01.cbl" pos="236:3:7" line-data="               PERFORM P011-PROCESS-COMMERCIAL" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011-PROCESS-COMMERCIAL`</SwmToken>, we check if <SwmToken path="/base/src/LGAPDB01.cbl" pos="369:3:5" line-data="           EVALUATE WS-STAT" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`WS-STAT`</SwmToken> is 0 (approved). If so, we run <SwmToken path="/base/src/LGAPDB01.cbl" pos="262:3:9" line-data="               PERFORM P011C-ENHANCED-ACTUARIAL-CALC" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011C-ENHANCED-ACTUARIAL-CALC`</SwmToken> for extra actuarial analysis.
+After getting basic premium results in <SwmToken path="/base/src/LGAPDB01.cbl" pos="247:3:7" line-data="               PERFORM P011-PROCESS-COMMERCIAL" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011-PROCESS-COMMERCIAL`</SwmToken>, we check if <SwmToken path="/base/src/LGAPDB01.cbl" pos="399:3:5" line-data="           EVALUATE WS-STAT" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`WS-STAT`</SwmToken> is 0 (approved). If so, we run <SwmToken path="/base/src/LGAPDB01.cbl" pos="274:3:9" line-data="               PERFORM P011C-ENHANCED-ACTUARIAL-CALC" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011C-ENHANCED-ACTUARIAL-CALC`</SwmToken> for extra actuarial analysis.
 
 ```cobol
            IF WS-STAT = 0
@@ -1018,18 +1030,18 @@ After getting basic premium results in <SwmToken path="/base/src/LGAPDB01.cbl" p
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
     node1["Prepare input and coverage data for actuarial calculation"]
-    click node1 openCode "base/src/LGAPDB01.cbl:283:311"
+    click node1 openCode "base/src/LGAPDB01.cbl:296:324"
     node1 --> node2{"Is total premium > $500?"}
-    click node2 openCode "base/src/LGAPDB01.cbl:312:312"
+    click node2 openCode "base/src/LGAPDB01.cbl:325:325"
     node2 -->|"Yes"| node3["Actuarial Premium Calculation Steps
 (Perform enhanced actuarial calculation)"]
     click node3 goToHeading "Actuarial Premium Calculation Steps"
     node2 -->|"No"| node6["Premium unchanged"]
-    click node6 openCode "base/src/LGAPDB01.cbl:325:325"
+    click node6 openCode "base/src/LGAPDB01.cbl:338:338"
     node3 --> node4{"Is enhanced premium higher than current?"}
-    click node4 openCode "base/src/LGAPDB01.cbl:317:317"
+    click node4 openCode "base/src/LGAPDB01.cbl:330:330"
     node4 -->|"Yes"| node5["Update fire, crime, flood, weather, and total premiums, and experience modifier"]
-    click node5 openCode "base/src/LGAPDB01.cbl:318:323"
+    click node5 openCode "base/src/LGAPDB01.cbl:331:326"
     node4 -->|"No"| node6
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 node3:::HeadingStyle 
@@ -1038,18 +1050,18 @@ node3:::HeadingStyle
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
 %%     node1["Prepare input and coverage data for actuarial calculation"]
-%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:283:311"
+%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:296:324"
 %%     node1 --> node2{"Is total premium > $500?"}
-%%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:312:312"
+%%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:325:325"
 %%     node2 -->|"Yes"| node3["Actuarial Premium Calculation Steps
 %% (Perform enhanced actuarial calculation)"]
 %%     click node3 goToHeading "Actuarial Premium Calculation Steps"
 %%     node2 -->|"No"| node6["Premium unchanged"]
-%%     click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:325:325"
+%%     click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:338:338"
 %%     node3 --> node4{"Is enhanced premium higher than current?"}
-%%     click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:317:317"
+%%     click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:330:330"
 %%     node4 -->|"Yes"| node5["Update fire, crime, flood, weather, and total premiums, and experience modifier"]
-%%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:318:323"
+%%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:331:326"
 %%     node4 -->|"No"| node6
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 %% node3:::HeadingStyle 
@@ -1065,11 +1077,11 @@ This section ensures that all required data is structured and available for actu
 | Business logic  | No change on lower premium     | If the enhanced actuarial calculation does not result in a higher total premium, the existing premium values remain unchanged.                                                                                       |
 | Business logic  | Minimum premium constant       | The minimum premium threshold for enhanced actuarial calculation is $500, as defined by configuration.                                                                                                               |
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="283" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="296" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-In <SwmToken path="/base/src/LGAPDB01.cbl" pos="283:1:7" line-data="       P011C-ENHANCED-ACTUARIAL-CALC." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011C-ENHANCED-ACTUARIAL-CALC`</SwmToken>, we prep the input structure by moving all customer, property, and coverage fields into the actuarial data area. This sets up everything needed for the next calculation step.
+In <SwmToken path="/base/src/LGAPDB01.cbl" pos="296:1:7" line-data="       P011C-ENHANCED-ACTUARIAL-CALC." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011C-ENHANCED-ACTUARIAL-CALC`</SwmToken>, we prep the input structure by moving all customer, property, and coverage fields into the actuarial data area. This sets up everything needed for the next calculation step.
 
 ```cobol
        P011C-ENHANCED-ACTUARIAL-CALC.
@@ -1105,11 +1117,11 @@ In <SwmToken path="/base/src/LGAPDB01.cbl" pos="283:1:7" line-data="       P011C
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="312" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="325" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-After prepping the input, we call <SwmToken path="/base/src/LGAPDB01.cbl" pos="313:4:4" line-data="               CALL &#39;LGAPDB04&#39; USING LK-INPUT-DATA, LK-COVERAGE-DATA, " repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`LGAPDB04`</SwmToken> for enhanced actuarial calculation. If the returned premium is higher, we update all premium fields with the new values.
+After prepping the input, we call <SwmToken path="/base/src/LGAPDB01.cbl" pos="326:4:4" line-data="               CALL &#39;LGAPDB04&#39; USING LK-INPUT-DATA, LK-COVERAGE-DATA, " repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`LGAPDB04`</SwmToken> for enhanced actuarial calculation. If the returned premium is higher, we update all premium fields with the new values.
 
 ```cobol
            IF WS-TOT-PREM > WS-MIN-PREMIUM
@@ -1530,45 +1542,191 @@ This section governs the actuarial premium calculation for commercial property i
 
 </SwmSnippet>
 
-### Business Rules, Output, and Stats Update
+### Applying Business Rules, and Generating TAC
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="264" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="base/src/LGAPDB01.cbl" line="276" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
 
 ---
 
-After returning from <SwmToken path="/base/src/LGAPDB01.cbl" pos="262:3:9" line-data="               PERFORM P011C-ENHANCED-ACTUARIAL-CALC" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011C-ENHANCED-ACTUARIAL-CALC`</SwmToken>, <SwmToken path="/base/src/LGAPDB01.cbl" pos="236:3:7" line-data="               PERFORM P011-PROCESS-COMMERCIAL" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011-PROCESS-COMMERCIAL`</SwmToken> runs business rules, writes the output record, and then calls <SwmToken path="/base/src/LGAPDB01.cbl" pos="266:3:7" line-data="           PERFORM P011F-UPDATE-STATISTICS." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011F-UPDATE-STATISTICS`</SwmToken>. This last step makes sure all cumulative stats (like totals and counts) reflect the final processed record, including any changes from the enhanced actuarial calculation.
+After returning from <SwmToken path="/base/src/LGAPDB01.cbl" pos="274:3:9" line-data="               PERFORM P011C-ENHANCED-ACTUARIAL-CALC" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011C-ENHANCED-ACTUARIAL-CALC`</SwmToken>, <SwmToken path="/base/src/LGAPDB01.cbl" pos="247:3:7" line-data="               PERFORM P011-PROCESS-COMMERCIAL" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011-PROCESS-COMMERCIAL`</SwmToken> runs business rules - which updates the status to <SwmToken path="/base/src/LGAPDB01.cbl" pos="345:4:4" line-data="                   MOVE &#39;REJECTED&#39; TO WS-STAT-DESC" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`REJECTED`</SwmToken>, <SwmToken path="/base/src/LGAPDB01.cbl" pos="350:4:4" line-data="                   MOVE &#39;PENDING&#39; TO WS-STAT-DESC" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`PENDING`</SwmToken>, or <SwmToken path="/base/src/LGAPDB01.cbl" pos="360:4:4" line-data="                   MOVE &#39;APPROVED&#39; TO WS-STAT-DESC" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`APPROVED`</SwmToken>.
+
+It then calls <SwmToken path="/base/src/LGAPDB01.cbl" pos="277:3:7" line-data="           PERFORM P011E-GENERATE-TAC" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011E-GENERATE-TAC`</SwmToken>. This last step generates a Transaction Authentication Code, for audit trail and data integrity purposes. This ensures that each premium quote gets a unique, verifiable transaction code.
 
 ```cobol
            PERFORM P011D-APPLY-BUSINESS-RULES
-           PERFORM P011E-WRITE-OUTPUT-RECORD
-           PERFORM P011F-UPDATE-STATISTICS.
+           PERFORM P011E-GENERATE-TAC
 ```
 
 ---
 
 </SwmSnippet>
 
-## Cumulative Statistics and Risk Tracking
+### Generating TAC (Transaction Authentication Code)
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
+flowchart TD
+node4["Initialize MAC block with secret key"]
+    click node4 openCode "base/src/LGAPTAC.alg:31:37"
+    node4 --> node5["XOR each transaction byte with MAC block"]
+    click node5 openCode "base/src/LGAPTAC.alg:44:50"
+    node5 --> node6["Apply rotation mixing with neighbors"]
+    click node6 openCode "base/src/LGAPTAC.alg:52:56"
+    node6 --> node7["Final mixing pass with cumulative sum"]
+    click node7 openCode "base/src/LGAPTAC.alg:60:68"
+    node7 --> node8["Convert to alphanumeric characters (A-Z, 0-9)"]
+    click node8 openCode "base/src/LGAPTAC.alg:70:78"
+    node8 --> node9["Return 8-character TAC to COBOL"]
+    click node9 openCode "base/src/LGAPDB01.cbl:376:378"
+    node9 --> node10["Write TAC to output record"]
+    click node10 openCode "base/src/LGAPDB01.cbl:392:393"
+
+classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
+```
+
+This section ensures that every processed insurance policy quote receives a unique, cryptographically-derived Transaction Authentication Code (TAC) for audit trail and data integrity purposes. It produces an 8-character alphanumeric code that enables verification of quote authenticity and detection of unauthorized modifications.
+
+| Category        | Rule Name                      | Description                                                                                                                                                                                                       |
+| --------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Data validation | Transaction data completeness  | Transaction data for TAC generation must include customer number, total premium, risk score, and processing date. Missing any component will result in an incomplete TAC.                                         |
+| Data validation | TAC length requirement         | The generated TAC must be exactly 8 characters in length, conforming to the alphanumeric character set (A-Z, 0-9).                                                                                                |
+| Data validation | Secret key requirement         | The secret key used for TAC generation must be exactly 8 bytes. If shorter, default padding ('A') is applied to remaining positions.                                                                              |
+| Business logic  | Transaction data concatenation | Transaction elements must be concatenated in a fixed order: customer number, premium amount, risk score, and processing date, with space delimiters for customer/premium/risk and no delimiter before date.       |
+| Business logic  | MAC block initialization       | The MAC (Message Authentication Code) block must be initialized with 8 bytes from the secret key before any XOR operations are performed.                                                                         |
+| Business logic  | Iterative XOR processing       | Each byte of transaction data must be XORed with the MAC block using modulo-8 position cycling, ensuring all input data influences the final TAC.                                                                 |
+| Business logic  | Neighbor rotation mixing       | After XORing each byte, the MAC block must apply rotation mixing where each position is XORed with its neighbor (position N with N+1, or position 8 with position 1).                                             |
+| Business logic  | Cumulative sum mixing          | A final mixing pass must XOR each MAC block position with a cumulative sum of all previous positions, ensuring complete data interdependence.                                                                     |
+| Business logic  | Alphanumeric character mapping | Final MAC block values must be converted to alphanumeric characters by: (1) taking modulo 36 of each value, (2) mapping 0-9 to digits '0'-'9', (3) mapping 10-35 to letters 'A'-'Z'.                              |
+| Business logic  | TAC uniqueness per transaction | Each unique combination of customer number, premium, risk score, and date must produce a unique TAC. Identical transaction data with the same secret key will always produce the same TAC, enabling verification. |
+| Business logic  | TAC output placement           | The generated TAC must be written to the output record's transaction code field (OUT-TRANSACTION-CODE) before the record is written to the output file.                                                           |
+| Business logic  | Error record TAC handling      | Records that fail validation or are rejected must have their transaction code field set to spaces rather than generating a TAC, indicating no valid transaction occurred.                                         |
+
+<SwmSnippet path="/base/src/LGAPTAC.alg" line="31" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+
+---
+
+In <SwmToken path="/base/src/LGAPTAC.alg" pos="15:3:3" line-data="  PROCEDURE GENERATE_TAC(TRANSACTION_DATA, SECRET_KEY, TAC_OUTPUT);" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`GENERATE_TAC`</SwmToken>, we initialize the MAC block with a secret key.
+
+```alg
+    FOR I := 1 STEP 1 UNTIL 8 DO
+    BEGIN
+      IF I <= KEY_LEN THEN
+        MAC_BLOCK[I] := RANK(SECRET_KEY[I])
+      ELSE
+        MAC_BLOCK[I] := 65; COMMENT Default to 'A' if key too short;
+    END;
+```
+
+---
+
+</SwmSnippet>
+
+<SwmSnippet path="base/src/LGAPTAC.alg" line="44" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+
+---
+
+We then `XOR` each byte of transaction data must be with the MAC block using modulo-8 position cycling, ensuring all input data influences the final TAC. We then apply rotation mixing where each position is XORed with its neighbor.
+
+```alg
+    FOR I := 1 STEP 1 UNTIL DATA_LEN DO
+    BEGIN
+      CURRENT_VAL := RANK(TRANSACTION_DATA[I]);
+      J := ((I - 1) MOD 8) + 1;
+      
+      COMMENT XOR current character with MAC block position;
+      MAC_BLOCK[J] := BITXOR(MAC_BLOCK[J], CURRENT_VAL);
+      
+      COMMENT Additional mixing - rotate with neighbor;
+      IF J < 8 THEN
+        MAC_BLOCK[J + 1] := BITXOR(MAC_BLOCK[J + 1], MAC_BLOCK[J])
+      ELSE
+        MAC_BLOCK[1] := BITXOR(MAC_BLOCK[1], MAC_BLOCK[8]);
+    END;
+```
+
+---
+
+</SwmSnippet>
+
+<SwmSnippet path="/base/src/LGAPTAC.alg" line="63" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+
+---
+
+We then XOR each MAC block position with a cumulative sum of all previous positions, ensuring complete data interdependence.
+
+```alg
+    ROTATION := 0;
+    FOR I := 1 STEP 1 UNTIL 8 DO
+    BEGIN
+      ROTATION := ROTATION + MAC_BLOCK[I];
+      TEMP_BLOCK[I] := BITXOR(MAC_BLOCK[I], (ROTATION MOD 256));
+    END;
+```
+
+---
+
+</SwmSnippet>
+
+<SwmSnippet path="/base/src/LGAPTAC.alg" line="70" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+
+---
+
+Lastly, <SwmToken path="/base/src/LGAPTAC.alg" pos="15:3:3" line-data="  PROCEDURE GENERATE_TAC(TRANSACTION_DATA, SECRET_KEY, TAC_OUTPUT);" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`GENERATE_TAC`</SwmToken>, converts each byte to an alphanumeric character:
+
+```alg
+    FOR I := 1 STEP 1 UNTIL 8 DO
+    BEGIN
+      CURRENT_VAL := TEMP_BLOCK[I] MOD 36;
+      
+      IF CURRENT_VAL < 10 THEN
+        TAC_OUTPUT[I] := CHR(48 + CURRENT_VAL) COMMENT 0-9;
+      ELSE
+        TAC_OUTPUT[I] := CHR(55 + CURRENT_VAL); COMMENT A-Z;
+    END;
+```
+
+---
+
+</SwmSnippet>
+
+### Writing Output, and Updating Statistics
+
+<SwmSnippet path="base/src/LGAPDB01.cbl" line="278" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+
+---
+
+After returning from <SwmToken path="/base/src/LGAPDB01.cbl" pos="278:3:9" line-data="           PERFORM P011F-WRITE-OUTPUT-RECORD" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011F-WRITE-OUTPUT-RECORD`</SwmToken>, <SwmToken path="/base/src/LGAPDB01.cbl" pos="247:3:7" line-data="               PERFORM P011-PROCESS-COMMERCIAL" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011-PROCESS-COMMERCIAL`</SwmToken> writes the output record, and then calls <SwmToken path="/base/src/LGAPDB01.cbl" pos="279:3:7" line-data="           PERFORM P011G-UPDATE-STATISTICS." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011G-UPDATE-STATISTICS`</SwmToken>. This last step makes sure all cumulative stats (like totals and counts) reflect the final processed record, including any changes from the enhanced actuarial calculation.
+
+```cobol
+           PERFORM P011F-WRITE-OUTPUT-RECORD
+           PERFORM P011G-UPDATE-STATISTICS.
+```
+
+---
+
+</SwmSnippet>
+
+### Cumulative Statistics and Risk Tracking
 
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
     node1["Update total premium and risk score"]
-    click node1 openCode "base/src/LGAPDB01.cbl:366:367"
+    click node1 openCode "base/src/LGAPDB01.cbl:396:397"
     node1 --> node2{"Underwriting decision status"}
-    click node2 openCode "base/src/LGAPDB01.cbl:369:373"
+    click node2 openCode "base/src/LGAPDB01.cbl:399:403"
     node2 -->|"Approved"| node3["Increment approved count"]
-    click node3 openCode "base/src/LGAPDB01.cbl:370:370"
+    click node3 openCode "base/src/LGAPDB01.cbl:400:400"
     node2 -->|"Pending"| node4["Increment pending count"]
-    click node4 openCode "base/src/LGAPDB01.cbl:371:371"
+    click node4 openCode "base/src/LGAPDB01.cbl:401:401"
     node2 -->|"Rejected"| node5["Increment rejected count"]
-    click node5 openCode "base/src/LGAPDB01.cbl:372:372"
+    click node5 openCode "base/src/LGAPDB01.cbl:402:402"
     node3 --> node6{"Is base risk score > 200?"}
     node4 --> node6
     node5 --> node6
-    click node6 openCode "base/src/LGAPDB01.cbl:375:377"
+    click node6 openCode "base/src/LGAPDB01.cbl:405:407"
     node6 -->|"#gt; 200"| node7["Increment high-risk count"]
-    click node7 openCode "base/src/LGAPDB01.cbl:376:376"
+    click node7 openCode "base/src/LGAPDB01.cbl:406:406"
     node6 -->|"#lt;= 200"| node8["End"]
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 
@@ -1576,21 +1734,21 @@ classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
 %%     node1["Update total premium and risk score"]
-%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:366:367"
+%%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:396:397"
 %%     node1 --> node2{"Underwriting decision status"}
-%%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:369:373"
+%%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:399:403"
 %%     node2 -->|"Approved"| node3["Increment approved count"]
-%%     click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:370:370"
+%%     click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:400:400"
 %%     node2 -->|"Pending"| node4["Increment pending count"]
-%%     click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:371:371"
+%%     click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:401:401"
 %%     node2 -->|"Rejected"| node5["Increment rejected count"]
-%%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:372:372"
+%%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:402:402"
 %%     node3 --> node6{"Is base risk score > 200?"}
 %%     node4 --> node6
 %%     node5 --> node6
-%%     click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:375:377"
+%%     click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:405:407"
 %%     node6 -->|"#gt; 200"| node7["Increment high-risk count"]
-%%     click node7 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:376:376"
+%%     click node7 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:406:406"
 %%     node6 -->|"#lt;= 200"| node8["End"]
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 ```
@@ -1605,14 +1763,14 @@ This section is responsible for maintaining up-to-date cumulative statistics and
 | Business logic  | Decision status counting        | For each processed record, increment the counter corresponding to the underwriting decision status: approved, pending, or rejected.      |
 | Business logic  | High-risk record identification | If a record's base risk score exceeds 200, increment the high-risk record counter to track the number of high-risk cases.                |
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="365" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="395" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-In <SwmToken path="/base/src/LGAPDB01.cbl" pos="266:3:7" line-data="           PERFORM P011F-UPDATE-STATISTICS." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011F-UPDATE-STATISTICS`</SwmToken>, we add the current premium and risk score to running totals, then use <SwmToken path="/base/src/LGAPDB01.cbl" pos="369:3:5" line-data="           EVALUATE WS-STAT" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`WS-STAT`</SwmToken> to bump the right counter (approved, pending, rejected). This keeps all summary stats up to date for each processed record.
+In <SwmToken path="/base/src/LGAPDB01.cbl" pos="279:3:7" line-data="           PERFORM P011G-UPDATE-STATISTICS." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011G-UPDATE-STATISTICS`</SwmToken>, we add the current premium and risk score to running totals, then use <SwmToken path="/base/src/LGAPDB01.cbl" pos="399:3:5" line-data="           EVALUATE WS-STAT" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`WS-STAT`</SwmToken> to bump the right counter (approved, pending, rejected). This keeps all summary stats up to date for each processed record.
 
 ```cobol
-       P011F-UPDATE-STATISTICS.
+       P011G-UPDATE-STATISTICS.
            ADD WS-TOT-PREM TO WS-TOTAL-PREMIUM-AMT
            ADD WS-BASE-RISK-SCR TO WS-CONTROL-TOTALS
            
@@ -1627,11 +1785,11 @@ In <SwmToken path="/base/src/LGAPDB01.cbl" pos="266:3:7" line-data="           P
 
 </SwmSnippet>
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="375" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="405" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-After updating totals and counters, <SwmToken path="/base/src/LGAPDB01.cbl" pos="266:3:7" line-data="           PERFORM P011F-UPDATE-STATISTICS." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011F-UPDATE-STATISTICS`</SwmToken> checks if the risk score is over 200 and bumps the high risk count if so. This lets us track how many records are flagged as high risk for reporting.
+After updating totals and counters, <SwmToken path="/base/src/LGAPDB01.cbl" pos="279:3:7" line-data="           PERFORM P011G-UPDATE-STATISTICS." repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P011G-UPDATE-STATISTICS`</SwmToken> checks if the risk score is over 200 and bumps the high risk count if so. This lets us track how many records are flagged as high risk for reporting.
 
 ```cobol
            IF WS-BASE-RISK-SCR > 200
@@ -1645,11 +1803,11 @@ After updating totals and counters, <SwmToken path="/base/src/LGAPDB01.cbl" pos=
 
 ## Looping for Next Input Record
 
-<SwmSnippet path="/base/src/LGAPDB01.cbl" line="188" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=">
+<SwmSnippet path="/base/src/LGAPDB01.cbl" line="199" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">
 
 ---
 
-<SwmToken path="/base/src/LGAPDB01.cbl" pos="94:3:7" line-data="           PERFORM P006-PROCESS-RECORDS" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P006-PROCESS-RECORDS`</SwmToken> goes right to the next input after finishing with a valid record, keeping the loop moving.
+<SwmToken path="/base/src/LGAPDB01.cbl" pos="104:3:7" line-data="           PERFORM P006-PROCESS-RECORDS" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`P006-PROCESS-RECORDS`</SwmToken> goes right to the next input after finishing with a valid record, keeping the loop moving.
 
 ```cobol
                PERFORM P007-READ-INPUT
