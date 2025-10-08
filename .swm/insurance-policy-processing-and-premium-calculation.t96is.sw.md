@@ -7,18 +7,27 @@ This flow processes insurance policy records by loading configuration values, va
 
 ```mermaid
 flowchart TD
-    node1["Configuration File Handling"] --> node2["Input Record Processing Loop"]
+    node1["Configuration File Handling"] --> node2["Input Record
+ Processing Loop"]
     click node1 goToHeading "Configuration File Handling"
-    click node2 goToHeading "Input Record Processing Loop"
-    node2 --> node3["Input Validation and Error Logging"]
+    click node2 goToHeading "Input Record 
+Processing Loop"
+    node2 --> node3["Input Validation and
+ Error Logging"]
     click node3 goToHeading "Input Validation and Error Logging"
-    node3 --> node4{"Valid vs Error Record Routing"}
+    node3 --> node4{"Valid vs Error
+ Record Routing"}
     click node4 goToHeading "Valid vs Error Record Routing"
-    node4 -->|"Valid"| node5["Commercial vs Non-Commercial Record Handling"]
-    node4 -->|"Error"| node6["Cumulative Statistics and Risk Tracking"]
+    node4 -->|"Valid"| node5["Commercial vs 
+Non-Commercial 
+Record Handling"]
+    node4 -->|"Error"| node6["Cumulative Statistics and 
+Risk Tracking"]
     click node5 goToHeading "Commercial vs Non-Commercial Record Handling"
-    click node6 goToHeading "Cumulative Statistics and Risk Tracking"
-    node5 -->|"Commercial"| node7["Commercial Policy Processing Sequence"]
+    click node6 goToHeading "Cumulative Statistics and 
+Risk Tracking"
+    node5 -->|"Commercial"| node7["Commercial Policy 
+Processing Sequence"]
     node5 -->|"Non-Commercial"| node6
     click node7 goToHeading "Commercial Policy Processing Sequence"
     node7 --> node6
@@ -822,11 +831,14 @@ Back in <SwmToken path="/base/src/LGAPDB01.cbl" pos="104:3:7" line-data="       
 flowchart TD
   node1["Calculate risk score"]
   click node1 openCode "base/src/LGAPDB01.cbl:270:271"
-  node1 --> node2["Basic Premium Calculation via External Program"]
+  node1 --> node2["Basic Premium Calculation
+ via External Program"]
   
-  node2 --> node3{"WS-STAT = 0 (Underwriting approved)?"}
+  node2 --> node3{"WS-STAT = 0 
+(Underwriting approved)?"}
   click node3 openCode "base/src/LGAPDB01.cbl:273:275"
-  node3 -->|"Yes"| node4["Preparing Data for Actuarial Analysis"]
+  node3 -->|"Yes"| node4["Preparing Data for 
+Actuarial Analysis"]
   
   node3 -->|"No"| node5["Applying Business Rules
 Generating TAC"]
@@ -849,11 +861,14 @@ node5:::HeadingStyle
 %% flowchart TD
 %%   node1["Calculate risk score"]
 %%   click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:270:271"
-%%   node1 --> node2["Basic Premium Calculation via External Program"]
+%%   node1 --> node2["Basic Premium Calculation
+%%  via External Program"]
 %%   
-%%   node2 --> node3{"<SwmToken path="/base/src/LGAPDB01.cbl" pos="273:3:5" line-data="           IF WS-STAT = 0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`WS-STAT`</SwmToken> = 0 (Underwriting approved)?"}
+%%   node2 --> node3{"<SwmToken path="/base/src/LGAPDB01.cbl" pos="273:3:5" line-data="           IF WS-STAT = 0" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`WS-STAT`</SwmToken> = 0 
+%% (Underwriting approved)?"}
 %%   click node3 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:273:275"
-%%   node3 -->|"Yes"| node4["Preparing Data for Actuarial Analysis"]
+%%   node3 -->|"Yes"| node4["Preparing Data for 
+%% Actuarial Analysis"]
 %%   
 %%   node3 -->|"No"| node5["Applying Business Rules
 %% Generating TAC"]
@@ -1149,18 +1164,26 @@ After getting basic premium results in <SwmToken path="/base/src/LGAPDB01.cbl" p
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
-    node1["Prepare input and coverage data for actuarial calculation"]
+    node1["Prepare input and coverage
+ data for 
+actuarial calculation"]
     click node1 openCode "base/src/LGAPDB01.cbl:296:324"
     node1 --> node2{"Is total premium > $500?"}
     click node2 openCode "base/src/LGAPDB01.cbl:325:325"
-    node2 -->|"Yes"| node3["Actuarial Premium Calculation Steps
-(Perform enhanced actuarial calculation)"]
+    node2 -->|"Yes"| node3["Actuarial Premium 
+Calculation Steps
+(Perform enhanced 
+actuarial calculation)"]
     click node3 goToHeading "Actuarial Premium Calculation Steps"
     node2 -->|"No"| node6["Premium unchanged"]
     click node6 openCode "base/src/LGAPDB01.cbl:338:338"
-    node3 --> node4{"Is enhanced premium higher than current?"}
+    node3 --> node4{"Is enhanced premium
+ higher than current?"}
     click node4 openCode "base/src/LGAPDB01.cbl:330:330"
-    node4 -->|"Yes"| node5["Update fire, crime, flood, weather, and total premiums, and experience modifier"]
+    node4 -->|"Yes"| node5["Update fire, crime, 
+flood, weather, and 
+total premiums,
+ and experience modifier"]
     click node5 openCode "base/src/LGAPDB01.cbl:331:326"
     node4 -->|"No"| node6
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
@@ -1169,18 +1192,26 @@ node3:::HeadingStyle
 %% Swimm:
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
-%%     node1["Prepare input and coverage data for actuarial calculation"]
+%%     node1["Prepare input and coverage
+%%  data for 
+%% actuarial calculation"]
 %%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:296:324"
 %%     node1 --> node2{"Is total premium > $500?"}
 %%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:325:325"
-%%     node2 -->|"Yes"| node3["Actuarial Premium Calculation Steps
-%% (Perform enhanced actuarial calculation)"]
+%%     node2 -->|"Yes"| node3["Actuarial Premium 
+%% Calculation Steps
+%% (Perform enhanced 
+%% actuarial calculation)"]
 %%     click node3 goToHeading "Actuarial Premium Calculation Steps"
 %%     node2 -->|"No"| node6["Premium unchanged"]
 %%     click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:338:338"
-%%     node3 --> node4{"Is enhanced premium higher than current?"}
+%%     node3 --> node4{"Is enhanced premium
+%%  higher than current?"}
 %%     click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:330:330"
-%%     node4 -->|"Yes"| node5["Update fire, crime, flood, weather, and total premiums, and experience modifier"]
+%%     node4 -->|"Yes"| node5["Update fire, crime, 
+%% flood, weather, and 
+%% total premiums,
+%%  and experience modifier"]
 %%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB01.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB01.cbl`</SwmPath>:331:326"
 %%     node4 -->|"No"| node6
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
@@ -1269,36 +1300,53 @@ After prepping the input, we call <SwmToken path="/base/src/LGAPDB01.cbl" pos="3
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
-    node1["Start: Initialize policy and retrieve rates"]
+    node1["Start: Initialize policy 
+and retrieve rates"] --> node2
     click node1 openCode "base/src/LGAPDB04.cbl:139:141"
-    node2{"Is business 5+ years in operation?"}
+    node2{"Is business 5+ years 
+in operation?"}
     click node2 openCode "base/src/LGAPDB04.cbl:237:257"
     node2 -->|"Yes"| node3{"Claims in last 5 years?"}
-    node2 -->|"No"| node5["Apply new business penalty to experience mod"]
+    node2 -->|"No"| node5["Apply new business 
+penalty to experience mod"]
     click node5 openCode "base/src/LGAPDB04.cbl:255:256"
-    node3 -->|"No"| node4["Apply best experience modification (0.85)"]
+    node3 -->|"No"| node4["Apply best experience
+ modification (0.85)"]
     click node4 openCode "base/src/LGAPDB04.cbl:239:240"
-    node3 -->|"Yes"| node6["Calculate experience mod based on claims (capped 0.5-2.0)"]
+    node3 -->|"Yes"| node6["Calculate experience
+ mod based on claims
+ (capped 0.5-2.0)"]
     click node6 openCode "base/src/LGAPDB04.cbl:241:252"
-    node4 --> node7["Calculate schedule modification (building, protection, occupancy, exposure)"]
+    node4 --> node7["Calculate schedule modification
+ (building, protection, 
+occupancy, exposure)"]
     click node7 openCode "base/src/LGAPDB04.cbl:260:316"
     node6 --> node7
     node5 --> node7
-    node7 --> node8["Calculate base premium for each covered peril"]
+    node7 --> node8["Calculate base 
+premium 
+for each covered peril"]
     click node8 openCode "base/src/LGAPDB04.cbl:318:367"
-    node8 --> node9["Apply catastrophe and expense loads"]
+    node8 --> node9["Apply catastrophe and 
+expense loads"]
     click node9 openCode "base/src/LGAPDB04.cbl:145:147"
-    node9 --> node10["Calculate discounts and deductible credits (multi-peril, claims-free, deductible; cap 25%)"]
+    node9 --> node10["Calculate discounts and 
+deductible credits
+ (multi-peril, claims-free, 
+deductible; cap 25%)"]
     click node10 openCode "base/src/LGAPDB04.cbl:407:454"
     node10 --> node11["Calculate taxes (6.75%)"]
     click node11 openCode "base/src/LGAPDB04.cbl:456:462"
     node11 --> node12["Calculate final premium and rate factor"]
     click node12 openCode "base/src/LGAPDB04.cbl:464:472"
-    node12 --> node13{"Is final rate factor > 0.050000?"}
+    node12 --> node13{"Is final rate factor
+ > 0.050000?"}
     click node13 openCode "base/src/LGAPDB04.cbl:473:477"
-    node13 -->|"Yes"| node14["Cap rate factor and recalculate premium"]
+    node13 -->|"Yes"| node14["Cap rate factor
+ and recalculate premium"]
     click node14 openCode "base/src/LGAPDB04.cbl:474:477"
-    node13 -->|"No"| node15["End: Output final premium"]
+    node13 -->|"No"| node15["End: Output
+ final premium"]
     click node15 openCode "base/src/LGAPDB04.cbl:150:150"
     node14 --> node15
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
@@ -1306,36 +1354,53 @@ classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 %% Swimm:
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
-%%     node1["Start: Initialize policy and retrieve rates"]
+%%     node1["Start: Initialize policy 
+%% and retrieve rates"] --> node2
 %%     click node1 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:139:141"
-%%     node2{"Is business 5+ years in operation?"}
+%%     node2{"Is business 5+ years 
+%% in operation?"}
 %%     click node2 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:237:257"
 %%     node2 -->|"Yes"| node3{"Claims in last 5 years?"}
-%%     node2 -->|"No"| node5["Apply new business penalty to experience mod"]
+%%     node2 -->|"No"| node5["Apply new business 
+%% penalty to experience mod"]
 %%     click node5 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:255:256"
-%%     node3 -->|"No"| node4["Apply best experience modification (0.85)"]
+%%     node3 -->|"No"| node4["Apply best experience
+%%  modification (0.85)"]
 %%     click node4 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:239:240"
-%%     node3 -->|"Yes"| node6["Calculate experience mod based on claims (capped 0.5-2.0)"]
+%%     node3 -->|"Yes"| node6["Calculate experience
+%%  mod based on claims
+%%  (capped 0.5-2.0)"]
 %%     click node6 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:241:252"
-%%     node4 --> node7["Calculate schedule modification (building, protection, occupancy, exposure)"]
+%%     node4 --> node7["Calculate schedule modification
+%%  (building, protection, 
+%% occupancy, exposure)"]
 %%     click node7 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:260:316"
 %%     node6 --> node7
 %%     node5 --> node7
-%%     node7 --> node8["Calculate base premium for each covered peril"]
+%%     node7 --> node8["Calculate base 
+%% premium 
+%% for each covered peril"]
 %%     click node8 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:318:367"
-%%     node8 --> node9["Apply catastrophe and expense loads"]
+%%     node8 --> node9["Apply catastrophe and 
+%% expense loads"]
 %%     click node9 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:145:147"
-%%     node9 --> node10["Calculate discounts and deductible credits (multi-peril, claims-free, deductible; cap 25%)"]
+%%     node9 --> node10["Calculate discounts and 
+%% deductible credits
+%%  (multi-peril, claims-free, 
+%% deductible; cap 25%)"]
 %%     click node10 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:407:454"
 %%     node10 --> node11["Calculate taxes (6.75%)"]
 %%     click node11 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:456:462"
 %%     node11 --> node12["Calculate final premium and rate factor"]
 %%     click node12 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:464:472"
-%%     node12 --> node13{"Is final rate factor > <SwmToken path="/base/src/P999.cpy" pos="11:13:15" line-data="           IF LK-FINAL-RATE-FACTOR &gt; 0.050000" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`0.050000`</SwmToken>?"}
+%%     node12 --> node13{"Is final rate factor
+%%  > <SwmToken path="/base/src/P999.cpy" pos="11:13:15" line-data="           IF LK-FINAL-RATE-FACTOR &gt; 0.050000" repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp">`0.050000`</SwmToken>?"}
 %%     click node13 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:473:477"
-%%     node13 -->|"Yes"| node14["Cap rate factor and recalculate premium"]
+%%     node13 -->|"Yes"| node14["Cap rate factor
+%%  and recalculate premium"]
 %%     click node14 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:474:477"
-%%     node13 -->|"No"| node15["End: Output final premium"]
+%%     node13 -->|"No"| node15["End: Output
+%%  final premium"]
 %%     click node15 openCode "<SwmPath repo-id="Z2l0aHViJTNBJTNBa3luZHJ5bC1jaWNzLWdlbmFwcCUzQSUzQVN3aW1tLURlbW8=" repo-name="kyndryl-cics-genapp" path="/base/src/LGAPDB04.cbl">`(kyndryl-cics-genapp) base/src/LGAPDB04.cbl`</SwmPath>:150:150"
 %%     node14 --> node15
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
